@@ -1,9 +1,8 @@
 ﻿using CommandLine;
-using CommandLine.Text;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
-using System.Text;
 
 namespace JumpSavesCLI
 {
@@ -11,10 +10,10 @@ namespace JumpSavesCLI
     {
         public class Options
         {
-            [Option('s', "save", Required = true, HelpText = "Path to main Jump Space save file")]
+            [Option('s', "save", Required = false, HelpText = "Path to main Jump Space save file/dir (auto-detect if missing)")]
             public string SavePath { get; set; }
 
-            [Option('d', "donorSave", Required = false, HelpText = "Path to donor Jump Space save file")]
+            [Option('d', "donorSave", Required = false, HelpText = "Path to donor Jump Space save file/dir")]
             public string DonorSavePath { get; set; }
         }
 
@@ -48,16 +47,56 @@ namespace JumpSavesCLI
             try
 #endif
             {
-                Console.WriteLine($"Opening save file: {options.SavePath}");
-                JSL.SaveFile file = new JSL.SaveFile(options.SavePath);
-                Console.WriteLine("Done.\n");
+                JSL.SaveDir dir = null;
+                if (String.IsNullOrEmpty(options.SavePath))
+                {
+                    Console.WriteLine("No save directory provided. Attempting to auto-detect...");
+                    dir = JSL.SaveDir.Default;
+                    if (dir == null)
+                    {
+                        Console.WriteLine("Failed to auto-detect the save directory. Please provide --save <...> on the command line.");
+                        return 1;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Auto-detected save directory: {dir.Path}");
+                    }
+                }
+
+                JSL.SaveFile file = null;
+                if (dir != null)
+                {
+                    Console.WriteLine($"Opening latest save file from dir: {dir.Path}");
+                    file = dir.SaveFile;
+                }
+                else if (Directory.Exists(options.SavePath))
+                {
+                    Console.WriteLine($"Opening save file: {options.SavePath}");
+                    dir = new JSL.SaveDir(options.SavePath);
+                    file = dir.SaveFile;
+                }
+                else
+                {
+                    Console.WriteLine($"Opening latest save file from dir: {options.SavePath}");
+                    file = new JSL.SaveFile(options.SavePath);
+                }
+                Console.WriteLine($"Opened {file.Path} successfully.\n");
 
                 JSL.SaveFile donorFile = null;
                 if (!string.IsNullOrEmpty(options.DonorSavePath))
                 {
-                    Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
-                    donorFile = new JSL.SaveFile(options.DonorSavePath);
-                    Console.WriteLine("Done.\n");
+                    if (Directory.Exists(options.DonorSavePath))
+                    {
+                        Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
+                        JSL.SaveDir donorDir = new JSL.SaveDir(options.DonorSavePath);
+                        donorFile = donorDir.SaveFile;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Opening latest donor save file from dir: {options.DonorSavePath}");
+                        donorFile = new JSL.SaveFile(options.DonorSavePath);
+                    }
+                    Console.WriteLine($"Opened {donorFile.Path} successfully.\n");
                 }
 
                 List<Command> commandsCopy = null;
@@ -81,8 +120,8 @@ namespace JumpSavesCLI
                     {
                         ShortName = "w",
                         LongName = "write",
-                        Description = "Write the current save state to the save file",
-                        Execute = () => { file.Save(); Console.WriteLine("Save file written."); }
+                        Description = "Write the current save state to the save file/dir",
+                        Execute = () => { Save(file, dir); }
                     },
                     new Command
                     {
@@ -189,7 +228,7 @@ namespace JumpSavesCLI
                 Console.WriteLine("Error: Both main and donor save files must be loaded.");
                 return;
             }
-            
+
             Console.Write("Enter object name to transplant from donor: ");
             Console.Out.Flush();
             string srcName = Console.ReadLine().Trim();
@@ -199,7 +238,7 @@ namespace JumpSavesCLI
                 Console.WriteLine($"Object '{srcName}' not found in donor save.");
                 return;
             }
-            
+
             object srcObject = donorFile.State.GetObject(srcLocation);
             if (srcObject == null)
             {
@@ -226,6 +265,20 @@ namespace JumpSavesCLI
 
             JSL.SaveState.SetObjectPlacement(srcObject, (byte)placement);
             mainFile.State.SetObject(dstLocation, srcObject);
+        }
+
+        private void Save(JSL.SaveFile file, JSL.SaveDir dir)
+        {
+            if (dir == null)
+            {
+                file.Save();
+                Console.WriteLine($"Saved file {file.Path}");
+            }
+            else
+            {
+                dir.Save(file);
+                Console.WriteLine($"Saved to directory {dir.Path}");
+            }
         }
     }
 }

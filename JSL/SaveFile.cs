@@ -1,9 +1,4 @@
-﻿using MessagePack;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 
 namespace JSL
 {
@@ -11,6 +6,11 @@ namespace JSL
     {
         public SaveFile(string path)
         {
+            if (!File.Exists(path))
+            {
+                throw new FileNotFoundException($"File not found: {path}");
+            }
+
             Path = path;
             Load();
         }
