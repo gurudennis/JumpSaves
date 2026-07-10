@@ -40,9 +40,30 @@ namespace JSL
 
         public class Location // can't point to the root by design
         {
-            public Location()
+            public Location(string loc = null)
             {
                 Sequence = new List<int>();
+                if (!String.IsNullOrEmpty(loc))
+                {
+                    string[] parts = loc.Split('/');
+                    foreach (string part in parts)
+                    {
+                        if (int.TryParse(part, out int value) && value >= 0)
+                        {
+                            Sequence.Add(value);
+                        }
+                        else
+                        {
+                            Sequence.Clear();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            public Location(List<int> sequence)
+            {
+                Sequence = sequence != null ? new List<int>(sequence) : new List<int>();
             }
 
             public bool IsValid
@@ -81,6 +102,11 @@ namespace JSL
             object current = root_;
             for (int i = 0; i < location.Sequence.Count; ++i)
             {
+                if (location.Sequence[i] < 0 || location.Sequence[i] >= ((object[])current).Length)
+                {
+                    return null;
+                }
+
                 current = ((object[])current)[location.Sequence[i]];
             }
 
@@ -97,7 +123,18 @@ namespace JSL
             object current = root_;
             for (int i = 0; i < location.Sequence.Count - 1; ++i)
             {
+                if (location.Sequence[i] < 0 || location.Sequence[i] >= ((object[])current).Length)
+                {
+                    return;
+                }
+
                 current = ((object[])current)[location.Sequence[i]];
+            }
+
+            int lastIndex = location.Sequence[location.Sequence.Count - 1];
+            if (lastIndex < 0 || lastIndex >= ((object[])current).Length)
+            {
+                return;
             }
 
             ((object[])current)[location.Sequence[location.Sequence.Count - 1]] = newValue;

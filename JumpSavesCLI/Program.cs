@@ -71,13 +71,13 @@ namespace JumpSavesCLI
                 }
                 else if (Directory.Exists(options.SavePath))
                 {
-                    Console.WriteLine($"Opening save file: {options.SavePath}");
+                    Console.WriteLine($"Opening latest save file from dir: {options.SavePath}");
                     dir = new JSL.SaveDir(options.SavePath);
                     file = dir.SaveFile;
                 }
                 else
                 {
-                    Console.WriteLine($"Opening latest save file from dir: {options.SavePath}");
+                    Console.WriteLine($"Opening save file: {options.SavePath}");
                     file = new JSL.SaveFile(options.SavePath);
                 }
                 Console.WriteLine($"Opened {file.Path} successfully.\n");
@@ -87,13 +87,13 @@ namespace JumpSavesCLI
                 {
                     if (Directory.Exists(options.DonorSavePath))
                     {
-                        Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
+                        Console.WriteLine($"Opening latest donor save file from dir: {options.DonorSavePath}");
                         JSL.SaveDir donorDir = new JSL.SaveDir(options.DonorSavePath);
                         donorFile = donorDir.SaveFile;
                     }
                     else
                     {
-                        Console.WriteLine($"Opening latest donor save file from dir: {options.DonorSavePath}");
+                        Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
                         donorFile = new JSL.SaveFile(options.DonorSavePath);
                     }
                     Console.WriteLine($"Opened {donorFile.Path} successfully.\n");
@@ -111,8 +111,8 @@ namespace JumpSavesCLI
                     },
                     new Command
                     {
-                        ShortName = "p",
-                        LongName = "print",
+                        ShortName = "pa",
+                        LongName = "print_all",
                         Description = "Print the current save state as JSON",
                         Execute = () => { Console.WriteLine($"\n{file.State}\n"); }
                     },
@@ -136,6 +136,20 @@ namespace JumpSavesCLI
                         LongName = "find_donor",
                         Description = "Find an object in the donor save",
                         Execute = () => { FindObject(donorFile); }
+                    },
+                    new Command
+                    {
+                        ShortName = "p",
+                        LongName = "print",
+                        Description = "Print an object from the main save",
+                        Execute = () => { PrintObject(file); }
+                    },
+                    new Command
+                    {
+                        ShortName = "pd",
+                        LongName = "print_donor",
+                        Description = "Print an object from the donor save",
+                        Execute = () => { PrintObject(donorFile); }
                     },
                     new Command
                     {
@@ -209,16 +223,45 @@ namespace JumpSavesCLI
             Console.Out.Flush();
             string name = Console.ReadLine().Trim();
             JSL.SaveState.Location location = file.State.FindObject(name);
-            if (location.IsValid)
-            {
-                Console.WriteLine($"Found object '{name}' at location: {location}");
-                object obj = file.State.GetObject(location);
-                Console.WriteLine($"{JSL.SaveState.JSONFromObject(obj)}\n");
-            }
-            else
+            if (!PrintObjectAtLocation(file, location))
             {
                 Console.WriteLine($"Object '{name}' not found.");
             }
+        }
+
+        private void PrintObject(JSL.SaveFile file)
+        {
+            if (file == null)
+            {
+                Console.WriteLine("Error: No such file!");
+                return;
+            }
+            Console.Write("Enter object location x/y/... to print: ");
+            Console.Out.Flush();
+            string locationStr = Console.ReadLine().Trim();
+            JSL.SaveState.Location location = new JSL.SaveState.Location(locationStr);
+            if (!PrintObjectAtLocation(file, location))
+            {
+                Console.WriteLine($"Location '{locationStr}' is invalid. Contrived valid example: 1/7/3");
+            }
+        }
+
+        private bool PrintObjectAtLocation(JSL.SaveFile file, JSL.SaveState.Location location)
+        {
+            if (!location.IsValid)
+            {
+                return false;
+            }
+
+            object obj = file.State.GetObject(location);
+
+            Console.WriteLine($"{JSL.SaveState.JSONFromObject(obj)}\n");
+            if (obj != null && obj.GetType() == typeof(object[]))
+            {
+                Console.WriteLine($"\nThis object has {((object[])obj).Length} children.");
+            }
+
+            return true;
         }
 
         private void TransplantObject(JSL.SaveFile mainFile, JSL.SaveFile donorFile)
