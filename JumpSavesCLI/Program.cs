@@ -230,7 +230,12 @@ namespace JumpSavesCLI
             Console.Write("Enter object name to find: ");
             Console.Out.Flush();
             string name = Console.ReadLine().Trim();
-            JSL.SaveState.Location location = file.State.FindObject(name);
+
+            Console.Write("Enter object location x/y/... after which to search, or leave empty for none: ");
+            Console.Out.Flush();
+            string after = Console.ReadLine().Trim();
+
+            JSL.SaveState.Location location = file.State.FindObject(name, new JSL.SaveState.Location(after));
             if (!PrintObjectAtLocation(file, location))
             {
                 Console.WriteLine($"Object '{name}' not found.");
@@ -300,10 +305,15 @@ namespace JumpSavesCLI
             }
             
             Console.WriteLine($"Current value at {locationStr}: {JSL.SaveState.JSONFromObject(obj)}");
-            Console.Write("Enter new value (as JSON): ");
+            Console.Write("Enter new value (as JSON), or ~ to cancel: ");
             Console.Out.Flush();
 
             string newValueStr = Console.ReadLine().Trim();
+            if (newValueStr == "~")
+            {
+                return;
+            }
+
             try
             {
                 object newValue = JSL.SaveState.ObjectFromJSON(newValueStr, obj.GetType());

@@ -88,6 +88,29 @@ namespace JSL
                 }
             }
 
+            public bool IsAtOrAfter(Location location)
+            {
+                if (location == null || !location.IsValid)
+                {
+                    return true;
+                }
+
+                int count = Math.Min(Sequence.Count, location.Sequence.Count);
+                for (int i = 0; i < count; ++i)
+                {
+                    if (Sequence[i] > location.Sequence[i])
+                    {
+                        return true;
+                    }
+                    else if (Sequence[i] < location.Sequence[i])
+                    {
+                        return false;
+                    }
+                }
+
+                return Sequence.Count >= location.Sequence.Count;
+            }
+
             public override string ToString()
             {
                 return IsValid ? string.Join("/", Sequence) : "<invalid>";
@@ -96,14 +119,14 @@ namespace JSL
             public List<int> Sequence { get; private set; }
         }
 
-        public Location FindObject(string name, int nameDepth = 2)
+        public Location FindObject(string name, Location after = null, int nameDepth = 2)
         {
             if (String.IsNullOrEmpty(name) || nameDepth < 0)
             {
                 return new Location();
             }
 
-            return FindObjectRecursive(root_, new Location(), name, nameDepth);
+            return FindObjectRecursive(root_, new Location(), name, after, nameDepth);
         }
 
         public object GetObject(Location location)
@@ -194,23 +217,12 @@ namespace JSL
             return JsonSerializer.Deserialize(json, type);
         }
 
-        public List<MajorItem> GetMajorItems()
+        public object[] GetMajorItems()
         {
-            List<MajorItem> majorItems = new List<MajorItem>();
-
-            object m = GetObject(new Location(new List<int>{ MajorItemsIndex }));
-            if (m != null && m is object[])
-            {
-                foreach (object o in (object[])m)
-                {
-                    majorItems.Add(new MajorItem(o));
-                }
-            }
-
-            return majorItems;
+            return GetObject(new Location(new List<int> { MajorItemsIndex })) as object[];
         }
 
-        private Location FindObjectRecursive(object current, Location location, string name, int nameDepth)
+        private Location FindObjectRecursive(object current, Location location, string name, Location after, int nameDepth)
         {
             if (current == null)
             {
@@ -230,7 +242,7 @@ namespace JSL
                     }
                     childLocation.Sequence.Add(i);
 
-                    Location found = FindObjectRecursive(child, childLocation, name, nameDepth);
+                    Location found = FindObjectRecursive(child, childLocation, name, after, nameDepth);
                     if (found.IsValid)
                     {
                         return found;
@@ -248,7 +260,10 @@ namespace JSL
                     }
 
                     location.Sequence.RemoveRange(location.Sequence.Count - nameDepth, nameDepth);
-                    return location;
+                    if (location.IsAtOrAfter(after))
+                    {
+                        return location;
+                    }
                 }
             }
 
