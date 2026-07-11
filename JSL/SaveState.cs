@@ -74,6 +74,20 @@ namespace JSL
                 }
             }
 
+            public Location Parent
+            {
+                get
+                {
+                    List<int> parentSequence = new List<int>();
+                    foreach (int child in Sequence)
+                    {
+                        parentSequence.Add(child);
+                    }
+                    parentSequence.RemoveRange(parentSequence.Count - 1, 1);
+                    return new Location(parentSequence);
+                }
+            }
+
             public override string ToString()
             {
                 return IsValid ? string.Join("/", Sequence) : "<invalid>";
@@ -170,6 +184,32 @@ namespace JSL
             return JsonSerializer.Serialize(o, new JsonSerializerOptions { WriteIndented = true });
         }
 
+        public static object ObjectFromJSON(string json, Type type)
+        {
+            if (string.IsNullOrEmpty(json) || type == null)
+            {
+                return null;
+            }
+
+            return JsonSerializer.Deserialize(json, type);
+        }
+
+        public List<MajorItem> GetMajorItems()
+        {
+            List<MajorItem> majorItems = new List<MajorItem>();
+
+            object m = GetObject(new Location(new List<int>{ MajorItemsIndex }));
+            if (m != null && m is object[])
+            {
+                foreach (object o in (object[])m)
+                {
+                    majorItems.Add(new MajorItem(o));
+                }
+            }
+
+            return majorItems;
+        }
+
         private Location FindObjectRecursive(object current, Location location, string name, int nameDepth)
         {
             if (current == null)
@@ -217,6 +257,7 @@ namespace JSL
 
         private const int MessagePackOffset = 13;
         private const int ObjectPlacementIndex = 3;
+        private const int MajorItemsIndex = 11;
         private readonly byte[] origBytes_;
         private object[] root_;
     }

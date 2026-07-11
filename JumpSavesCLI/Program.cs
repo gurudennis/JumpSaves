@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using JSL;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -153,6 +154,13 @@ namespace JumpSavesCLI
                     },
                     new Command
                     {
+                        ShortName = "s",
+                        LongName = "set",
+                        Description = "Set a value into the main save at a given location",
+                        Execute = () => { SetValue(file); }
+                    },
+                    new Command
+                    {
                         ShortName = "t",
                         LongName = "transplant",
                         Description  = "Transplant an object from the donor save to the main save",
@@ -256,12 +264,57 @@ namespace JumpSavesCLI
             object obj = file.State.GetObject(location);
 
             Console.WriteLine($"{JSL.SaveState.JSONFromObject(obj)}\n");
+
+            Console.WriteLine($"\nThe object is at location {location}");
             if (obj != null && obj.GetType() == typeof(object[]))
             {
-                Console.WriteLine($"\nThis object has {((object[])obj).Length} children.");
+                Console.WriteLine($"It has {((object[])obj).Length} children.");
             }
 
             return true;
+        }
+
+        private void SetValue(JSL.SaveFile file)
+        {
+            if (file == null)
+            {
+                Console.WriteLine("Error: No such file!");
+                return;
+            }
+            
+            Console.Write("Enter object location x/y/... to set value: ");
+            Console.Out.Flush();
+            string locationStr = Console.ReadLine().Trim();
+            JSL.SaveState.Location location = new JSL.SaveState.Location(locationStr);
+            if (!location.IsValid)
+            {
+                Console.WriteLine($"Location '{locationStr}' is invalid. Contrived valid example: 1/7/3");
+                return;
+            }
+            
+            object obj = file.State.GetObject(location);
+            if (obj == null)
+            {
+                Console.WriteLine($"No object found at location '{locationStr}'.");
+                return;
+            }
+            
+            Console.WriteLine($"Current value at {locationStr}: {JSL.SaveState.JSONFromObject(obj)}");
+            Console.Write("Enter new value (as JSON): ");
+            Console.Out.Flush();
+
+            string newValueStr = Console.ReadLine().Trim();
+            try
+            {
+                object newValue = JSL.SaveState.ObjectFromJSON(newValueStr, obj.GetType());
+                JSL.ArrayBasedObject editor = new JSL.ArrayBasedObject(file.State.GetObject(location.Parent));
+                editor.SetProperty(location.Sequence[location.Sequence.Count - 1], newValue);
+                Console.WriteLine($"Successfully set new value at {locationStr}.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error setting new value: {ex.Message}");
+            }
         }
 
         private void TransplantObject(JSL.SaveFile mainFile, JSL.SaveFile donorFile)
