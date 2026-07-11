@@ -9,14 +9,16 @@ namespace JSL
 {
     public class ArrayBasedObject
     {
-        public ArrayBasedObject(object o)
+        public ArrayBasedObject(object o, object[] parent)
         {
             Root = o as object[];
+            Parent = parent;
         }
 
-        public ArrayBasedObject(byte[] b)
+        public ArrayBasedObject(byte[] b, object[] parent)
         {
             Root = MessagePackSerializer.Deserialize<object[]>(b);
+            Parent = parent;
         }
 
         public object[] Root
@@ -25,7 +27,7 @@ namespace JSL
             {
                 return root_;
             }
-            set
+            private set
             {
                 if (value is null)
                 {
@@ -35,6 +37,8 @@ namespace JSL
                 root_ = value;
             }
         }
+
+        public object[] Parent { get; private set; }
 
         public virtual byte[] Bytes
         {
@@ -46,7 +50,7 @@ namespace JSL
 
         public bool GetProperty<T>(int index, out T value)
         {
-            if (index >= Root.Length)
+            if (index < 0 || index >= Root.Length)
             {
                 value = default(T);
                 return false;
@@ -77,7 +81,7 @@ namespace JSL
 
         public bool SetProperty(int index, object value, bool adaptive = true)
         {
-            if (index >= Root.Length)
+            if (index < 0 || index >= Root.Length)
             {
                 return false;
             }
@@ -121,9 +125,67 @@ namespace JSL
             }
         }
 
+        public bool InsertProperty(int index, object value, bool allowOrphan = false)
+        {
+            if (index < 0 || index > Root.Length || (Parent == null && !allowOrphan))
+            {
+                return false;
+            }
+
+            List<object> tempList = new List<object>(Root);
+            tempList.Insert(index, value);
+
+            int selfIndex = FindSelfInParent();
+            Root = tempList.ToArray();
+
+            if (Parent != null && !UpdateParent(selfIndex))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void InsertPropertyStrict(int index, object value, bool allowOrphan = false)
+        {
+            if (!InsertProperty(index, value, allowOrphan))
+            {
+                throw new Exception($"Failed to insert property at index {index}.");
+            }
+        }
+
+        public bool RemoveProperty(int index, bool allowOrphan = false)
+        {
+            if (index < 0 || index >= Root.Length || (Parent == null && !allowOrphan))
+            {
+                return false;
+            }
+
+            List<object> tempList = new List<object>(Root);
+            tempList.RemoveAt(index);
+
+            int selfIndex = FindSelfInParent();
+            Root = tempList.ToArray();
+
+            if (Parent != null && !UpdateParent(selfIndex))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void RemovePropertyStrict(int index, bool allowOrphan = false)
+        {
+            if (!RemoveProperty(index, allowOrphan))
+            {
+                throw new Exception($"Failed to remove property at index {index}.");
+            }
+        }
+
         public bool GetSubObject(int index, out object value)
         {
-            if (index >= Root.Length)
+            if (index < 0 || index >= Root.Length)
             {
                 value = null;
                 return false;
@@ -145,7 +207,7 @@ namespace JSL
 
         public bool SetSubObject(int index, object value)
         {
-            if (index >= Root.Length)
+            if (index < 0 || index >= Root.Length)
             {
                 return false;
             }
@@ -207,6 +269,28 @@ namespace JSL
             }
 
             return res;
+        }
+
+        public int FindSelfInParent()
+        {
+            if (Parent == null)
+            {
+                return -1;
+            }
+
+            return Array.IndexOf(Parent, Root);
+        }
+
+        private bool UpdateParent(int selfIndex)
+        {
+            if (Parent == null || selfIndex < 0)
+            {
+                return false;
+            }
+
+            Parent[selfIndex] = Root;
+
+            return true;
         }
 
         private object[] root_;

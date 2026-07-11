@@ -53,6 +53,14 @@ namespace JSL
             }
         }
 
+        public int Leaf
+        {
+            get
+            {
+                return IsValid ? Sequence[Sequence.Count - 1] : -1;
+            }
+        }
+
         public bool IsAtOrAfter(Location location)
         {
             if (location == null || !location.IsValid)

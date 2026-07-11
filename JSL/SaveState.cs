@@ -8,7 +8,7 @@ namespace JSL
 {
     public class SaveState : ArrayBasedObject
     {
-        public SaveState(byte[] bytes) : base(Initialize(bytes))
+        public SaveState(byte[] bytes) : base(Initialize(bytes), null)
         {
             origBytes_ = bytes;
         }
@@ -167,7 +167,7 @@ namespace JSL
         {
             get
             {
-                return new MajorItemSlotUpgrades(GetSubArrayStrict(Index_MajorItemSlotUpgrades));
+                return new MajorItemSlotUpgrades(GetSubArrayStrict(Index_MajorItemSlotUpgrades), Root);
             }
         }
 
@@ -176,6 +176,14 @@ namespace JSL
             get
             {
                 return GetSubArrayStrict(Index_RecentMajorItems);
+            }
+        }
+
+        public Resources Resources
+        {
+            get
+            {
+                return new Resources(GetSubArrayStrict(Index_Resources), Root);
             }
         }
 

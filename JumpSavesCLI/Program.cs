@@ -161,6 +161,20 @@ namespace JumpSavesCLI
                     },
                     new Command
                     {
+                        ShortName = "i",
+                        LongName = "insert",
+                        Description = "Insert a value into the main save at a given location",
+                        Execute = () => { InsertValue(file); }
+                    },
+                    new Command
+                    {
+                        ShortName = "r",
+                        LongName = "remove",
+                        Description = "Remove a value from the main save at a given location",
+                        Execute = () => { RemoveValue(file); }
+                    },
+                    new Command
+                    {
                         ShortName = "t",
                         LongName = "transplant",
                         Description  = "Transplant an object from the donor save to the main save",
@@ -283,7 +297,7 @@ namespace JumpSavesCLI
 
             Console.WriteLine($"{JSL.SaveState.JSONFromObject(obj)}\n");
 
-            Console.WriteLine($"\nThe object is at location {location}");
+            Console.WriteLine($"\nThe object of type {StringFromType(obj.GetType())} is at location {location}");
             if (obj != null && obj.GetType() == typeof(object[]))
             {
                 Console.WriteLine($"It has {((object[])obj).Length} children.");
@@ -330,14 +344,107 @@ namespace JumpSavesCLI
             try
             {
                 object newValue = JSL.SaveState.ObjectFromJSON(newValueStr, obj.GetType());
-                JSL.ArrayBasedObject editor = new JSL.ArrayBasedObject(file.State.GetObject(location.Parent));
-                editor.SetProperty(location.Sequence[location.Sequence.Count - 1], newValue);
+                JSL.ArrayBasedObject editor = new JSL.ArrayBasedObject(file.State.GetObject(location.Parent), null);
+                editor.SetProperty(location.Leaf, newValue);
                 Console.WriteLine($"Successfully set new value at {locationStr}.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error setting new value: {ex.Message}");
             }
+        }
+
+        private void InsertValue(JSL.SaveFile file)
+        {
+            if (file == null)
+            {
+                Console.WriteLine("Error: No such file!");
+                return;
+            }
+
+            Console.Write("Enter object location x/y/... to insert value: ");
+            Console.Out.Flush();
+            string locationStr = Console.ReadLine().Trim();
+            JSL.Location location = new JSL.Location(locationStr);
+            if (!location.IsValid)
+            {
+                Console.WriteLine($"Location '{locationStr}' is invalid. Contrived valid example: 1/7/3");
+                return;
+            }
+
+            object obj = file.State.GetObject(location.Parent);
+            if (obj == null || obj.GetType() != typeof(object[]))
+            {
+                Console.WriteLine($"No array found at location '{location.Parent}'.");
+                return;
+            }
+
+            Console.WriteLine($"Current array at {location.Parent}:\n{JSL.SaveState.JSONFromObject(obj)}");
+
+            Console.Write("Enter the type of new value to insert (string, byte, int, double, bool etc.), or ~ to cancel: ");
+            Console.Out.Flush();
+            string newValueTypeStr = Console.ReadLine().Trim();
+            if (newValueTypeStr == "~")
+            {
+                return;
+            }
+
+            Type type = TypeFromString(newValueTypeStr);
+
+            Console.Write("Enter new value to insert (as JSON), or ~ to cancel: ");
+            Console.Out.Flush();
+            string newValueStr = Console.ReadLine().Trim();
+            if (newValueStr == "~")
+            {
+                return;
+            }
+
+            object newValue = JSL.SaveState.ObjectFromJSON(newValueStr, type);
+            object[] grandparent = file.State.GetObject(location.Parent.Parent) as object[];
+            JSL.ArrayBasedObject editor = new JSL.ArrayBasedObject(file.State.GetObject(location.Parent), grandparent);
+            if (!editor.InsertProperty(location.Leaf, newValue))
+            {
+                Console.WriteLine($"Failed to insert new value at location {location}");
+                return;
+            }
+
+            Console.WriteLine($"Successfully inserted new value at {locationStr}.");
+        }
+
+        public void RemoveValue(JSL.SaveFile file)
+        {
+            if (file == null)
+            {
+                Console.WriteLine("Error: No such file!");
+                return;
+            }
+
+            Console.Write("Enter object location x/y/... to remove value: ");
+            Console.Out.Flush();
+            string locationStr = Console.ReadLine().Trim();
+            JSL.Location location = new JSL.Location(locationStr);
+            if (!location.IsValid)
+            {
+                Console.WriteLine($"Location '{locationStr}' is invalid. Contrived valid example: 1/7/3");
+                return;
+            }
+
+            object obj = file.State.GetObject(location.Parent);
+            if (obj == null || obj.GetType() != typeof(object[]))
+            {
+                Console.WriteLine($"No array found at location '{location.Parent}'.");
+                return;
+            }
+
+            object[] grandparent = file.State.GetObject(location.Parent.Parent) as object[];
+            JSL.ArrayBasedObject editor = new JSL.ArrayBasedObject(obj, grandparent);
+            if (!editor.RemoveProperty(location.Leaf))
+            {
+                Console.WriteLine($"Failed to remove value at location {location}");
+                return;
+            }
+
+            Console.WriteLine($"Successfully removed value at {locationStr}.");
         }
 
         private void TransplantObject(JSL.SaveFile mainFile, JSL.SaveFile donorFile)
@@ -398,6 +505,66 @@ namespace JumpSavesCLI
                 dir.Save(file);
                 Console.WriteLine($"Saved to directory {dir.Path}");
             }
+        }
+
+        private static Type TypeFromString(string s)
+        {
+            if (string.Equals(s, "bool", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(bool);
+            }
+            else if (string.Equals(s, "byte", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(byte);
+            }
+            else if (string.Equals(s, "int", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(double);
+            }
+            else if (string.Equals(s, "double", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(int);
+            }
+            else if (string.Equals(s, "string", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(string);
+            }
+            else if (string.Equals(s, "object[]", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(object[]);
+            }
+
+            return Type.GetType(s);
+        }
+
+        private static string StringFromType(Type t)
+        {
+            if (t == typeof(bool))
+            {
+                return "bool";
+            }
+            else if (t == typeof(byte))
+            {
+                return "byte";
+            }
+            else if (t == typeof(int))
+            {
+                return "int";
+            }
+            else if (t == typeof(double))
+            {
+                return "double";
+            }
+            else if (t == typeof(string))
+            {
+                return "string";
+            }
+            else if (t == typeof(object[]))
+            {
+                return "object[]";
+            }
+
+            return t.FullName;
         }
     }
 }

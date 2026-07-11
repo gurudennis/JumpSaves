@@ -8,7 +8,7 @@ namespace JSL
 {
     public class Resource : ArrayBasedObject
     {
-        public Resource(object o) : base(o)
+        public Resource(object o, object[] parent) : base(o, parent)
         {
         }
 
@@ -42,7 +42,7 @@ namespace JSL
 
     public class Resources : ArrayBasedObject
     {
-        public Resources(object o) : base(o)
+        public Resources(object o, object[] parent) : base(o, parent)
         {
             if (Root.Length != ExpectedElementCount)
             {

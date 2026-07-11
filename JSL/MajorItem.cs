@@ -12,7 +12,7 @@ namespace JSL
 
     public class Module : ArrayBasedObject
     {
-        public Module(object o) : base(o)
+        public Module(object o, object[] parent) : base(o, parent)
         {
         }
 
@@ -83,7 +83,7 @@ namespace JSL
 
     public class MajorItemBlueprint : ArrayBasedObject
     {
-        public MajorItemBlueprint(object o) : base(o)
+        public MajorItemBlueprint(object o, object[] parent) : base(o, parent)
         {
         }
 
@@ -164,7 +164,7 @@ namespace JSL
 
     public class StoredMajorItem : ArrayBasedObject
     {
-        public StoredMajorItem(object o) : base(o)
+        public StoredMajorItem(object o, object[] parent) : base(o, parent)
         {
         }
 
@@ -184,7 +184,7 @@ namespace JSL
         {
             get
             {
-                return new MajorItemBlueprint(GetSubObjectStrict(Index_Blueprint));
+                return new MajorItemBlueprint(GetSubObjectStrict(Index_Blueprint), Root);
             }
             set
             {
@@ -211,7 +211,7 @@ namespace JSL
 
     public class MajorItemSlotUpgrade : ArrayBasedObject
     {
-        public MajorItemSlotUpgrade(object o) : base(o)
+        public MajorItemSlotUpgrade(object o, object[] parent) : base(o, parent)
         {
         }
 
@@ -245,7 +245,7 @@ namespace JSL
 
     public class MajorItemSlotUpgrades : ArrayBasedObject
     {
-        public MajorItemSlotUpgrades(object o) : base(o)
+        public MajorItemSlotUpgrades(object o, object[] parent) : base(o, parent)
         {
             if (Root.Length != ExpectedElementCount)
             {
@@ -266,7 +266,7 @@ namespace JSL
 
     public class RecentMajorItem : ArrayBasedObject
     {
-        public RecentMajorItem(object o) : base(o)
+        public RecentMajorItem(object o, object[] parent) : base(o, parent)
         {
         }
 
@@ -286,7 +286,7 @@ namespace JSL
         {
             get
             {
-                return new MajorItemBlueprint(GetSubObjectStrict(Index_Blueprint));
+                return new MajorItemBlueprint(GetSubObjectStrict(Index_Blueprint), Root);
             }
             set
             {
