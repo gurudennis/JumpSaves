@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JSL
 {
@@ -212,5 +207,94 @@ namespace JSL
         private const int Index_RawCategory = 0;
         private const int Index_Blueprint = 1;
         private const int Index_PlacementInCategory = 3;
+    }
+
+    public class MajorItemSlotUpgrade : ArrayBasedObject
+    {
+        public MajorItemSlotUpgrade(object o) : base(o)
+        {
+        }
+
+        public string RawType
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_RawType);
+            }
+            set
+            {
+                SetPropertyStrict(Index_RawType, value);
+            }
+        }
+
+        public int SlotCount
+        {
+            get
+            {
+                return GetPropertyStrict<int>(Index_SlotCount);
+            }
+            set
+            {
+                SetPropertyStrict(Index_SlotCount, value);
+            }
+        }
+
+        private const int Index_RawType = 0;
+        private const int Index_SlotCount = 0;
+    }
+
+    public class MajorItemSlotUpgrades : ArrayBasedObject
+    {
+        public MajorItemSlotUpgrades(object o) : base(o)
+        {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in MajorItemSlotUpgrades, found {Root.Length}.");
+            }
+        }
+
+        public MajorItemSlotUpgrade[] Elements
+        {
+            get
+            {
+                return GetFixedElementsStrict<MajorItemSlotUpgrade>();
+            }
+        }
+
+        private const int ExpectedElementCount = 9;
+    }
+
+    public class RecentMajorItem : ArrayBasedObject
+    {
+        public RecentMajorItem(object o) : base(o)
+        {
+        }
+
+        public string RawCategory
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_RawCategory);
+            }
+            set
+            {
+                SetPropertyStrict(Index_RawCategory, value);
+            }
+        }
+
+        public MajorItemBlueprint Blueprint
+        {
+            get
+            {
+                return new MajorItemBlueprint(GetSubObjectStrict(Index_Blueprint));
+            }
+            set
+            {
+                SetSubObjectStrict(Index_Blueprint, value.Root);
+            }
+        }
+
+        private const int Index_RawCategory = 0;
+        private const int Index_Blueprint = 1;
     }
 }

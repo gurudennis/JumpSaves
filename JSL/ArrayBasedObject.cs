@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,11 @@ namespace JSL
         public ArrayBasedObject(object o)
         {
             Root = o as object[];
+        }
+
+        public ArrayBasedObject(byte[] b)
+        {
+            Root = MessagePackSerializer.Deserialize<object[]>(b);
         }
 
         public object[] Root
@@ -27,6 +33,14 @@ namespace JSL
                 }
 
                 root_ = value;
+            }
+        }
+
+        public virtual byte[] Bytes
+        {
+            get
+            {
+                return MessagePackSerializer.Serialize(Root);
             }
         }
 
@@ -182,6 +196,17 @@ namespace JSL
             {
                 throw new Exception($"Failed to set sub-array at index {index}.");
             }
+        }
+
+        public T[] GetFixedElementsStrict<T>() where T : ArrayBasedObject
+        {
+            T[] res = new T[Root.Length];
+            for (int i = 0; i < Root.Length; ++i)
+            {
+                res[i] = (T)Activator.CreateInstance(typeof(T), GetSubObjectStrict(i));
+            }
+
+            return res;
         }
 
         private object[] root_;

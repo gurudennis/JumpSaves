@@ -75,7 +75,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayBasedObject.cs" />
+    <Compile Include="Location.cs" />
     <Compile Include="MajorItem.cs" />
+    <Compile Include="Resource.cs" />
     <Compile Include="SaveDir.cs" />
     <Compile Include="SaveFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

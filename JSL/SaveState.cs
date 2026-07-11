@@ -6,24 +6,19 @@ using System.Text.Json;
 
 namespace JSL
 {
-    public class SaveState
+    public class SaveState : ArrayBasedObject
     {
-        public SaveState(byte[] bytes)
+        public SaveState(byte[] bytes) : base(Initialize(bytes))
         {
             origBytes_ = bytes;
-
-            ReadOnlySequence<byte> messagePackBytes = new ReadOnlySequence<byte>(bytes, MessagePackOffset, bytes.Length - MessagePackOffset);
-
-            var lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4BlockArray);
-            root_ = MessagePackSerializer.Deserialize<object[]>(messagePackBytes, lz4Options);
         }
 
-        public byte[] Bytes
+        public override byte[] Bytes
         {
             get
             {
                 var lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4BlockArray);
-                byte[] reser = MessagePackSerializer.Serialize<object[]>(root_, lz4Options);
+                byte[] reser = MessagePackSerializer.Serialize<object[]>(Root, lz4Options);
 
                 byte[] result = new byte[MessagePackOffset + reser.Length];
                 Buffer.BlockCopy(origBytes_, 0, result, 0, MessagePackOffset);
@@ -35,88 +30,7 @@ namespace JSL
 
         public override string ToString()
         {
-            return JSONFromObject(root_);
-        }
-
-        public class Location // can't point to the root by design
-        {
-            public Location(string loc = null)
-            {
-                Sequence = new List<int>();
-                if (!String.IsNullOrEmpty(loc))
-                {
-                    string[] parts = loc.Split('/');
-                    foreach (string part in parts)
-                    {
-                        if (int.TryParse(part, out int value) && value >= 0)
-                        {
-                            Sequence.Add(value);
-                        }
-                        else
-                        {
-                            Sequence.Clear();
-                            return;
-                        }
-                    }
-                }
-            }
-
-            public Location(List<int> sequence)
-            {
-                Sequence = sequence != null ? new List<int>(sequence) : new List<int>();
-            }
-
-            public bool IsValid
-            {
-                get
-                {
-                    return Sequence.Count != 0;
-                }
-            }
-
-            public Location Parent
-            {
-                get
-                {
-                    List<int> parentSequence = new List<int>();
-                    foreach (int child in Sequence)
-                    {
-                        parentSequence.Add(child);
-                    }
-                    parentSequence.RemoveRange(parentSequence.Count - 1, 1);
-                    return new Location(parentSequence);
-                }
-            }
-
-            public bool IsAtOrAfter(Location location)
-            {
-                if (location == null || !location.IsValid)
-                {
-                    return true;
-                }
-
-                int count = Math.Min(Sequence.Count, location.Sequence.Count);
-                for (int i = 0; i < count; ++i)
-                {
-                    if (Sequence[i] > location.Sequence[i])
-                    {
-                        return true;
-                    }
-                    else if (Sequence[i] < location.Sequence[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return Sequence.Count >= location.Sequence.Count;
-            }
-
-            public override string ToString()
-            {
-                return IsValid ? string.Join("/", Sequence) : "<invalid>";
-            }
-
-            public List<int> Sequence { get; private set; }
+            return JSONFromObject(Root);
         }
 
         public Location FindObject(string name, Location after = null, int nameDepth = 2)
@@ -126,7 +40,7 @@ namespace JSL
                 return new Location();
             }
 
-            return FindObjectRecursive(root_, new Location(), name, after, nameDepth);
+            return FindObjectRecursive(Root, new Location(), name, after, nameDepth);
         }
 
         public object GetObject(Location location)
@@ -136,7 +50,7 @@ namespace JSL
                 return null;
             }
 
-            object current = root_;
+            object current = Root;
             for (int i = 0; i < location.Sequence.Count; ++i)
             {
                 if (location.Sequence[i] < 0 || location.Sequence[i] >= ((object[])current).Length)
@@ -157,7 +71,7 @@ namespace JSL
                 return;
             }
 
-            object current = root_;
+            object current = Root;
             for (int i = 0; i < location.Sequence.Count - 1; ++i)
             {
                 if (location.Sequence[i] < 0 || location.Sequence[i] >= ((object[])current).Length)
@@ -184,7 +98,7 @@ namespace JSL
                 return null;
             }
 
-            return (byte)((object[])o)[ObjectPlacementIndex];
+            return (byte)((object[])o)[DeepIndex_ObjectPlacement];
         }
 
         public static void SetObjectPlacement(object o, byte placement)
@@ -194,7 +108,7 @@ namespace JSL
                 return;
             }
 
-            ((object[])o)[ObjectPlacementIndex] = placement;
+            ((object[])o)[DeepIndex_ObjectPlacement] = placement;
         }
 
         public static string JSONFromObject(object o)
@@ -217,12 +131,60 @@ namespace JSL
             return JsonSerializer.Deserialize(json, type);
         }
 
+        public object[] Ships
+        {
+            get
+            {
+                return GetSubArrayStrict(Index_Ships);
+            }
+        }
+
+        public string CurrentShipRawType
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_CurrentShipRawType);
+            }
+        }
+
+        public object[] PlayerInventory
+        {
+            get
+            {
+                return GetSubArrayStrict(Index_PlayerInventory);
+            }
+        }
+
         public object[] StoredMajorItems
         {
             get
             {
-                return GetObject(new Location(new List<int> { MajorItemsIndex })) as object[];
+                return GetSubArrayStrict(Index_StoredMajorItems);
             }
+        }
+
+        public MajorItemSlotUpgrades MajorItemSlotUpgrades
+        {
+            get
+            {
+                return new MajorItemSlotUpgrades(GetSubArrayStrict(Index_MajorItemSlotUpgrades));
+            }
+        }
+
+        public object[] RecentMajorItems
+        {
+            get
+            {
+                return GetSubArrayStrict(Index_RecentMajorItems);
+            }
+        }
+
+        private static object Initialize(byte[] bytes)
+        {
+            ReadOnlySequence<byte> messagePackBytes = new ReadOnlySequence<byte>(bytes, MessagePackOffset, bytes.Length - MessagePackOffset);
+
+            var lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4BlockArray);
+            return MessagePackSerializer.Deserialize<object[]>(messagePackBytes, lz4Options);
         }
 
         private Location FindObjectRecursive(object current, Location location, string name, Location after, int nameDepth)
@@ -274,9 +236,17 @@ namespace JSL
         }
 
         private const int MessagePackOffset = 13;
-        private const int ObjectPlacementIndex = 3;
-        private const int MajorItemsIndex = 11;
-        private readonly byte[] origBytes_;
-        private object[] root_;
+
+        private const int DeepIndex_ObjectPlacement = 3;
+
+        private const int Index_Ships = 3;
+        private const int Index_CurrentShipRawType = 6;
+        private const int Index_PlayerInventory = 7;
+        private const int Index_StoredMajorItems = 11;
+        private const int Index_MajorItemSlotUpgrades = 12;
+        private const int Index_RecentMajorItems = 13;
+        private const int Index_Resources = 14;
+
+        private byte[] origBytes_;
     }
 }

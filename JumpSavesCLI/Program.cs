@@ -184,8 +184,21 @@ namespace JumpSavesCLI
                     {
                         if (string.Equals(input, c.ShortName, StringComparison.OrdinalIgnoreCase) || string.Equals(input, c.LongName, StringComparison.OrdinalIgnoreCase))
                         {
-                            c.Execute();
                             found = true;
+
+#if !DEBUG
+                            try
+#endif
+                            {
+                                c.Execute();
+                            }
+#if !DEBUG
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Error: {ex.Message}");
+                            }
+#endif
+                            
                             break;
                         }
                     }
@@ -235,7 +248,7 @@ namespace JumpSavesCLI
             Console.Out.Flush();
             string after = Console.ReadLine().Trim();
 
-            JSL.SaveState.Location location = file.State.FindObject(name, new JSL.SaveState.Location(after));
+            JSL.Location location = file.State.FindObject(name, new JSL.Location(after));
             if (!PrintObjectAtLocation(file, location))
             {
                 Console.WriteLine($"Object '{name}' not found.");
@@ -252,14 +265,14 @@ namespace JumpSavesCLI
             Console.Write("Enter object location x/y/... to print: ");
             Console.Out.Flush();
             string locationStr = Console.ReadLine().Trim();
-            JSL.SaveState.Location location = new JSL.SaveState.Location(locationStr);
+            JSL.Location location = new JSL.Location(locationStr);
             if (!PrintObjectAtLocation(file, location))
             {
                 Console.WriteLine($"Location '{locationStr}' is invalid. Contrived valid example: 1/7/3");
             }
         }
 
-        private bool PrintObjectAtLocation(JSL.SaveFile file, JSL.SaveState.Location location)
+        private bool PrintObjectAtLocation(JSL.SaveFile file, JSL.Location location)
         {
             if (!location.IsValid)
             {
@@ -290,7 +303,7 @@ namespace JumpSavesCLI
             Console.Write("Enter object location x/y/... to set value: ");
             Console.Out.Flush();
             string locationStr = Console.ReadLine().Trim();
-            JSL.SaveState.Location location = new JSL.SaveState.Location(locationStr);
+            JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
                 Console.WriteLine($"Location '{locationStr}' is invalid. Contrived valid example: 1/7/3");
@@ -338,7 +351,7 @@ namespace JumpSavesCLI
             Console.Write("Enter object name to transplant from donor: ");
             Console.Out.Flush();
             string srcName = Console.ReadLine().Trim();
-            JSL.SaveState.Location srcLocation = donorFile.State.FindObject(srcName);
+            JSL.Location srcLocation = donorFile.State.FindObject(srcName);
             if (!srcLocation.IsValid)
             {
                 Console.WriteLine($"Object '{srcName}' not found in donor save.");
@@ -355,7 +368,7 @@ namespace JumpSavesCLI
             Console.Write("Enter object name to transplant to (will be overwritten!): ");
             Console.Out.Flush();
             string dstName = Console.ReadLine().Trim();
-            JSL.SaveState.Location dstLocation = mainFile.State.FindObject(dstName);
+            JSL.Location dstLocation = mainFile.State.FindObject(dstName);
             if (!dstLocation.IsValid)
             {
                 Console.WriteLine($"Object '{dstName}' not found in main save.");
