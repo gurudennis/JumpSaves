@@ -217,9 +217,12 @@ namespace JSL
             return JsonSerializer.Deserialize(json, type);
         }
 
-        public object[] GetMajorItems()
+        public object[] StoredMajorItems
         {
-            return GetObject(new Location(new List<int> { MajorItemsIndex })) as object[];
+            get
+            {
+                return GetObject(new Location(new List<int> { MajorItemsIndex })) as object[];
+            }
         }
 
         private Location FindObjectRecursive(object current, Location location, string name, Location after, int nameDepth)
