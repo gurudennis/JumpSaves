@@ -153,9 +153,7 @@ namespace JumpSavesCLI
 
                 while (true)
                 {
-                    Console.Write("\nInput comamnd ('h' to get help, 'q' to quit): ");
-                    Console.Out.Flush();
-                    string input = Console.ReadLine().Trim();
+                    string input = GetValue("\nInput comamnd ('h' to get help, 'q' to quit)");
                     if (string.Equals(input, "q", StringComparison.OrdinalIgnoreCase) || string.Equals(input, "quit", StringComparison.OrdinalIgnoreCase))
                     {
                         break;
@@ -247,7 +245,7 @@ namespace JumpSavesCLI
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to load save file!");
+                Console.WriteLine($"Failed to load save file: {ex}");
                 return false;
             }
 
@@ -271,7 +269,7 @@ namespace JumpSavesCLI
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to load donor save file!");
+                Console.WriteLine($"Failed to load donor save file: {ex}");
                 return false;
             }
 
@@ -296,13 +294,9 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter object name to find: ");
-            Console.Out.Flush();
-            string name = Console.ReadLine().Trim();
+            string name = GetValue("Enter object name to find");
 
-            Console.Write("Enter object location x/y/... after which to search, or leave empty for none: ");
-            Console.Out.Flush();
-            string after = Console.ReadLine().Trim();
+            string after = GetValue("Enter object location x/y/... after which to search, or leave empty for none");
 
             JSL.Location location = file.State.FindObject(name, new JSL.Location(after));
             if (!PrintObjectAtLocation(file, location))
@@ -318,9 +312,8 @@ namespace JumpSavesCLI
                 Console.WriteLine("Error: No such file!");
                 return;
             }
-            Console.Write("Enter object location x/y/... to print: ");
-            Console.Out.Flush();
-            string locationStr = Console.ReadLine().Trim();
+
+            string locationStr = GetValue("Enter object location x/y/... to print");
             JSL.Location location = new JSL.Location(locationStr);
             if (!PrintObjectAtLocation(file, location))
             {
@@ -360,9 +353,7 @@ namespace JumpSavesCLI
                 return;
             }
             
-            Console.Write("Enter object location x/y/... to set value: ");
-            Console.Out.Flush();
-            string locationStr = Console.ReadLine().Trim();
+            string locationStr = GetValue("Enter object location x/y/... to set value: ");
             JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
@@ -378,10 +369,8 @@ namespace JumpSavesCLI
             }
             
             Console.WriteLine($"Current value at {locationStr}: {JSL.SaveState.JSONFromObject(obj)}");
-            Console.Write("Enter new value (as JSON), or ~ to cancel: ");
-            Console.Out.Flush();
 
-            string newValueStr = Console.ReadLine().Trim();
+            string newValueStr = GetValue("Enter new value (as JSON), or ~ to cancel");
             if (newValueStr == "~")
             {
                 return;
@@ -408,9 +397,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter object location x/y/... to insert value: ");
-            Console.Out.Flush();
-            string locationStr = Console.ReadLine().Trim();
+            string locationStr = GetValue("Enter object location x/y/... to insert value");
             JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
@@ -428,9 +415,7 @@ namespace JumpSavesCLI
             Console.WriteLine($"Current array at {location.Parent}:\n{JSL.SaveState.JSONFromObject(obj)}");
 
             Console.WriteLine("Available data types: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types");
-            Console.Write("Enter the type of new value to insert, or ~ to cancel: ");
-            Console.Out.Flush();
-            string newValueTypeStr = Console.ReadLine().Trim();
+            string newValueTypeStr = GetValue("Enter the type of new value to insert, or ~ to cancel");
             if (newValueTypeStr == "~")
             {
                 return;
@@ -438,9 +423,7 @@ namespace JumpSavesCLI
 
             Type type = TypeFromString(newValueTypeStr);
 
-            Console.Write("Enter new value to insert (as JSON), or ~ to cancel: ");
-            Console.Out.Flush();
-            string newValueStr = Console.ReadLine().Trim();
+            string newValueStr = GetValue("Enter new value to insert (as JSON), or ~ to cancel");
             if (newValueStr == "~")
             {
                 return;
@@ -466,9 +449,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter object location x/y/... to remove value: ");
-            Console.Out.Flush();
-            string locationStr = Console.ReadLine().Trim();
+            string locationStr = GetValue("Enter object location x/y/... to remove value");
             JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
@@ -502,9 +483,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter source object location x/y/...: ");
-            Console.Out.Flush();
-            string srcLocationStr = Console.ReadLine().Trim();
+            string srcLocationStr = GetValue("Enter source object location x/y/...");
             JSL.Location srcLocation = new JSL.Location(srcLocationStr);
             if (!srcLocation.IsValid)
             {
@@ -512,9 +491,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter destination object location x/y/...: ");
-            Console.Out.Flush();
-            string dstLocationStr = Console.ReadLine().Trim();
+            string dstLocationStr = GetValue("Enter destination object location x/y/...");
             JSL.Location dstLocation = new JSL.Location(dstLocationStr);
             if (!dstLocation.IsValid)
             {
@@ -555,9 +532,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter object name to transplant from donor: ");
-            Console.Out.Flush();
-            string srcName = Console.ReadLine().Trim();
+            string srcName = GetValue("Enter object name to transplant from donor");
             JSL.Location srcLocation = donorFile.State.FindObject(srcName);
             if (!srcLocation.IsValid)
             {
@@ -572,9 +547,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            Console.Write("Enter object name to transplant to (will be overwritten!): ");
-            Console.Out.Flush();
-            string dstName = Console.ReadLine().Trim();
+            string dstName = GetValue("Enter object name to transplant to (will be overwritten!)");
             JSL.Location dstLocation = mainFile.State.FindObject(dstName);
             if (!dstLocation.IsValid)
             {
@@ -605,6 +578,13 @@ namespace JumpSavesCLI
                 dir.Save(file);
                 Console.WriteLine($"Saved to directory {dir.Path}");
             }
+        }
+
+        private string GetValue(string query)
+        {
+            Console.Write($"{query}: ");
+            Console.Out.Flush();
+            return Console.ReadLine().Trim();
         }
 
         private static Type TypeFromString(string s)
