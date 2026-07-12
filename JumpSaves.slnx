@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Art/">
+    <File Path="Art/JumpSaves.png" />
+    <File Path="Art/JumpSavesCLI.png" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="LICENSE.txt" />
   </Folder>
