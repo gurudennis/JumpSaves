@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using static JumpSavesCLI.Program;
 
 namespace JumpSavesCLI
 {
@@ -48,56 +49,9 @@ namespace JumpSavesCLI
             try
 #endif
             {
-                JSL.SaveDir dir = null;
-                if (String.IsNullOrEmpty(options.SavePath))
+                if (!Load(options, out JSL.SaveDir dir, out JSL.SaveFile file, out JSL.SaveFile donorFile))
                 {
-                    Console.WriteLine("No save directory provided. Attempting to auto-detect...");
-                    dir = JSL.SaveDir.Default;
-                    if (dir == null)
-                    {
-                        Console.WriteLine("Failed to auto-detect the save directory. Please provide --save <...> on the command line.");
-                        return 1;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Auto-detected save directory: {dir.Path}");
-                    }
-                }
-
-                JSL.SaveFile file = null;
-                if (dir != null)
-                {
-                    Console.WriteLine($"Opening latest save file from dir: {dir.Path}");
-                    file = dir.SaveFile;
-                }
-                else if (Directory.Exists(options.SavePath))
-                {
-                    Console.WriteLine($"Opening latest save file from dir: {options.SavePath}");
-                    dir = new JSL.SaveDir(options.SavePath);
-                    file = dir.SaveFile;
-                }
-                else
-                {
-                    Console.WriteLine($"Opening save file: {options.SavePath}");
-                    file = new JSL.SaveFile(options.SavePath);
-                }
-                Console.WriteLine($"Opened {file.Path} successfully.\n");
-
-                JSL.SaveFile donorFile = null;
-                if (!string.IsNullOrEmpty(options.DonorSavePath))
-                {
-                    if (Directory.Exists(options.DonorSavePath))
-                    {
-                        Console.WriteLine($"Opening latest donor save file from dir: {options.DonorSavePath}");
-                        JSL.SaveDir donorDir = new JSL.SaveDir(options.DonorSavePath);
-                        donorFile = donorDir.SaveFile;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
-                        donorFile = new JSL.SaveFile(options.DonorSavePath);
-                    }
-                    Console.WriteLine($"Opened {donorFile.Path} successfully.\n");
+                    return 1;
                 }
 
                 List<Command> commandsCopy = null;
@@ -109,6 +63,13 @@ namespace JumpSavesCLI
                         LongName = "help",
                         Description = "Show this help message",
                         Execute = () => { PrintHelp(commandsCopy); }
+                    },
+                    new Command
+                    {
+                        ShortName = "l",
+                        LongName = "load",
+                        Description = "Reloads the save file(s)",
+                        Execute = () => { Load(options, out dir, out file, out donorFile); }
                     },
                     new Command
                     {
@@ -241,6 +202,80 @@ namespace JumpSavesCLI
 #endif
 
             return 0;
+        }
+
+        private bool Load(Options options, out JSL.SaveDir dir, out JSL.SaveFile file, out JSL.SaveFile donorFile)
+        {
+            dir = null;
+            file = null;
+            donorFile = null;
+
+            try
+            {
+                if (String.IsNullOrEmpty(options.SavePath))
+                {
+                    Console.WriteLine("No save directory provided. Attempting to auto-detect...");
+                    dir = JSL.SaveDir.Default;
+                    if (dir == null)
+                    {
+                        Console.WriteLine("Failed to auto-detect the save directory. Please provide --save <...> on the command line.");
+                        return false;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Auto-detected save directory: {dir.Path}");
+                    }
+                }
+
+                if (dir != null)
+                {
+                    Console.WriteLine($"Opening latest save file from dir: {dir.Path}");
+                    file = dir.SaveFile;
+                }
+                else if (Directory.Exists(options.SavePath))
+                {
+                    Console.WriteLine($"Opening latest save file from dir: {options.SavePath}");
+                    dir = new JSL.SaveDir(options.SavePath);
+                    file = dir.SaveFile;
+                }
+                else
+                {
+                    Console.WriteLine($"Opening save file: {options.SavePath}");
+                    file = new JSL.SaveFile(options.SavePath);
+                }
+                Console.WriteLine($"Opened {file.Path} successfully.\n");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to load save file!");
+                return false;
+            }
+
+            try
+            {
+                if (!string.IsNullOrEmpty(options.DonorSavePath))
+                {
+                    if (Directory.Exists(options.DonorSavePath))
+                    {
+                        Console.WriteLine($"Opening latest donor save file from dir: {options.DonorSavePath}");
+                        JSL.SaveDir donorDir = new JSL.SaveDir(options.DonorSavePath);
+                        donorFile = donorDir.SaveFile;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
+                        donorFile = new JSL.SaveFile(options.DonorSavePath);
+                    }
+                    Console.WriteLine($"Opened {donorFile.Path} successfully.\n");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Failed to load donor save file!");
+                return false;
+            }
+
+            return true;
         }
 
         private void PrintHelp(List<Command> commands)

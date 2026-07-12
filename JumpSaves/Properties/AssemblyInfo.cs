@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("JSL")]
-[assembly: AssemblyDescription("JumpSaves Library (JSL)")]
+[assembly: AssemblyTitle("JumpSaves")]
+[assembly: AssemblyDescription("JumpSpace save file editor by gurudennis")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("JSL")]
+[assembly: AssemblyProduct("JumpSaves")]
 [assembly: AssemblyCopyright("Copyright © gurudennis, 2026")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("eed5b172-1e66-466c-8e86-bae5cf7f58b1")]
+[assembly: Guid("97289245-324a-4a13-ae1d-53110295ab3e")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.6.0")]
-[assembly: AssemblyFileVersion("1.0.6.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
