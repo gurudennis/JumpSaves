@@ -175,6 +175,13 @@ namespace JumpSavesCLI
                     },
                     new Command
                     {
+                        ShortName = "c",
+                        LongName = "copy",
+                        Description  = "Copy an object from one location in the main save to another",
+                        Execute = () => { CopyValue(file); }
+                    },
+                    new Command
+                    {
                         ShortName = "t",
                         LongName = "transplant",
                         Description  = "Transplant an object from the donor save to the main save",
@@ -294,6 +301,10 @@ namespace JumpSavesCLI
             }
 
             object obj = file.State.GetObject(location);
+            if (obj == null)
+            {
+                return false;
+            }
 
             Console.WriteLine($"{JSL.SaveState.JSONFromObject(obj)}\n");
 
@@ -381,7 +392,8 @@ namespace JumpSavesCLI
 
             Console.WriteLine($"Current array at {location.Parent}:\n{JSL.SaveState.JSONFromObject(obj)}");
 
-            Console.Write("Enter the type of new value to insert (string, byte, int, double, bool etc.), or ~ to cancel: ");
+            Console.WriteLine("Available data types: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types");
+            Console.Write("Enter the type of new value to insert, or ~ to cancel: ");
             Console.Out.Flush();
             string newValueTypeStr = Console.ReadLine().Trim();
             if (newValueTypeStr == "~")
@@ -445,6 +457,59 @@ namespace JumpSavesCLI
             }
 
             Console.WriteLine($"Successfully removed value at {locationStr}.");
+        }
+
+        private void CopyValue(JSL.SaveFile file)
+        {
+            if (file == null)
+            {
+                Console.WriteLine("Error: No such file!");
+                return;
+            }
+
+            Console.Write("Enter source object location x/y/...: ");
+            Console.Out.Flush();
+            string srcLocationStr = Console.ReadLine().Trim();
+            JSL.Location srcLocation = new JSL.Location(srcLocationStr);
+            if (!srcLocation.IsValid)
+            {
+                Console.WriteLine($"Source location '{srcLocationStr}' is invalid. Contrived valid example: 1/7/3");
+                return;
+            }
+
+            Console.Write("Enter destination object location x/y/...: ");
+            Console.Out.Flush();
+            string dstLocationStr = Console.ReadLine().Trim();
+            JSL.Location dstLocation = new JSL.Location(dstLocationStr);
+            if (!dstLocation.IsValid)
+            {
+                Console.WriteLine($"Destination location '{dstLocationStr}' is invalid. Contrived valid example: 1/7/3");
+                return;
+            }
+
+            object obj = file.State.GetObject(srcLocation);
+            if (obj == null)
+            {
+                Console.WriteLine($"No object found at location '{srcLocation}'.");
+                return;
+            }
+
+            object dstParentObj = file.State.GetObject(dstLocation.Parent);
+            if (dstParentObj == null)
+            {
+                Console.WriteLine($"No parent object found at location '{dstLocation.Parent}'.");
+                return;
+            }
+
+            object[] grandparent = file.State.GetObject(dstLocation.Parent.Parent) as object[];
+            JSL.ArrayBasedObject editor = new ArrayBasedObject(dstParentObj, grandparent);
+            if (!editor.InsertProperty(dstLocation.Leaf, obj))
+            {
+                Console.WriteLine($"Failed to copy value to location {dstLocation}");
+                return;
+            }
+
+            Console.WriteLine($"Successfully copied value to {dstLocation}.");
         }
 
         private void TransplantObject(JSL.SaveFile mainFile, JSL.SaveFile donorFile)
@@ -517,13 +582,21 @@ namespace JumpSavesCLI
             {
                 return typeof(byte);
             }
+            else if (string.Equals(s, "short", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(short);
+            }
             else if (string.Equals(s, "int", StringComparison.OrdinalIgnoreCase))
             {
-                return typeof(double);
+                return typeof(int);
+            }
+            else if (string.Equals(s, "float", StringComparison.OrdinalIgnoreCase))
+            {
+                return typeof(float);
             }
             else if (string.Equals(s, "double", StringComparison.OrdinalIgnoreCase))
             {
-                return typeof(int);
+                return typeof(double);
             }
             else if (string.Equals(s, "string", StringComparison.OrdinalIgnoreCase))
             {
@@ -547,9 +620,17 @@ namespace JumpSavesCLI
             {
                 return "byte";
             }
+            else if (t == typeof(short))
+            {
+                return "short";
+            }
             else if (t == typeof(int))
             {
                 return "int";
+            }
+            else if (t == typeof(float))
+            {
+                return "float";
             }
             else if (t == typeof(double))
             {
