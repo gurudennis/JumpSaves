@@ -3,6 +3,7 @@ using JSL;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using static JumpSavesCLI.Program;
 
@@ -10,13 +11,46 @@ namespace JumpSavesCLI
 {
     internal class Program
     {
-        public class Options
+        internal class Options
         {
             [Option('s', "save", Required = false, HelpText = "Path to main Jump Space save file/dir (auto-detect if missing)")]
             public string SavePath { get; set; }
 
             [Option('d', "donorSave", Required = false, HelpText = "Path to donor Jump Space save file/dir")]
             public string DonorSavePath { get; set; }
+        }
+
+        internal class CommandContext
+        {
+            public CommandContext(Options options, string cmd)
+            {
+                Options = options;
+                Verbatim = cmd;
+
+                string[] parts = cmd.Split(' ');
+                Name = parts[0];
+                Arguments = parts.Length > 1 ? parts.Skip(1).ToArray() : new string[0];
+            }
+
+            public Options Options { get; private set; }
+
+            public string Verbatim { get; private set; }
+
+            public string Name { get; private set; }
+
+            public string[] Arguments { get; private set; }
+
+            public string TakeArgument()
+            {
+                if (currentArgumentIndex_ >= Arguments.Length)
+                {
+                    return null;
+                }
+
+                return Arguments[currentArgumentIndex_++];
+            }
+
+            private int currentArgumentIndex_ = 0;
         }
 
         static int Main(string[] args)
@@ -37,7 +71,7 @@ namespace JumpSavesCLI
             public string ShortName { get; set; }
             public string LongName { get; set; }
             public string Description { get; set; }
-            public Action Execute { get; set; }
+            public Action<CommandContext> Execute { get; set; }
         }
 
         private int Run(Options options)
@@ -49,7 +83,7 @@ namespace JumpSavesCLI
             try
 #endif
             {
-                if (!Load(options, out JSL.SaveDir dir, out JSL.SaveFile file, out JSL.SaveFile donorFile))
+                if (!Load(new CommandContext(options, String.Empty), out JSL.SaveDir dir, out JSL.SaveFile file, out JSL.SaveFile donorFile))
                 {
                     return 1;
                 }
@@ -62,107 +96,110 @@ namespace JumpSavesCLI
                         ShortName = "h",
                         LongName = "help",
                         Description = "Show this help message",
-                        Execute = () => { PrintHelp(commandsCopy); }
+                        Execute = (CommandContext c) => { PrintHelp(c, commandsCopy); }
                     },
                     new Command
                     {
                         ShortName = "l",
                         LongName = "load",
                         Description = "Reloads the save file(s)",
-                        Execute = () => { Load(options, out dir, out file, out donorFile); }
+                        Execute = (CommandContext c) => { Load(c, out dir, out file, out donorFile); }
                     },
                     new Command
                     {
                         ShortName = "pa",
                         LongName = "print_all",
                         Description = "Print the current save state as JSON",
-                        Execute = () => { Console.WriteLine($"\n{file.State}\n"); }
+                        Execute = (CommandContext c) => { Console.WriteLine($"\n{file.State}\n"); }
                     },
                     new Command
                     {
                         ShortName = "w",
                         LongName = "write",
                         Description = "Write the current save state to the save file/dir",
-                        Execute = () => { Save(file, dir); }
+                        Execute = (CommandContext c) => { Save(c, file, dir); }
                     },
                     new Command
                     {
                         ShortName = "f",
                         LongName = "find",
                         Description = "Find an object in the main save",
-                        Execute = () => { FindObject(file); }
+                        Execute = (CommandContext c) => { FindObject(c, file); }
                     },
                     new Command
                     {
                         ShortName = "fd",
                         LongName = "find_donor",
                         Description = "Find an object in the donor save",
-                        Execute = () => { FindObject(donorFile); }
+                        Execute = (CommandContext c) => { FindObject(c, donorFile); }
                     },
                     new Command
                     {
                         ShortName = "p",
                         LongName = "print",
                         Description = "Print an object from the main save",
-                        Execute = () => { PrintObject(file); }
+                        Execute = (CommandContext c) => { PrintObject(c, file); }
                     },
                     new Command
                     {
                         ShortName = "pd",
                         LongName = "print_donor",
                         Description = "Print an object from the donor save",
-                        Execute = () => { PrintObject(donorFile); }
+                        Execute = (CommandContext c) => { PrintObject(c, donorFile); }
                     },
                     new Command
                     {
                         ShortName = "s",
                         LongName = "set",
                         Description = "Set a value into the main save at a given location",
-                        Execute = () => { SetValue(file); }
+                        Execute = (CommandContext c) => { SetValue(c, file); }
                     },
                     new Command
                     {
                         ShortName = "i",
                         LongName = "insert",
                         Description = "Insert a value into the main save at a given location",
-                        Execute = () => { InsertValue(file); }
+                        Execute = (CommandContext c) => { InsertValue(c, file); }
                     },
                     new Command
                     {
                         ShortName = "r",
                         LongName = "remove",
                         Description = "Remove a value from the main save at a given location",
-                        Execute = () => { RemoveValue(file); }
+                        Execute = (CommandContext c) => { RemoveValue(c, file); }
                     },
                     new Command
                     {
                         ShortName = "c",
                         LongName = "copy",
                         Description  = "Copy an object from one location in the main save to another",
-                        Execute = () => { CopyValue(file); }
+                        Execute = (CommandContext c) => { CopyValue(c, file); }
                     },
                     new Command
                     {
                         ShortName = "t",
                         LongName = "transplant",
                         Description  = "Transplant an object from the donor save to the main save",
-                        Execute = () => { TransplantObject(file, donorFile); }
+                        Execute = (CommandContext c) => { TransplantObject(c, file, donorFile); }
                     },
                 };
                 commandsCopy = commands;
 
                 while (true)
                 {
-                    string input = GetValue("\nInput comamnd ('h' to get help, 'q' to quit)");
+                    Console.WriteLine();
+                    string input = GetArgument(null, "command", "'h' to get help, 'q' to quit");
                     if (string.Equals(input, "q", StringComparison.OrdinalIgnoreCase) || string.Equals(input, "quit", StringComparison.OrdinalIgnoreCase))
                     {
                         break;
                     }
 
+                    CommandContext commandContext = new CommandContext(options, input);
+
                     bool found = false;
                     foreach (Command c in commands)
                     {
-                        if (string.Equals(input, c.ShortName, StringComparison.OrdinalIgnoreCase) || string.Equals(input, c.LongName, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(commandContext.Name, c.ShortName, StringComparison.OrdinalIgnoreCase) || string.Equals(commandContext.Name, c.LongName, StringComparison.OrdinalIgnoreCase))
                         {
                             found = true;
 
@@ -170,7 +207,7 @@ namespace JumpSavesCLI
                             try
 #endif
                             {
-                                c.Execute();
+                                c.Execute(commandContext);
                             }
 #if !DEBUG
                             catch (Exception ex)
@@ -185,7 +222,7 @@ namespace JumpSavesCLI
 
                     if (!found)
                     {
-                        Console.WriteLine($"Unrecognized command '{input}'");
+                        Console.WriteLine($"Unrecognized command '{commandContext.Name}'");
                     }
 
                     Console.WriteLine();
@@ -202,7 +239,7 @@ namespace JumpSavesCLI
             return 0;
         }
 
-        private bool Load(Options options, out JSL.SaveDir dir, out JSL.SaveFile file, out JSL.SaveFile donorFile)
+        private bool Load(CommandContext context, out JSL.SaveDir dir, out JSL.SaveFile file, out JSL.SaveFile donorFile)
         {
             dir = null;
             file = null;
@@ -210,7 +247,7 @@ namespace JumpSavesCLI
 
             try
             {
-                if (String.IsNullOrEmpty(options.SavePath))
+                if (String.IsNullOrEmpty(context.Options.SavePath))
                 {
                     Console.WriteLine("No save directory provided. Attempting to auto-detect...");
                     dir = JSL.SaveDir.Default;
@@ -230,16 +267,16 @@ namespace JumpSavesCLI
                     Console.WriteLine($"Opening latest save file from dir: {dir.Path}");
                     file = dir.SaveFile;
                 }
-                else if (Directory.Exists(options.SavePath))
+                else if (Directory.Exists(context.Options.SavePath))
                 {
-                    Console.WriteLine($"Opening latest save file from dir: {options.SavePath}");
-                    dir = new JSL.SaveDir(options.SavePath);
+                    Console.WriteLine($"Opening latest save file from dir: {context.Options.SavePath}");
+                    dir = new JSL.SaveDir(context.Options.SavePath);
                     file = dir.SaveFile;
                 }
                 else
                 {
-                    Console.WriteLine($"Opening save file: {options.SavePath}");
-                    file = new JSL.SaveFile(options.SavePath);
+                    Console.WriteLine($"Opening save file: {context.Options.SavePath}");
+                    file = new JSL.SaveFile(context.Options.SavePath);
                 }
                 Console.WriteLine($"Opened {file.Path} successfully.\n");
             }
@@ -251,18 +288,18 @@ namespace JumpSavesCLI
 
             try
             {
-                if (!string.IsNullOrEmpty(options.DonorSavePath))
+                if (!string.IsNullOrEmpty(context.Options.DonorSavePath))
                 {
-                    if (Directory.Exists(options.DonorSavePath))
+                    if (Directory.Exists(context.Options.DonorSavePath))
                     {
-                        Console.WriteLine($"Opening latest donor save file from dir: {options.DonorSavePath}");
-                        JSL.SaveDir donorDir = new JSL.SaveDir(options.DonorSavePath);
+                        Console.WriteLine($"Opening latest donor save file from dir: {context.Options.DonorSavePath}");
+                        JSL.SaveDir donorDir = new JSL.SaveDir(context.Options.DonorSavePath);
                         donorFile = donorDir.SaveFile;
                     }
                     else
                     {
-                        Console.WriteLine($"Opening donor save file: {options.DonorSavePath}");
-                        donorFile = new JSL.SaveFile(options.DonorSavePath);
+                        Console.WriteLine($"Opening donor save file: {context.Options.DonorSavePath}");
+                        donorFile = new JSL.SaveFile(context.Options.DonorSavePath);
                     }
                     Console.WriteLine($"Opened {donorFile.Path} successfully.\n");
                 }
@@ -276,7 +313,7 @@ namespace JumpSavesCLI
             return true;
         }
 
-        private void PrintHelp(List<Command> commands)
+        private void PrintHelp(CommandContext context, List<Command> commands)
         {
             Console.WriteLine("Available commands:");
             Console.WriteLine("  q, quit - Quit the program");
@@ -286,7 +323,7 @@ namespace JumpSavesCLI
             }
         }
 
-        private void FindObject(JSL.SaveFile file)
+        private void FindObject(CommandContext context, JSL.SaveFile file)
         {
             if (file == null)
             {
@@ -294,9 +331,9 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string name = GetValue("Enter object name to find");
+            string name = GetArgument(context, "object name to find");
 
-            string after = GetValue("Enter object location x/y/... after which to search, or leave empty for none");
+            string after = GetArgument(context, "object location after which to search", "x/y/..., or leave empty for none");
 
             JSL.Location location = file.State.FindObject(name, new JSL.Location(after));
             if (!PrintObjectAtLocation(file, location))
@@ -305,7 +342,7 @@ namespace JumpSavesCLI
             }
         }
 
-        private void PrintObject(JSL.SaveFile file)
+        private void PrintObject(CommandContext context, JSL.SaveFile file)
         {
             if (file == null)
             {
@@ -313,7 +350,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string locationStr = GetValue("Enter object location x/y/... to print");
+            string locationStr = GetArgument(context, "object location to print", "x/y/...");
             JSL.Location location = new JSL.Location(locationStr);
             if (!PrintObjectAtLocation(file, location))
             {
@@ -345,7 +382,7 @@ namespace JumpSavesCLI
             return true;
         }
 
-        private void SetValue(JSL.SaveFile file)
+        private void SetValue(CommandContext context, JSL.SaveFile file)
         {
             if (file == null)
             {
@@ -353,7 +390,7 @@ namespace JumpSavesCLI
                 return;
             }
             
-            string locationStr = GetValue("Enter object location x/y/... to set value: ");
+            string locationStr = GetArgument(context, "object location to set value", "x/y/...");
             JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
@@ -370,7 +407,7 @@ namespace JumpSavesCLI
             
             Console.WriteLine($"Current value at {locationStr}: {JSL.SaveState.JSONFromObject(obj)}");
 
-            string newValueStr = GetValue("Enter new value (as JSON), or ~ to cancel");
+            string newValueStr = GetArgument(context, "new value as JSON", "~ to cancel");
             if (newValueStr == "~")
             {
                 return;
@@ -389,7 +426,7 @@ namespace JumpSavesCLI
             }
         }
 
-        private void InsertValue(JSL.SaveFile file)
+        private void InsertValue(CommandContext context, JSL.SaveFile file)
         {
             if (file == null)
             {
@@ -397,7 +434,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string locationStr = GetValue("Enter object location x/y/... to insert value");
+            string locationStr = GetArgument(context, "object location to insert value", "x/y/...");
             JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
@@ -415,7 +452,7 @@ namespace JumpSavesCLI
             Console.WriteLine($"Current array at {location.Parent}:\n{JSL.SaveState.JSONFromObject(obj)}");
 
             Console.WriteLine("Available data types: https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/built-in-types");
-            string newValueTypeStr = GetValue("Enter the type of new value to insert, or ~ to cancel");
+            string newValueTypeStr = GetArgument(context, "type of new value to insert", "~ to cancel");
             if (newValueTypeStr == "~")
             {
                 return;
@@ -423,7 +460,7 @@ namespace JumpSavesCLI
 
             Type type = TypeFromString(newValueTypeStr);
 
-            string newValueStr = GetValue("Enter new value to insert (as JSON), or ~ to cancel");
+            string newValueStr = GetArgument(context, "new value to insert as JSON", "~ to cancel");
             if (newValueStr == "~")
             {
                 return;
@@ -441,7 +478,7 @@ namespace JumpSavesCLI
             Console.WriteLine($"Successfully inserted new value at {locationStr}.");
         }
 
-        public void RemoveValue(JSL.SaveFile file)
+        public void RemoveValue(CommandContext context, JSL.SaveFile file)
         {
             if (file == null)
             {
@@ -449,7 +486,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string locationStr = GetValue("Enter object location x/y/... to remove value");
+            string locationStr = GetArgument(context, "object location to remove value", "x/y/...");
             JSL.Location location = new JSL.Location(locationStr);
             if (!location.IsValid)
             {
@@ -475,7 +512,7 @@ namespace JumpSavesCLI
             Console.WriteLine($"Successfully removed value at {locationStr}.");
         }
 
-        private void CopyValue(JSL.SaveFile file)
+        private void CopyValue(CommandContext context, JSL.SaveFile file)
         {
             if (file == null)
             {
@@ -483,7 +520,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string srcLocationStr = GetValue("Enter source object location x/y/...");
+            string srcLocationStr = GetArgument(context, "source object location", "x/y/...");
             JSL.Location srcLocation = new JSL.Location(srcLocationStr);
             if (!srcLocation.IsValid)
             {
@@ -491,7 +528,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string dstLocationStr = GetValue("Enter destination object location x/y/...");
+            string dstLocationStr = GetArgument(context, "destination object location", "x/y/...");
             JSL.Location dstLocation = new JSL.Location(dstLocationStr);
             if (!dstLocation.IsValid)
             {
@@ -524,7 +561,7 @@ namespace JumpSavesCLI
             Console.WriteLine($"Successfully copied value to {dstLocation}.");
         }
 
-        private void TransplantObject(JSL.SaveFile mainFile, JSL.SaveFile donorFile)
+        private void TransplantObject(CommandContext context, JSL.SaveFile mainFile, JSL.SaveFile donorFile)
         {
             if (mainFile == null || donorFile == null)
             {
@@ -532,7 +569,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string srcName = GetValue("Enter object name to transplant from donor");
+            string srcName = GetArgument(context, "object name to transplant from donor");
             JSL.Location srcLocation = donorFile.State.FindObject(srcName);
             if (!srcLocation.IsValid)
             {
@@ -547,7 +584,7 @@ namespace JumpSavesCLI
                 return;
             }
 
-            string dstName = GetValue("Enter object name to transplant to (will be overwritten!)");
+            string dstName = GetArgument(context, "object name to transplant to", "will be overwritten!");
             JSL.Location dstLocation = mainFile.State.FindObject(dstName);
             if (!dstLocation.IsValid)
             {
@@ -566,7 +603,7 @@ namespace JumpSavesCLI
             mainFile.State.SetObject(dstLocation, srcObject);
         }
 
-        private void Save(JSL.SaveFile file, JSL.SaveDir dir)
+        private void Save(CommandContext context, JSL.SaveFile file, JSL.SaveDir dir)
         {
             if (dir == null)
             {
@@ -580,11 +617,19 @@ namespace JumpSavesCLI
             }
         }
 
-        private string GetValue(string query)
+        private string GetArgument(CommandContext context, string query, string help = null)
         {
-            Console.Write($"{query}: ");
-            Console.Out.Flush();
-            return Console.ReadLine().Trim();
+            string value = context?.TakeArgument();
+            if (value == null)
+            {
+                string helpStr = String.IsNullOrEmpty(help) ? String.Empty : $" ({help})";
+                Console.Write($"Enter {query}{helpStr}: ");
+                Console.Out.Flush();
+                return Console.ReadLine().Trim();
+            }
+
+            Console.WriteLine($"{query}: {value}");
+            return value;
         }
 
         private static Type TypeFromString(string s)
