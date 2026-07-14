@@ -32,19 +32,20 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripOpenDefaultDirectoryButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripOpenDirectoryButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripOpenFileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripCloseButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripRunCLIButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
             this.openDefaultDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -78,28 +79,21 @@
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripOpenDefaultDirectoryButton,
             this.toolStripOpenDirectoryButton,
             this.toolStripOpenFileButton,
             this.toolStripCloseButton,
-            this.toolStripRunCLIButton});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 28);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1306, 31);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // closeToolStripMenuItem
-            // 
-            this.closeToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.Close;
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.toolStripRunCLIButton,
+            this.toolStripGameRunningLabel});
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(1306, 31);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // toolStripOpenDefaultDirectoryButton
             // 
@@ -151,6 +145,14 @@
             this.toolStripRunCLIButton.Text = "Run CLI";
             this.toolStripRunCLIButton.Click += new System.EventHandler(this.toolStripRunCLIButton_Click);
             // 
+            // toolStripGameRunningLabel
+            // 
+            this.toolStripGameRunningLabel.Image = global::JumpSaves.Properties.Resources.Running;
+            this.toolStripGameRunningLabel.Margin = new System.Windows.Forms.Padding(30, 1, 0, 2);
+            this.toolStripGameRunningLabel.Name = "toolStripGameRunningLabel";
+            this.toolStripGameRunningLabel.Size = new System.Drawing.Size(180, 28);
+            this.toolStripGameRunningLabel.Text = "Jump Space is running";
+            // 
             // openDefaultDirectoryToolStripMenuItem
             // 
             this.openDefaultDirectoryToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenDefaultDirectory;
@@ -175,11 +177,19 @@
             this.openFileToolStripMenuItem.Text = "Open file...";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.Close;
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
             // runCLIToolStripMenuItem
             // 
             this.runCLIToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.RunCLI;
             this.runCLIToolStripMenuItem.Name = "runCLIToolStripMenuItem";
-            this.runCLIToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.runCLIToolStripMenuItem.Size = new System.Drawing.Size(141, 26);
             this.runCLIToolStripMenuItem.Text = "Run CLI";
             this.runCLIToolStripMenuItem.Click += new System.EventHandler(this.runCLIToolStripMenuItem_Click);
             // 
@@ -189,7 +199,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
             this.ClientSize = new System.Drawing.Size(1306, 707);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -200,8 +210,8 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,7 +223,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripOpenDirectoryButton;
         private System.Windows.Forms.ToolStripButton toolStripOpenFileButton;
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
@@ -223,6 +233,7 @@
         private System.Windows.Forms.ToolStripMenuItem openDefaultDirectoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripCloseButton;
+        private System.Windows.Forms.ToolStripLabel toolStripGameRunningLabel;
     }
 }
 

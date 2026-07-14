@@ -73,6 +73,8 @@ namespace JumpSaves.Model
             }
         }
 
+        public bool IsGameRunning { get; private set; }
+
         public JSL.SaveEditor Editor { get; private set; }
 
         public event EventHandler<PeriodicInfoArgs> PeriodicInfoEvent;
@@ -88,6 +90,8 @@ namespace JumpSaves.Model
         {
             PostOnUIThread(() =>
             {
+                IsGameRunning = args.IsGameRunning;
+
                 PeriodicInfoEvent?.Invoke(this, new PeriodicInfoArgs
                 {
                     IsRunning = args.IsGameRunning,

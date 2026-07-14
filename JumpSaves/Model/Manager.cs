@@ -42,7 +42,7 @@ namespace JumpSaves.Model
 
                 GlobalPeriodicInfoEventArgs args = new GlobalPeriodicInfoEventArgs();
 
-                Process[] processes = Process.GetProcessesByName("JumpSpace.exe");
+                Process[] processes = Process.GetProcessesByName("Jump Space");
                 args.IsGameRunning = (processes != null && processes.Length > 0);
 
                 PeriodicInfoEvent?.Invoke(this, args);

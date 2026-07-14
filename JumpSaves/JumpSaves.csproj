@@ -91,6 +91,7 @@
     <None Include="Images\Close.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
+    <None Include="Images\Running.png" />
     <Content Include="JumpSaves.ico" />
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,7 @@ namespace JumpSaves
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            OnJumpSpaceGameStateChanged();
             OpenDefaultDirectory();
         }
 
@@ -148,12 +149,17 @@ namespace JumpSaves
 
         private void OnPeriodicInfo(object sender, Model.PeriodicInfoArgs args)
         {
-            // ...
+            OnJumpSpaceGameStateChanged();
         }
 
         private void OnOpenCloseStateChanged()
         {
             // ...
+        }
+
+        private void OnJumpSpaceGameStateChanged()
+        {
+            toolStripGameRunningLabel.Visible = model_.IsGameRunning;
         }
 
         private Model.Instance model_;
