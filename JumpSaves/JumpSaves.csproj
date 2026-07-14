@@ -89,6 +89,7 @@
     <None Include="Images\RunCLI.png" />
     <None Include="Images\OpenDefaultDirectory.png" />
     <None Include="Images\Close.png" />
+    <None Include="Images\About.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />

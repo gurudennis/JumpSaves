@@ -33,6 +33,10 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.editorPanel = new System.Windows.Forms.Panel();
+            this.libraryPanel = new System.Windows.Forms.Panel();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripOpenDefaultDirectoryButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripOpenDirectoryButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripOpenFileButton = new System.Windows.Forms.ToolStripButton();
@@ -44,8 +48,14 @@
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripAboutButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -53,10 +63,11 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.toolsToolStripMenuItem});
+            this.toolsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1306, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1167, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -88,12 +99,62 @@
             this.toolStripOpenFileButton,
             this.toolStripCloseButton,
             this.toolStripRunCLIButton,
+            this.toolStripAboutButton,
             this.toolStripGameRunningLabel});
             this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(1306, 31);
+            this.toolStrip.Size = new System.Drawing.Size(1167, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 59);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.editorPanel);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
+            this.splitContainer.Size = new System.Drawing.Size(1167, 662);
+            this.splitContainer.SplitterDistance = 830;
+            this.splitContainer.SplitterWidth = 10;
+            this.splitContainer.TabIndex = 2;
+            // 
+            // editorPanel
+            // 
+            this.editorPanel.AutoSize = true;
+            this.editorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editorPanel.BackColor = System.Drawing.Color.Silver;
+            this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorPanel.Location = new System.Drawing.Point(0, 0);
+            this.editorPanel.Name = "editorPanel";
+            this.editorPanel.Size = new System.Drawing.Size(830, 662);
+            this.editorPanel.TabIndex = 0;
+            // 
+            // libraryPanel
+            // 
+            this.libraryPanel.AutoSize = true;
+            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryPanel.BackColor = System.Drawing.Color.Silver;
+            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
+            this.libraryPanel.Name = "libraryPanel";
+            this.libraryPanel.Size = new System.Drawing.Size(327, 662);
+            this.libraryPanel.TabIndex = 0;
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Text = "Help";
             // 
             // toolStripOpenDefaultDirectoryButton
             // 
@@ -193,12 +254,31 @@
             this.runCLIToolStripMenuItem.Text = "Run CLI";
             this.runCLIToolStripMenuItem.Click += new System.EventHandler(this.runCLIToolStripMenuItem_Click);
             // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.About;
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.aboutToolStripMenuItem.Text = "About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // toolStripAboutButton
+            // 
+            this.toolStripAboutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripAboutButton.Image = global::JumpSaves.Properties.Resources.About;
+            this.toolStripAboutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripAboutButton.Name = "toolStripAboutButton";
+            this.toolStripAboutButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripAboutButton.Text = "toolStripButton1";
+            this.toolStripAboutButton.Click += new System.EventHandler(this.toolStripAboutButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(1306, 707);
+            this.ClientSize = new System.Drawing.Size(1167, 721);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -212,6 +292,12 @@
             this.menuStrip1.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel1.PerformLayout();
+            this.splitContainer.Panel2.ResumeLayout(false);
+            this.splitContainer.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,6 +320,12 @@
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripCloseButton;
         private System.Windows.Forms.ToolStripLabel toolStripGameRunningLabel;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.Panel editorPanel;
+        private System.Windows.Forms.Panel libraryPanel;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripAboutButton;
     }
 }
 

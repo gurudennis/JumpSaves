@@ -78,6 +78,26 @@ namespace JumpSaves
             RunCLI();
         }
 
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowAboutBox();
+        }
+
+        private void toolStripAboutButton_Click(object sender, EventArgs e)
+        {
+            ShowAboutBox();
+        }
+
+        private void onFormClosing(object sender, FormClosingEventArgs e)
+        {
+            CloseFileDir();
+
+            if (model_.IsOpen)
+            {
+                e.Cancel = true;
+            }
+        }
+
         private void onFormClosed(object sender, FormClosedEventArgs e)
         {
             model_?.Dispose();
@@ -147,6 +167,12 @@ namespace JumpSaves
             }
         }
 
+        private void ShowAboutBox()
+        {
+            string credits = "JumpSaves, a Jump Space save file editor.\n\nProgramming: gurudennis (gurudenis <at> gmail.com)\nBeta testing: Snakeyes";
+            MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         private void OnPeriodicInfo(object sender, Model.PeriodicInfoArgs args)
         {
             OnJumpSpaceGameStateChanged();
@@ -154,7 +180,7 @@ namespace JumpSaves
 
         private void OnOpenCloseStateChanged()
         {
-            // ...
+            editorPanel.Visible = model_.IsOpen;
         }
 
         private void OnJumpSpaceGameStateChanged()
@@ -163,15 +189,5 @@ namespace JumpSaves
         }
 
         private Model.Instance model_;
-
-        private void onFormClosing(object sender, FormClosingEventArgs e)
-        {
-            CloseFileDir();
-
-            if (model_.IsOpen)
-            {
-                e.Cancel = true;
-            }
-        }
     }
 }
