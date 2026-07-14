@@ -7,9 +7,16 @@ using System.Threading.Tasks;
 
 namespace JSL
 {
-    public abstract class SaveEditor
+    internal interface IRootEditor
     {
-        public SaveEditor()
+        bool IsDirty { get; set; }
+
+        SaveState State { get; }
+    }
+
+    public abstract class SaveEditor : IRootEditor
+    {
+        internal SaveEditor()
         {
             OpenedTime = DateTime.Now;
         }
@@ -20,24 +27,32 @@ namespace JSL
 
         public abstract DateTime LastEditTime { get; }
 
-        public bool IsDirty { get; protected set; }
+        public bool IsDirty { get; set; }
 
-        public abstract void Save();
-
-        protected SaveFile File { get; set; }
-
-        protected SaveState State
+        public SaveState State
         {
             get
             {
                 return File?.State;
             }
         }
+
+        public ResourceEditor Resources
+        {
+            get
+            {
+                return new ResourceEditor(this);
+            }
+        }
+
+        public abstract void Save();
+
+        protected SaveFile File { get; set; }
     }
 
     public class SaveFileEditor : SaveEditor
     {
-        public SaveFileEditor(string path)
+        internal SaveFileEditor(string path)
         {
             File = new SaveFile(path);
         }
@@ -68,7 +83,7 @@ namespace JSL
 
     public class SaveDirEditor : SaveEditor
     {
-        public SaveDirEditor(string path)
+        internal SaveDirEditor(string path)
         {
             dir_ = new SaveDir(path);
             File = dir_.SaveFile;

@@ -16,8 +16,9 @@ namespace JumpSaves
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            OnJumpSpaceGameStateChanged();
-            OnOpenCloseStateChanged();
+            toolStripComboBoxMode.SelectedIndex = 0;
+
+            OnStateChanged();
             OpenDefaultDirectory();
         }
 
@@ -91,6 +92,27 @@ namespace JumpSaves
             Save();
         }
 
+        private void toolStripComboBoxMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OnStateChanged();
+        }
+
+        private bool CanEdit
+        {
+            get
+            {
+                return model_.IsOpen && !model_.IsMonitoring;
+            }
+        }
+
+        private bool IsCheaterMode
+        {
+            get
+            {
+                return toolStripComboBoxMode.SelectedIndex == 1;
+            }
+        }
+
         private void onFormClosing(object sender, FormClosingEventArgs e)
         {
             CloseFileDir();
@@ -109,7 +131,7 @@ namespace JumpSaves
         private void OpenDefaultDirectory()
         {
             model_.Open(model_.DefaultPath);
-            OnOpenCloseStateChanged();
+            OnStateChanged();
         }
 
         private void OpenDirectory()
@@ -122,7 +144,7 @@ namespace JumpSaves
                 if (result == DialogResult.OK)
                 {
                     Common.Safe(this, "opening a save directory", () => model_.Open(dialog.SelectedPath));
-                    OnOpenCloseStateChanged();
+                    OnStateChanged();
                 }
             }
         }
@@ -141,7 +163,7 @@ namespace JumpSaves
                 if (result == DialogResult.OK)
                 {
                     Common.Safe(this, "opening a save file", () => model_.Open(dialog.FileName));
-                    OnOpenCloseStateChanged();
+                    OnStateChanged();
                 }
             }
         }
@@ -168,7 +190,7 @@ namespace JumpSaves
             }
 
             model_.Close();
-            OnOpenCloseStateChanged();
+            OnStateChanged();
 
             return;
         }
@@ -191,49 +213,31 @@ namespace JumpSaves
 
         private void OnPeriodicInfo(object sender, Model.PeriodicInfoArgs args)
         {
-            OnJumpSpaceGameStateChanged();
+            OnStateChanged();
         }
 
-        private void OnOpenCloseStateChanged()
+        private void OnStateChanged()
         {
             // Menu and toolbar
             toolStripCloseButton.Visible = model_.IsOpen;
             toolStripSaveButton.Visible = model_.IsOpen;
             closeToolStripMenuItem.Visible = model_.IsOpen;
             saveToolStripMenuItem.Visible = model_.IsOpen;
+            toolStripGameRunningLabel.Visible = model_.IsGameRunning;
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
             editorMajorItemList.Editor = model_.Editor;
-            OnEditorStateChanged();
-        }
-
-        private void OnJumpSpaceGameStateChanged()
-        {
-            // "Game running" indicator
-            toolStripGameRunningLabel.Visible = model_.IsGameRunning;
-
-            // Editor panel
-            OnEditorStateChanged();
-        }
-
-        private void OnEditorStateChanged()
-        {
-            bool enableEditing = model_.IsOpen && !model_.IsMonitoring;
-            bool cleared = !model_.IsOpen;
-
-            numericCredits.Enabled = enableEditing;
-            numericGreen.Enabled = enableEditing;
-            numericBlue.Enabled = enableEditing;
-            numericPurple.Enabled = enableEditing;
-            numericOrange.Enabled = enableEditing;
-            numericRed.Enabled = enableEditing;
-
-            buttonMaxOut.Enabled = enableEditing;
-            
-            editorMajorItemList.Enabled = enableEditing;
-
-            if (cleared)
+            editorMajorItemList.AllowCustomization = IsCheaterMode;
+            numericCredits.Enabled = CanEdit && IsCheaterMode;
+            numericGreen.Enabled = CanEdit && IsCheaterMode;
+            numericBlue.Enabled = CanEdit && IsCheaterMode;
+            numericPurple.Enabled = CanEdit && IsCheaterMode;
+            numericOrange.Enabled = CanEdit && IsCheaterMode;
+            numericRed.Enabled = CanEdit && IsCheaterMode;
+            buttonMaxOut.Enabled = CanEdit && IsCheaterMode;
+            editorMajorItemList.Enabled = CanEdit;
+            if (!model_.IsOpen)
             {
                 numericCredits.Value = 0;
                 numericGreen.Value = 0;
@@ -242,6 +246,9 @@ namespace JumpSaves
                 numericOrange.Value = 0;
                 numericRed.Value = 0;
             }
+
+            // Library panel
+            libraryMajorItemList.AllowCustomization = IsCheaterMode;
         }
 
         private Model.Instance model_;

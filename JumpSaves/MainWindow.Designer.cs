@@ -48,6 +48,8 @@
             this.toolStripCloseButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripRunCLIButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripAboutButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabelMode = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBoxMode = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.editorPanel = new System.Windows.Forms.Panel();
@@ -100,7 +102,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1637, 30);
+            this.menuStrip.Size = new System.Drawing.Size(1637, 28);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "Menu";
             // 
@@ -113,7 +115,7 @@
             this.saveToolStripMenuItem,
             this.closeToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openDefaultDirectoryToolStripMenuItem
@@ -161,7 +163,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runCLIToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 26);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // runCLIToolStripMenuItem
@@ -177,7 +179,7 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
@@ -199,8 +201,10 @@
             this.toolStripCloseButton,
             this.toolStripRunCLIButton,
             this.toolStripAboutButton,
+            this.toolStripLabelMode,
+            this.toolStripComboBoxMode,
             this.toolStripGameRunningLabel});
-            this.toolStrip.Location = new System.Drawing.Point(0, 30);
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1637, 31);
             this.toolStrip.TabIndex = 1;
@@ -276,6 +280,24 @@
             this.toolStripAboutButton.Text = "About...";
             this.toolStripAboutButton.Click += new System.EventHandler(this.toolStripAboutButton_Click);
             // 
+            // toolStripLabelMode
+            // 
+            this.toolStripLabelMode.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.toolStripLabelMode.Name = "toolStripLabelMode";
+            this.toolStripLabelMode.Size = new System.Drawing.Size(51, 28);
+            this.toolStripLabelMode.Text = "Mode:";
+            // 
+            // toolStripComboBoxMode
+            // 
+            this.toolStripComboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxMode.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.toolStripComboBoxMode.Items.AddRange(new object[] {
+            "Transfer only",
+            "Cheater"});
+            this.toolStripComboBoxMode.Name = "toolStripComboBoxMode";
+            this.toolStripComboBoxMode.Size = new System.Drawing.Size(121, 31);
+            this.toolStripComboBoxMode.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxMode_SelectedIndexChanged);
+            // 
             // toolStripGameRunningLabel
             // 
             this.toolStripGameRunningLabel.Image = global::JumpSaves.Properties.Resources.Running;
@@ -288,7 +310,7 @@
             // 
             this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 61);
+            this.splitContainer.Location = new System.Drawing.Point(0, 59);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -298,7 +320,7 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
-            this.splitContainer.Size = new System.Drawing.Size(1637, 872);
+            this.splitContainer.Size = new System.Drawing.Size(1637, 874);
             this.splitContainer.SplitterDistance = 1005;
             this.splitContainer.SplitterWidth = 10;
             this.splitContainer.TabIndex = 2;
@@ -315,7 +337,7 @@
             this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editorPanel.Location = new System.Drawing.Point(0, 0);
             this.editorPanel.Name = "editorPanel";
-            this.editorPanel.Size = new System.Drawing.Size(1005, 872);
+            this.editorPanel.Size = new System.Drawing.Size(1005, 874);
             this.editorPanel.TabIndex = 0;
             // 
             // editTabControl
@@ -327,7 +349,7 @@
             this.editTabControl.Location = new System.Drawing.Point(0, 25);
             this.editTabControl.Name = "editTabControl";
             this.editTabControl.SelectedIndex = 0;
-            this.editTabControl.Size = new System.Drawing.Size(381, 849);
+            this.editTabControl.Size = new System.Drawing.Size(381, 851);
             this.editTabControl.TabIndex = 2;
             // 
             // editTabPage1
@@ -350,7 +372,7 @@
             this.editTabPage1.Location = new System.Drawing.Point(4, 28);
             this.editTabPage1.Name = "editTabPage1";
             this.editTabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.editTabPage1.Size = new System.Drawing.Size(373, 817);
+            this.editTabPage1.Size = new System.Drawing.Size(373, 819);
             this.editTabPage1.TabIndex = 0;
             this.editTabPage1.Text = "Resources";
             this.editTabPage1.UseVisualStyleBackColor = true;
@@ -544,7 +566,7 @@
             this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.libraryPanel.Location = new System.Drawing.Point(0, 0);
             this.libraryPanel.Name = "libraryPanel";
-            this.libraryPanel.Size = new System.Drawing.Size(622, 872);
+            this.libraryPanel.Size = new System.Drawing.Size(622, 874);
             this.libraryPanel.TabIndex = 0;
             // 
             // label2
@@ -559,26 +581,30 @@
             // 
             // editorMajorItemList
             // 
+            this.editorMajorItemList.AllowCustomization = false;
             this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.editorMajorItemList.Editor = null;
             this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
             this.editorMajorItemList.Name = "editorMajorItemList";
-            this.editorMajorItemList.Size = new System.Drawing.Size(623, 848);
+            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
             this.editorMajorItemList.TabIndex = 1;
             // 
             // libraryMajorItemList
             // 
+            this.libraryMajorItemList.AllowCustomization = false;
             this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.libraryMajorItemList.Editor = null;
             this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
             this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
             this.libraryMajorItemList.Name = "libraryMajorItemList";
-            this.libraryMajorItemList.Size = new System.Drawing.Size(621, 846);
+            this.libraryMajorItemList.Size = new System.Drawing.Size(621, 848);
             this.libraryMajorItemList.TabIndex = 2;
             // 
             // MainWindow
@@ -670,6 +696,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button buttonMaxOut;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelMode;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMode;
     }
 }
 
