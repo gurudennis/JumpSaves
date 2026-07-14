@@ -22,6 +22,8 @@ namespace JSL
 
         public bool IsDirty { get; protected set; }
 
+        public abstract void Save();
+
         protected SaveFile File { get; set; }
 
         protected SaveState State
@@ -55,6 +57,12 @@ namespace JSL
                 FileInfo info = new FileInfo(Path);
                 return info.LastWriteTime;
             }
+        }
+
+        public override void Save()
+        {
+            File.Save();
+            IsDirty = false;
         }
     }
 
@@ -91,6 +99,12 @@ namespace JSL
 
                 return latest;
             }
+        }
+
+        public override void Save()
+        {
+            dir_.Save(File);
+            IsDirty = false;
         }
 
         private SaveDir dir_;

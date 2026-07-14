@@ -57,6 +57,16 @@ namespace JumpSaves.Model
             Editor = null;
         }
 
+        public void Save()
+        {
+            if (!IsOpen)
+            {
+                throw new Exception("Can't save because no save file or directory is open right now");
+            }
+
+            Editor.Save();
+        }
+
         public bool IsOpen
         {
             get
@@ -73,6 +83,14 @@ namespace JumpSaves.Model
             }
         }
 
+        public string Path
+        {
+            get
+            {
+                return Editor?.Path ?? String.Empty;
+            }
+        }
+
         public bool IsGameRunning { get; private set; }
 
         public JSL.SaveEditor Editor { get; private set; }
@@ -82,7 +100,7 @@ namespace JumpSaves.Model
         public void RunCLI()
         {
             string selfPath = System.Reflection.Assembly.GetEntryAssembly().Location;
-            string cliPath = Path.Combine(Path.GetDirectoryName(selfPath), "JumpSavesCLI.exe");
+            string cliPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(selfPath), "JumpSavesCLI.exe");
             Process.Start(cliPath, $"-s {Editor?.Path ?? DefaultPath}");
         }
 

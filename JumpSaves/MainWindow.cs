@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace JumpSaves
 {
@@ -25,6 +17,7 @@ namespace JumpSaves
         private void MainWindow_Load(object sender, EventArgs e)
         {
             OnJumpSpaceGameStateChanged();
+            OnOpenCloseStateChanged();
             OpenDefaultDirectory();
         }
 
@@ -88,6 +81,16 @@ namespace JumpSaves
             ShowAboutBox();
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void toolStripSaveButton_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
         private void onFormClosing(object sender, FormClosingEventArgs e)
         {
             CloseFileDir();
@@ -118,7 +121,7 @@ namespace JumpSaves
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    model_.Open(dialog.SelectedPath);
+                    Common.Safe(this, "opening a save directory", () => model_.Open(dialog.SelectedPath));
                     OnOpenCloseStateChanged();
                 }
             }
@@ -137,17 +140,28 @@ namespace JumpSaves
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    model_.Open(dialog.FileName);
+                    Common.Safe(this, "opening a save file", () => model_.Open(dialog.FileName));
                     OnOpenCloseStateChanged();
                 }
             }
+        }
+
+        private void Save()
+        {
+            model_.Save();
         }
 
         private void CloseFileDir()
         {
             if (model_.IsDirty)
             {
-                if (MessageBox.Show("There are unsaved changes. Are you sure you want to close?") != DialogResult.OK)
+                string text = $"There are unsaved changes to {model_.Path}.\n\nDo you want to save them now?";
+                DialogResult result = MessageBox.Show(this, text, "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    Save();
+                }
+                else if (result == DialogResult.Cancel)
                 {
                     return;
                 }
@@ -155,6 +169,8 @@ namespace JumpSaves
 
             model_.Close();
             OnOpenCloseStateChanged();
+
+            return;
         }
 
         private void RunCLI()
@@ -180,7 +196,15 @@ namespace JumpSaves
 
         private void OnOpenCloseStateChanged()
         {
+            // Menu and toolbar
+            toolStripCloseButton.Visible = model_.IsOpen;
+            toolStripSaveButton.Visible = model_.IsOpen;
+            closeToolStripMenuItem.Visible = model_.IsOpen;
+            saveToolStripMenuItem.Visible = model_.IsOpen;
+
+            // Editor panel
             editorPanel.Visible = model_.IsOpen;
+            saveLabel.Text = model_.Path;
         }
 
         private void OnJumpSpaceGameStateChanged()

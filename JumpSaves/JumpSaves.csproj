@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +94,7 @@
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />
+    <None Include="Images\Save.png" />
     <Content Include="JumpSaves.ico" />
   </ItemGroup>
   <ItemGroup>
