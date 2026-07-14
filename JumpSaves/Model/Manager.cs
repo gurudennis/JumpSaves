@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,51 +11,45 @@ namespace JumpSaves.Model
     public class GlobalPeriodicInfoEventArgs : EventArgs
     {
         public bool IsGameRunning { get; set; }
-
-        public Dictionary<string, DateTime> LastSaveTimes { get; set; }
     }
 
-    public class Manager
+    public class Manager : IDisposable
     {
-        public Manager(SynchronizationContext syncContext)
+        public Manager()
         {
-            syncContext_ = syncContext;
+            thread_ = new Thread(() => { ThreadProc(); });
+            thread_.Start();
         }
 
-        public Instance CreateInstance()
+        public void Dispose()
         {
-            return new Instance(this, new OnlyManagerShouldCreateThis());
+            stop_ = true;
+            thread_.Join();
         }
 
-        public event EventHandler<GlobalPeriodicInfoEventArgs> PeriodicInfoEvent
+        public Instance CreateInstance(SynchronizationContext syncContext)
         {
-            add
+            return new Instance(syncContext, this, new OnlyManagerShouldCreateThis());
+        }
+
+        public event EventHandler<GlobalPeriodicInfoEventArgs> PeriodicInfoEvent;
+
+        private void ThreadProc()
+        {
+            while (!stop_)
             {
-                periodicInfoEvent_ = (EventHandler<GlobalPeriodicInfoEventArgs>)Delegate.Combine(periodicInfoEvent_, value);
-            }
-            remove
-            {
-                periodicInfoEvent_ = (EventHandler<GlobalPeriodicInfoEventArgs>)Delegate.Remove(periodicInfoEvent_, value);
+                Thread.Sleep(2000);
+
+                GlobalPeriodicInfoEventArgs args = new GlobalPeriodicInfoEventArgs();
+
+                Process[] processes = Process.GetProcessesByName("JumpSpace.exe");
+                args.IsGameRunning = (processes != null && processes.Length > 0);
+
+                PeriodicInfoEvent?.Invoke(this, args);
             }
         }
 
-        private void PostOnUIThread(Action action)
-        {
-            syncContext_.Post(_ => { action(); }, null);
-        }
-
-        private class ProtectedState
-        {
-            public void AddSaveOfInterest(string path)
-            {
-                // ...
-            }
-
-            private Mutex guard_ = new Mutex();
-        }
-
-        private readonly SynchronizationContext syncContext_;
-        private EventHandler<GlobalPeriodicInfoEventArgs> periodicInfoEvent_;
-        private ProtectedState protectedState_ = new ProtectedState();
+        private bool stop_ = false;
+        private readonly Thread thread_;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using JSL;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -551,7 +550,7 @@ namespace JumpSavesCLI
             }
 
             object[] grandparent = file.State.GetObject(dstLocation.Parent.Parent) as object[];
-            JSL.ArrayBasedObject editor = new ArrayBasedObject(dstParentObj, grandparent);
+            JSL.ArrayBasedObject editor = new JSL.ArrayBasedObject(dstParentObj, grandparent);
             if (!editor.InsertProperty(dstLocation.Leaf, obj))
             {
                 Console.WriteLine($"Failed to copy value to location {dstLocation}");

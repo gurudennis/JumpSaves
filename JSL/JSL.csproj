@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SaveEditor.cs" />
     <Compile Include="ArrayBasedObject.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="MajorItem.cs" />

@@ -87,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\RunCLI.png" />
+    <None Include="Images\OpenDefaultDirectory.png" />
+    <None Include="Images\Close.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <Content Include="JumpSaves.ico" />

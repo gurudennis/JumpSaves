@@ -12,11 +12,13 @@ namespace JumpSaves
         [STAThread]
         static void Main()
         {
-            model_ = new Model.Manager(SynchronizationContext.Current);
+            model_ = new Model.Manager();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(model_.CreateInstance()));
+            Application.Run(new MainWindow(model_));
+
+            model_.Dispose();
         }
 
         private static Model.Manager model_;

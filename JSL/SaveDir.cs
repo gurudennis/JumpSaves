@@ -44,7 +44,7 @@ namespace JSL
             Path = path;
         }
 
-        public SaveFile SaveFile
+        public string SaveFilePath
         {
             get
             {
@@ -55,7 +55,16 @@ namespace JSL
                     return null;
                 }
 
-                return newestSaveFile != null ? new SaveFile(newestSaveFile.FullName) : null;
+                return newestSaveFile != null ? newestSaveFile.FullName : null;
+            }
+        }
+
+        public SaveFile SaveFile
+        {
+            get
+            {
+                string path = SaveFilePath;
+                return string.IsNullOrEmpty(path) ? null : new SaveFile(path);
             }
         }
 
@@ -83,7 +92,8 @@ namespace JSL
 
         public string Path { get; private set; }
 
+        public static readonly List<string> FileNames = new List<string> { "persistent_user_data.bin", "persistent_user_data.bin.bak1", "persistent_user_data.bin.bak2" };
+
         private const string FileMask = "persistent_user_data.bin*";
-        private readonly List<string> FileNames = new List<string> { "persistent_user_data.bin", "persistent_user_data.bin.bak1", "persistent_user_data.bin.bak2" };
     }
 }
