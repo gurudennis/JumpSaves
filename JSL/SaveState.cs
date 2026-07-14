@@ -183,7 +183,7 @@ namespace JSL
         {
             get
             {
-                return new Resources(GetSubArrayStrict(Index_Resources), Root);
+                return new Resources(GetSubArrayStrict(Index_Resources)[0], Root);
             }
         }
 

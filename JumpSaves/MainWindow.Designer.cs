@@ -55,26 +55,14 @@
             this.editorPanel = new System.Windows.Forms.Panel();
             this.editTabControl = new System.Windows.Forms.TabControl();
             this.editTabPage1 = new System.Windows.Forms.TabPage();
-            this.buttonMaxOut = new System.Windows.Forms.Button();
-            this.numericRed = new System.Windows.Forms.NumericUpDown();
-            this.numericOrange = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.numericPurple = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericBlue = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.numericGreen = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numericCredits = new System.Windows.Forms.NumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
+            this.editorResourceView = new JumpSaves.ResourceView();
             this.labelPlayerName = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.labelPlayerNameHeading = new System.Windows.Forms.Label();
+            this.editorMajorItemList = new JumpSaves.MajorItemList();
             this.saveLabel = new System.Windows.Forms.Label();
             this.libraryPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.editorMajorItemList = new JumpSaves.MajorItemList();
             this.libraryMajorItemList = new JumpSaves.MajorItemList();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -84,12 +72,6 @@
             this.editorPanel.SuspendLayout();
             this.editTabControl.SuspendLayout();
             this.editTabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericRed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericOrange)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericPurple)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericBlue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericGreen)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericCredits)).BeginInit();
             this.libraryPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -354,20 +336,8 @@
             // 
             // editTabPage1
             // 
-            this.editTabPage1.Controls.Add(this.buttonMaxOut);
-            this.editTabPage1.Controls.Add(this.numericRed);
-            this.editTabPage1.Controls.Add(this.numericOrange);
-            this.editTabPage1.Controls.Add(this.label7);
-            this.editTabPage1.Controls.Add(this.numericPurple);
-            this.editTabPage1.Controls.Add(this.label6);
-            this.editTabPage1.Controls.Add(this.numericBlue);
-            this.editTabPage1.Controls.Add(this.label5);
-            this.editTabPage1.Controls.Add(this.numericGreen);
-            this.editTabPage1.Controls.Add(this.label4);
-            this.editTabPage1.Controls.Add(this.numericCredits);
-            this.editTabPage1.Controls.Add(this.label3);
+            this.editTabPage1.Controls.Add(this.editorResourceView);
             this.editTabPage1.Controls.Add(this.labelPlayerName);
-            this.editTabPage1.Controls.Add(this.label1);
             this.editTabPage1.Controls.Add(this.labelPlayerNameHeading);
             this.editTabPage1.Location = new System.Drawing.Point(4, 28);
             this.editTabPage1.Name = "editTabPage1";
@@ -377,173 +347,44 @@
             this.editTabPage1.Text = "Resources";
             this.editTabPage1.UseVisualStyleBackColor = true;
             // 
-            // buttonMaxOut
+            // editorResourceView
             // 
-            this.buttonMaxOut.Image = global::JumpSaves.Properties.Resources.Riches_tiny;
-            this.buttonMaxOut.Location = new System.Drawing.Point(130, 244);
-            this.buttonMaxOut.Name = "buttonMaxOut";
-            this.buttonMaxOut.Size = new System.Drawing.Size(222, 43);
-            this.buttonMaxOut.TabIndex = 3;
-            this.buttonMaxOut.Text = "Max me out!";
-            this.buttonMaxOut.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.buttonMaxOut.UseVisualStyleBackColor = true;
-            // 
-            // numericRed
-            // 
-            this.numericRed.Location = new System.Drawing.Point(130, 206);
-            this.numericRed.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericRed.Name = "numericRed";
-            this.numericRed.Size = new System.Drawing.Size(222, 22);
-            this.numericRed.TabIndex = 2;
-            // 
-            // numericOrange
-            // 
-            this.numericOrange.Location = new System.Drawing.Point(130, 178);
-            this.numericOrange.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericOrange.Name = "numericOrange";
-            this.numericOrange.Size = new System.Drawing.Size(222, 22);
-            this.numericOrange.TabIndex = 2;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.OrangeRed;
-            this.label7.Location = new System.Drawing.Point(8, 208);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(86, 16);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "Red ingots:";
-            // 
-            // numericPurple
-            // 
-            this.numericPurple.Location = new System.Drawing.Point(130, 150);
-            this.numericPurple.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericPurple.Name = "numericPurple";
-            this.numericPurple.Size = new System.Drawing.Size(222, 22);
-            this.numericPurple.TabIndex = 2;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.ForeColor = System.Drawing.Color.Coral;
-            this.label6.Location = new System.Drawing.Point(8, 180);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(108, 16);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "Orange ingots:";
-            // 
-            // numericBlue
-            // 
-            this.numericBlue.Location = new System.Drawing.Point(130, 122);
-            this.numericBlue.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericBlue.Name = "numericBlue";
-            this.numericBlue.Size = new System.Drawing.Size(222, 22);
-            this.numericBlue.TabIndex = 2;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.MediumPurple;
-            this.label5.Location = new System.Drawing.Point(8, 152);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(102, 16);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Purple ingots:";
-            // 
-            // numericGreen
-            // 
-            this.numericGreen.Location = new System.Drawing.Point(130, 94);
-            this.numericGreen.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.numericGreen.Name = "numericGreen";
-            this.numericGreen.Size = new System.Drawing.Size(222, 22);
-            this.numericGreen.TabIndex = 2;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.DodgerBlue;
-            this.label4.Location = new System.Drawing.Point(8, 124);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(88, 16);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Blue ingots:";
-            // 
-            // numericCredits
-            // 
-            this.numericCredits.Location = new System.Drawing.Point(130, 64);
-            this.numericCredits.Maximum = new decimal(new int[] {
-            500000,
-            0,
-            0,
-            0});
-            this.numericCredits.Name = "numericCredits";
-            this.numericCredits.Size = new System.Drawing.Size(222, 22);
-            this.numericCredits.TabIndex = 2;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.Green;
-            this.label3.Location = new System.Drawing.Point(8, 96);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(99, 16);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Green ingots:";
+            this.editorResourceView.Location = new System.Drawing.Point(8, 50);
+            this.editorResourceView.Name = "editorResourceView";
+            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
+            this.editorResourceView.TabIndex = 1;
             // 
             // labelPlayerName
             // 
             this.labelPlayerName.AutoSize = true;
-            this.labelPlayerName.Location = new System.Drawing.Point(127, 14);
+            this.labelPlayerName.Location = new System.Drawing.Point(130, 14);
             this.labelPlayerName.Name = "labelPlayerName";
             this.labelPlayerName.Size = new System.Drawing.Size(55, 16);
             this.labelPlayerName.TabIndex = 0;
             this.labelPlayerName.Text = "<name>";
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.DarkGoldenrod;
-            this.label1.Location = new System.Drawing.Point(8, 66);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(60, 16);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Credits:";
-            // 
             // labelPlayerNameHeading
             // 
             this.labelPlayerNameHeading.AutoSize = true;
             this.labelPlayerNameHeading.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPlayerNameHeading.Location = new System.Drawing.Point(8, 14);
+            this.labelPlayerNameHeading.Location = new System.Drawing.Point(11, 14);
             this.labelPlayerNameHeading.Name = "labelPlayerNameHeading";
             this.labelPlayerNameHeading.Size = new System.Drawing.Size(56, 16);
             this.labelPlayerNameHeading.TabIndex = 0;
             this.labelPlayerNameHeading.Text = "Player:";
+            // 
+            // editorMajorItemList
+            // 
+            this.editorMajorItemList.AllowCustomization = false;
+            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.editorMajorItemList.Editor = null;
+            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
+            this.editorMajorItemList.Name = "editorMajorItemList";
+            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
+            this.editorMajorItemList.TabIndex = 1;
             // 
             // saveLabel
             // 
@@ -569,29 +410,6 @@
             this.libraryPanel.Size = new System.Drawing.Size(622, 874);
             this.libraryPanel.TabIndex = 0;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 18);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "My Library";
-            // 
-            // editorMajorItemList
-            // 
-            this.editorMajorItemList.AllowCustomization = false;
-            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.editorMajorItemList.Editor = null;
-            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
-            this.editorMajorItemList.Name = "editorMajorItemList";
-            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
-            this.editorMajorItemList.TabIndex = 1;
-            // 
             // libraryMajorItemList
             // 
             this.libraryMajorItemList.AllowCustomization = false;
@@ -606,6 +424,16 @@
             this.libraryMajorItemList.Name = "libraryMajorItemList";
             this.libraryMajorItemList.Size = new System.Drawing.Size(621, 848);
             this.libraryMajorItemList.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 18);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "My Library";
             // 
             // MainWindow
             // 
@@ -637,12 +465,6 @@
             this.editTabControl.ResumeLayout(false);
             this.editTabPage1.ResumeLayout(false);
             this.editTabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericRed)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericOrange)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericPurple)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericBlue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericGreen)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericCredits)).EndInit();
             this.libraryPanel.ResumeLayout(false);
             this.libraryPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -683,21 +505,9 @@
         private System.Windows.Forms.TabPage editTabPage1;
         private System.Windows.Forms.Label labelPlayerName;
         private System.Windows.Forms.Label labelPlayerNameHeading;
-        private System.Windows.Forms.NumericUpDown numericCredits;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.NumericUpDown numericRed;
-        private System.Windows.Forms.NumericUpDown numericOrange;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.NumericUpDown numericPurple;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown numericBlue;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.NumericUpDown numericGreen;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button buttonMaxOut;
         private System.Windows.Forms.ToolStripLabel toolStripLabelMode;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMode;
+        private ResourceView editorResourceView;
     }
 }
 

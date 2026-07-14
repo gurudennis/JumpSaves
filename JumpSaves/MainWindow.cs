@@ -229,23 +229,10 @@ namespace JumpSaves
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
             editorMajorItemList.Editor = model_.Editor;
             editorMajorItemList.AllowCustomization = IsCheaterMode;
-            numericCredits.Enabled = CanEdit && IsCheaterMode;
-            numericGreen.Enabled = CanEdit && IsCheaterMode;
-            numericBlue.Enabled = CanEdit && IsCheaterMode;
-            numericPurple.Enabled = CanEdit && IsCheaterMode;
-            numericOrange.Enabled = CanEdit && IsCheaterMode;
-            numericRed.Enabled = CanEdit && IsCheaterMode;
-            buttonMaxOut.Enabled = CanEdit && IsCheaterMode;
             editorMajorItemList.Enabled = CanEdit;
-            if (!model_.IsOpen)
-            {
-                numericCredits.Value = 0;
-                numericGreen.Value = 0;
-                numericBlue.Value = 0;
-                numericPurple.Value = 0;
-                numericOrange.Value = 0;
-                numericRed.Value = 0;
-            }
+            editorResourceView.Editor = model_.Editor?.Resources;
+            editorResourceView.AllowCustomization = IsCheaterMode;
+            editorResourceView.Enabled = CanEdit;
 
             // Library panel
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
