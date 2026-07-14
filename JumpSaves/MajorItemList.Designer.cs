@@ -1,0 +1,204 @@
+﻿namespace JumpSaves
+{
+    partial class MajorItemList
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Player Weapons", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Multi Turrets", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Pilot Cannons", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Special Weapons", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Engines", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Shield Generators", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("Sensors", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("Reactors", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Aux. Generators", System.Windows.Forms.HorizontalAlignment.Left);
+            this.list = new System.Windows.Forms.ListView();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
+            this.columnHeaderRarity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderModules = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // list
+            // 
+            this.list.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderName,
+            this.columnHeaderRarity,
+            this.columnHeaderLevel,
+            this.columnHeaderModules});
+            listViewGroup1.Header = "Player Weapons";
+            listViewGroup1.Name = "listViewGroupPlayerWeapons";
+            listViewGroup2.Header = "Multi Turrets";
+            listViewGroup2.Name = "listViewGroupMultiTurrets";
+            listViewGroup3.Header = "Pilot Cannons";
+            listViewGroup3.Name = "listViewGroupPilotCannons";
+            listViewGroup4.Header = "Special Weapons";
+            listViewGroup4.Name = "listViewGroupSpecialWeapons";
+            listViewGroup5.Header = "Engines";
+            listViewGroup5.Name = "listViewGroupEngines";
+            listViewGroup6.Header = "Shield Generators";
+            listViewGroup6.Name = "listViewGroupShieldGenerators";
+            listViewGroup7.Header = "Sensors";
+            listViewGroup7.Name = "listViewGroupSensors";
+            listViewGroup8.Header = "Reactors";
+            listViewGroup8.Name = "listViewGroupReactors";
+            listViewGroup9.Header = "Aux. Generators";
+            listViewGroup9.Name = "listViewGroupAuxGenerators";
+            this.list.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            listViewGroup1,
+            listViewGroup2,
+            listViewGroup3,
+            listViewGroup4,
+            listViewGroup5,
+            listViewGroup6,
+            listViewGroup7,
+            listViewGroup8,
+            listViewGroup9});
+            this.list.HideSelection = false;
+            this.list.Location = new System.Drawing.Point(0, 32);
+            this.list.Margin = new System.Windows.Forms.Padding(0);
+            this.list.Name = "list";
+            this.list.Size = new System.Drawing.Size(437, 684);
+            this.list.TabIndex = 0;
+            this.list.UseCompatibleStateImageBehavior = false;
+            this.list.View = System.Windows.Forms.View.Details;
+            this.list.VirtualMode = true;
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStrip.AutoSize = false;
+            this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonTransfer,
+            this.toolStripButtonAdd,
+            this.toolStripButtonRemove,
+            this.toolStripButtonEdit});
+            this.toolStrip.Location = new System.Drawing.Point(1, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(438, 31);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Text = "Actions";
+            // 
+            // columnHeaderName
+            // 
+            this.columnHeaderName.Text = "Name";
+            this.columnHeaderName.Width = 200;
+            // 
+            // toolStripButtonAdd
+            // 
+            this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAdd.Image = global::JumpSaves.Properties.Resources.Add;
+            this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAdd.Name = "toolStripButtonAdd";
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonAdd.Text = "Add...";
+            // 
+            // toolStripButtonRemove
+            // 
+            this.toolStripButtonRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemove.Image = global::JumpSaves.Properties.Resources.Remove;
+            this.toolStripButtonRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemove.Name = "toolStripButtonRemove";
+            this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonRemove.Text = "Remove selected items";
+            // 
+            // toolStripButtonTransfer
+            // 
+            this.toolStripButtonTransfer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTransfer.Image = global::JumpSaves.Properties.Resources.Transfer;
+            this.toolStripButtonTransfer.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonTransfer.Name = "toolStripButtonTransfer";
+            this.toolStripButtonTransfer.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonTransfer.Text = "Transfer a copy of selected items";
+            // 
+            // columnHeaderRarity
+            // 
+            this.columnHeaderRarity.Text = "Rarity";
+            this.columnHeaderRarity.Width = 50;
+            // 
+            // columnHeaderLevel
+            // 
+            this.columnHeaderLevel.Text = "Level";
+            this.columnHeaderLevel.Width = 50;
+            // 
+            // columnHeaderModules
+            // 
+            this.columnHeaderModules.Text = "Modules";
+            this.columnHeaderModules.Width = 100;
+            // 
+            // toolStripButtonEdit
+            // 
+            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEdit.Image = global::JumpSaves.Properties.Resources.Edit;
+            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
+            this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonEdit.Text = "Edit selected item";
+            // 
+            // MajorItemList
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Silver;
+            this.Controls.Add(this.toolStrip);
+            this.Controls.Add(this.list);
+            this.Name = "MajorItemList";
+            this.Size = new System.Drawing.Size(438, 717);
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.ListView list;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRemove;
+        private System.Windows.Forms.ColumnHeader columnHeaderName;
+        private System.Windows.Forms.ToolStripButton toolStripButtonTransfer;
+        private System.Windows.Forms.ColumnHeader columnHeaderRarity;
+        private System.Windows.Forms.ColumnHeader columnHeaderLevel;
+        private System.Windows.Forms.ColumnHeader columnHeaderModules;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
+    }
+}

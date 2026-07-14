@@ -23,7 +23,7 @@ namespace JumpSaves.Model
 
         public void Dispose()
         {
-            stop_ = true;
+            stop_.Set();
             thread_.Join();
         }
 
@@ -36,10 +36,8 @@ namespace JumpSaves.Model
 
         private void ThreadProc()
         {
-            while (!stop_)
+            while (!stop_.WaitOne(2000))
             {
-                Thread.Sleep(2000);
-
                 GlobalPeriodicInfoEventArgs args = new GlobalPeriodicInfoEventArgs();
 
                 Process[] processes = Process.GetProcessesByName("Jump Space");
@@ -49,7 +47,7 @@ namespace JumpSaves.Model
             }
         }
 
-        private bool stop_ = false;
+        private static ManualResetEvent stop_ = new ManualResetEvent(false);
         private readonly Thread thread_;
     }
 }

@@ -56,12 +56,21 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="MajorItemList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MajorItemList.Designer.cs">
+      <DependentUpon>MajorItemList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\Instance.cs" />
     <Compile Include="Model\Manager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MajorItemList.resx">
+      <DependentUpon>MajorItemList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -91,10 +100,14 @@
     <None Include="Images\OpenDefaultDirectory.png" />
     <None Include="Images\Close.png" />
     <None Include="Images\About.png" />
+    <None Include="Images\Add.png" />
+    <None Include="Images\Edit.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />
     <None Include="Images\Save.png" />
+    <None Include="Images\Remove.png" />
+    <None Include="Images\Transfer.png" />
     <Content Include="JumpSaves.ico" />
   </ItemGroup>
   <ItemGroup>

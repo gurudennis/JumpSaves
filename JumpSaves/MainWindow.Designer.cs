@@ -31,29 +31,33 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.editorPanel = new System.Windows.Forms.Panel();
-            this.libraryPanel = new System.Windows.Forms.Panel();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.toolStripOpenDefaultDirectoryButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripOpenDirectoryButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripOpenFileButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripCloseButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripRunCLIButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripAboutButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
             this.openDefaultDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripOpenDefaultDirectoryButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripOpenDirectoryButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripOpenFileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSaveButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripCloseButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripRunCLIButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripAboutButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.editorPanel = new System.Windows.Forms.Panel();
+            this.saveLabel = new System.Windows.Forms.Label();
+            this.libraryPanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.editTabControl = new System.Windows.Forms.TabControl();
+            this.editTabPage1 = new System.Windows.Forms.TabPage();
+            this.majorItemList1 = new JumpSaves.MajorItemList();
+            this.libraryMajorItemList = new JumpSaves.MajorItemList();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -62,6 +66,7 @@
             this.splitContainer.SuspendLayout();
             this.editorPanel.SuspendLayout();
             this.libraryPanel.SuspendLayout();
+            this.editTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -73,7 +78,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1167, 28);
+            this.menuStrip.Size = new System.Drawing.Size(1637, 28);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "Menu";
             // 
@@ -88,171 +93,6 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runCLIToolStripMenuItem});
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
-            this.toolsToolStripMenuItem.Text = "Tools";
-            // 
-            // toolStrip
-            // 
-            this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripOpenDefaultDirectoryButton,
-            this.toolStripOpenDirectoryButton,
-            this.toolStripOpenFileButton,
-            this.toolStripSaveButton,
-            this.toolStripCloseButton,
-            this.toolStripRunCLIButton,
-            this.toolStripAboutButton,
-            this.toolStripGameRunningLabel});
-            this.toolStrip.Location = new System.Drawing.Point(0, 28);
-            this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(1167, 31);
-            this.toolStrip.TabIndex = 1;
-            this.toolStrip.Text = "toolStrip1";
-            // 
-            // splitContainer
-            // 
-            this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 59);
-            this.splitContainer.Name = "splitContainer";
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.editorPanel);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
-            this.splitContainer.Size = new System.Drawing.Size(1167, 662);
-            this.splitContainer.SplitterDistance = 703;
-            this.splitContainer.SplitterWidth = 10;
-            this.splitContainer.TabIndex = 2;
-            // 
-            // editorPanel
-            // 
-            this.editorPanel.AutoSize = true;
-            this.editorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.editorPanel.BackColor = System.Drawing.Color.Silver;
-            this.editorPanel.Controls.Add(this.saveLabel);
-            this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorPanel.Location = new System.Drawing.Point(0, 0);
-            this.editorPanel.Name = "editorPanel";
-            this.editorPanel.Size = new System.Drawing.Size(703, 662);
-            this.editorPanel.TabIndex = 0;
-            // 
-            // libraryPanel
-            // 
-            this.libraryPanel.AutoSize = true;
-            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.libraryPanel.BackColor = System.Drawing.Color.Silver;
-            this.libraryPanel.Controls.Add(this.label2);
-            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
-            this.libraryPanel.Name = "libraryPanel";
-            this.libraryPanel.Size = new System.Drawing.Size(454, 662);
-            this.libraryPanel.TabIndex = 0;
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // saveLabel
-            // 
-            this.saveLabel.AutoSize = true;
-            this.saveLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveLabel.Location = new System.Drawing.Point(6, 5);
-            this.saveLabel.Name = "saveLabel";
-            this.saveLabel.Size = new System.Drawing.Size(96, 18);
-            this.saveLabel.TabIndex = 0;
-            this.saveLabel.Text = "<save path>";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 18);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Library";
-            // 
-            // toolStripOpenDefaultDirectoryButton
-            // 
-            this.toolStripOpenDefaultDirectoryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripOpenDefaultDirectoryButton.Image = global::JumpSaves.Properties.Resources.OpenDefaultDirectory;
-            this.toolStripOpenDefaultDirectoryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripOpenDefaultDirectoryButton.Name = "toolStripOpenDefaultDirectoryButton";
-            this.toolStripOpenDefaultDirectoryButton.Size = new System.Drawing.Size(29, 28);
-            this.toolStripOpenDefaultDirectoryButton.Text = "Open Default Directory";
-            this.toolStripOpenDefaultDirectoryButton.Click += new System.EventHandler(this.toolStripOpenDefaultDirectoryButton_Click);
-            // 
-            // toolStripOpenDirectoryButton
-            // 
-            this.toolStripOpenDirectoryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripOpenDirectoryButton.Image = global::JumpSaves.Properties.Resources.OpenDirectory;
-            this.toolStripOpenDirectoryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripOpenDirectoryButton.Name = "toolStripOpenDirectoryButton";
-            this.toolStripOpenDirectoryButton.Size = new System.Drawing.Size(29, 28);
-            this.toolStripOpenDirectoryButton.Text = "Open Directory...";
-            this.toolStripOpenDirectoryButton.Click += new System.EventHandler(this.toolStripOpenDirectoryButton_Click);
-            // 
-            // toolStripOpenFileButton
-            // 
-            this.toolStripOpenFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripOpenFileButton.Image = global::JumpSaves.Properties.Resources.OpenFile;
-            this.toolStripOpenFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripOpenFileButton.Name = "toolStripOpenFileButton";
-            this.toolStripOpenFileButton.Size = new System.Drawing.Size(29, 28);
-            this.toolStripOpenFileButton.Text = "Open File...";
-            this.toolStripOpenFileButton.Click += new System.EventHandler(this.toolStripOpenFileButton_Click);
-            // 
-            // toolStripCloseButton
-            // 
-            this.toolStripCloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripCloseButton.Image = global::JumpSaves.Properties.Resources.Close;
-            this.toolStripCloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripCloseButton.Name = "toolStripCloseButton";
-            this.toolStripCloseButton.Size = new System.Drawing.Size(29, 28);
-            this.toolStripCloseButton.Text = "Close";
-            this.toolStripCloseButton.Click += new System.EventHandler(this.toolStripCloseButton_Click);
-            // 
-            // toolStripRunCLIButton
-            // 
-            this.toolStripRunCLIButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripRunCLIButton.Image = global::JumpSaves.Properties.Resources.RunCLI;
-            this.toolStripRunCLIButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripRunCLIButton.Name = "toolStripRunCLIButton";
-            this.toolStripRunCLIButton.Size = new System.Drawing.Size(29, 28);
-            this.toolStripRunCLIButton.Text = "Run CLI";
-            this.toolStripRunCLIButton.Click += new System.EventHandler(this.toolStripRunCLIButton_Click);
-            // 
-            // toolStripAboutButton
-            // 
-            this.toolStripAboutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripAboutButton.Image = global::JumpSaves.Properties.Resources.About;
-            this.toolStripAboutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripAboutButton.Name = "toolStripAboutButton";
-            this.toolStripAboutButton.Size = new System.Drawing.Size(29, 28);
-            this.toolStripAboutButton.Text = "About...";
-            this.toolStripAboutButton.Click += new System.EventHandler(this.toolStripAboutButton_Click);
-            // 
-            // toolStripGameRunningLabel
-            // 
-            this.toolStripGameRunningLabel.Image = global::JumpSaves.Properties.Resources.Running;
-            this.toolStripGameRunningLabel.Margin = new System.Windows.Forms.Padding(30, 1, 0, 2);
-            this.toolStripGameRunningLabel.Name = "toolStripGameRunningLabel";
-            this.toolStripGameRunningLabel.Size = new System.Drawing.Size(180, 28);
-            this.toolStripGameRunningLabel.Text = "Jump Space is running";
             // 
             // openDefaultDirectoryToolStripMenuItem
             // 
@@ -294,6 +134,14 @@
             this.closeToolStripMenuItem.Text = "Close";
             this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
             // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.runCLIToolStripMenuItem});
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
+            this.toolsToolStripMenuItem.Text = "Tools";
+            // 
             // runCLIToolStripMenuItem
             // 
             this.runCLIToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.RunCLI;
@@ -302,13 +150,69 @@
             this.runCLIToolStripMenuItem.Text = "Run CLI";
             this.runCLIToolStripMenuItem.Click += new System.EventHandler(this.runCLIToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.About;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 26);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripOpenDefaultDirectoryButton,
+            this.toolStripOpenDirectoryButton,
+            this.toolStripOpenFileButton,
+            this.toolStripSaveButton,
+            this.toolStripCloseButton,
+            this.toolStripRunCLIButton,
+            this.toolStripAboutButton,
+            this.toolStripGameRunningLabel});
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(1637, 31);
+            this.toolStrip.TabIndex = 1;
+            this.toolStrip.Text = "toolStrip1";
+            // 
+            // toolStripOpenDefaultDirectoryButton
+            // 
+            this.toolStripOpenDefaultDirectoryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripOpenDefaultDirectoryButton.Image = global::JumpSaves.Properties.Resources.OpenDefaultDirectory;
+            this.toolStripOpenDefaultDirectoryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripOpenDefaultDirectoryButton.Name = "toolStripOpenDefaultDirectoryButton";
+            this.toolStripOpenDefaultDirectoryButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripOpenDefaultDirectoryButton.Text = "Open Default Directory";
+            this.toolStripOpenDefaultDirectoryButton.Click += new System.EventHandler(this.toolStripOpenDefaultDirectoryButton_Click);
+            // 
+            // toolStripOpenDirectoryButton
+            // 
+            this.toolStripOpenDirectoryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripOpenDirectoryButton.Image = global::JumpSaves.Properties.Resources.OpenDirectory;
+            this.toolStripOpenDirectoryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripOpenDirectoryButton.Name = "toolStripOpenDirectoryButton";
+            this.toolStripOpenDirectoryButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripOpenDirectoryButton.Text = "Open Directory...";
+            this.toolStripOpenDirectoryButton.Click += new System.EventHandler(this.toolStripOpenDirectoryButton_Click);
+            // 
+            // toolStripOpenFileButton
+            // 
+            this.toolStripOpenFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripOpenFileButton.Image = global::JumpSaves.Properties.Resources.OpenFile;
+            this.toolStripOpenFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripOpenFileButton.Name = "toolStripOpenFileButton";
+            this.toolStripOpenFileButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripOpenFileButton.Text = "Open File...";
+            this.toolStripOpenFileButton.Click += new System.EventHandler(this.toolStripOpenFileButton_Click);
             // 
             // toolStripSaveButton
             // 
@@ -320,12 +224,165 @@
             this.toolStripSaveButton.Text = "Save";
             this.toolStripSaveButton.Click += new System.EventHandler(this.toolStripSaveButton_Click);
             // 
+            // toolStripCloseButton
+            // 
+            this.toolStripCloseButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripCloseButton.Image = global::JumpSaves.Properties.Resources.Close;
+            this.toolStripCloseButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripCloseButton.Name = "toolStripCloseButton";
+            this.toolStripCloseButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripCloseButton.Text = "Close";
+            this.toolStripCloseButton.Click += new System.EventHandler(this.toolStripCloseButton_Click);
+            // 
+            // toolStripRunCLIButton
+            // 
+            this.toolStripRunCLIButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripRunCLIButton.Image = global::JumpSaves.Properties.Resources.RunCLI;
+            this.toolStripRunCLIButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripRunCLIButton.Name = "toolStripRunCLIButton";
+            this.toolStripRunCLIButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripRunCLIButton.Text = "Run CLI";
+            this.toolStripRunCLIButton.Click += new System.EventHandler(this.toolStripRunCLIButton_Click);
+            // 
+            // toolStripAboutButton
+            // 
+            this.toolStripAboutButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripAboutButton.Image = global::JumpSaves.Properties.Resources.About;
+            this.toolStripAboutButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripAboutButton.Name = "toolStripAboutButton";
+            this.toolStripAboutButton.Size = new System.Drawing.Size(29, 28);
+            this.toolStripAboutButton.Text = "About...";
+            this.toolStripAboutButton.Click += new System.EventHandler(this.toolStripAboutButton_Click);
+            // 
+            // toolStripGameRunningLabel
+            // 
+            this.toolStripGameRunningLabel.Image = global::JumpSaves.Properties.Resources.Running;
+            this.toolStripGameRunningLabel.Margin = new System.Windows.Forms.Padding(30, 1, 0, 2);
+            this.toolStripGameRunningLabel.Name = "toolStripGameRunningLabel";
+            this.toolStripGameRunningLabel.Size = new System.Drawing.Size(180, 28);
+            this.toolStripGameRunningLabel.Text = "Jump Space is running";
+            // 
+            // splitContainer
+            // 
+            this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 59);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.editorPanel);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
+            this.splitContainer.Size = new System.Drawing.Size(1637, 874);
+            this.splitContainer.SplitterDistance = 1056;
+            this.splitContainer.SplitterWidth = 10;
+            this.splitContainer.TabIndex = 2;
+            this.splitContainer.TabStop = false;
+            // 
+            // editorPanel
+            // 
+            this.editorPanel.AutoSize = true;
+            this.editorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editorPanel.BackColor = System.Drawing.Color.Gainsboro;
+            this.editorPanel.Controls.Add(this.editTabControl);
+            this.editorPanel.Controls.Add(this.majorItemList1);
+            this.editorPanel.Controls.Add(this.saveLabel);
+            this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorPanel.Location = new System.Drawing.Point(0, 0);
+            this.editorPanel.Name = "editorPanel";
+            this.editorPanel.Size = new System.Drawing.Size(1056, 874);
+            this.editorPanel.TabIndex = 0;
+            // 
+            // saveLabel
+            // 
+            this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveLabel.Location = new System.Drawing.Point(4, 5);
+            this.saveLabel.Name = "saveLabel";
+            this.saveLabel.Size = new System.Drawing.Size(1049, 18);
+            this.saveLabel.TabIndex = 0;
+            this.saveLabel.Text = "<save path>";
+            this.saveLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // libraryPanel
+            // 
+            this.libraryPanel.AutoSize = true;
+            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryPanel.BackColor = System.Drawing.Color.Gainsboro;
+            this.libraryPanel.Controls.Add(this.libraryMajorItemList);
+            this.libraryPanel.Controls.Add(this.label2);
+            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
+            this.libraryPanel.Name = "libraryPanel";
+            this.libraryPanel.Size = new System.Drawing.Size(571, 874);
+            this.libraryPanel.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 18);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "My Library";
+            // 
+            // editTabControl
+            // 
+            this.editTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.editTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.editTabControl.Controls.Add(this.editTabPage1);
+            this.editTabControl.Location = new System.Drawing.Point(0, 25);
+            this.editTabControl.Name = "editTabControl";
+            this.editTabControl.SelectedIndex = 0;
+            this.editTabControl.Size = new System.Drawing.Size(484, 849);
+            this.editTabControl.TabIndex = 2;
+            // 
+            // editTabPage1
+            // 
+            this.editTabPage1.Location = new System.Drawing.Point(4, 28);
+            this.editTabPage1.Name = "editTabPage1";
+            this.editTabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.editTabPage1.Size = new System.Drawing.Size(476, 817);
+            this.editTabPage1.TabIndex = 0;
+            this.editTabPage1.Text = "Properties";
+            this.editTabPage1.UseVisualStyleBackColor = true;
+            // 
+            // majorItemList1
+            // 
+            this.majorItemList1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.majorItemList1.BackColor = System.Drawing.Color.Silver;
+            this.majorItemList1.Location = new System.Drawing.Point(486, 25);
+            this.majorItemList1.Name = "majorItemList1";
+            this.majorItemList1.Size = new System.Drawing.Size(570, 848);
+            this.majorItemList1.TabIndex = 1;
+            // 
+            // libraryMajorItemList
+            // 
+            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
+            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
+            this.libraryMajorItemList.Name = "libraryMajorItemList";
+            this.libraryMajorItemList.Size = new System.Drawing.Size(570, 846);
+            this.libraryMajorItemList.TabIndex = 2;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(1167, 721);
+            this.ClientSize = new System.Drawing.Size(1637, 933);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
@@ -347,9 +404,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
             this.editorPanel.ResumeLayout(false);
-            this.editorPanel.PerformLayout();
             this.libraryPanel.ResumeLayout(false);
             this.libraryPanel.PerformLayout();
+            this.editTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -382,6 +439,10 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripSaveButton;
+        private MajorItemList libraryMajorItemList;
+        private MajorItemList majorItemList1;
+        private System.Windows.Forms.TabControl editTabControl;
+        private System.Windows.Forms.TabPage editTabPage1;
     }
 }
 
