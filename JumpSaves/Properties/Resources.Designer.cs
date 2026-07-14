@@ -143,6 +143,26 @@ namespace JumpSaves.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Riches {
+            get {
+                object obj = ResourceManager.GetObject("Riches", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Riches_tiny {
+            get {
+                object obj = ResourceManager.GetObject("Riches_tiny", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap RunCLI {
             get {
                 object obj = ResourceManager.GetObject("RunCLI", resourceCulture);

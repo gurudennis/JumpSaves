@@ -16,5 +16,19 @@ namespace JumpSaves
         {
             InitializeComponent();
         }
+
+        public JSL.SaveEditor Editor;
+
+        private void OnEnabledChanged(object sender, EventArgs e)
+        {
+            list.Enabled = Enabled;
+            list.BackColor = Enabled ? SystemColors.Control : Color.Gainsboro;
+
+            toolStrip.Enabled = Enabled;
+            foreach (ToolStripItem item in toolStrip.Items)
+            {
+                item.Enabled = toolStrip.Enabled;
+            }
+        }
     }
 }

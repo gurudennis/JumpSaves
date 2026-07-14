@@ -38,14 +38,14 @@
             System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("Reactors", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Aux. Generators", System.Windows.Forms.HorizontalAlignment.Left);
             this.list = new System.Windows.Forms.ListView();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
             this.columnHeaderRarity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderModules = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -92,11 +92,31 @@
             this.list.Location = new System.Drawing.Point(0, 32);
             this.list.Margin = new System.Windows.Forms.Padding(0);
             this.list.Name = "list";
-            this.list.Size = new System.Drawing.Size(437, 684);
+            this.list.Size = new System.Drawing.Size(479, 684);
             this.list.TabIndex = 0;
             this.list.UseCompatibleStateImageBehavior = false;
             this.list.View = System.Windows.Forms.View.Details;
             this.list.VirtualMode = true;
+            // 
+            // columnHeaderName
+            // 
+            this.columnHeaderName.Text = "Name";
+            this.columnHeaderName.Width = 200;
+            // 
+            // columnHeaderRarity
+            // 
+            this.columnHeaderRarity.Text = "Rarity";
+            this.columnHeaderRarity.Width = 50;
+            // 
+            // columnHeaderLevel
+            // 
+            this.columnHeaderLevel.Text = "Level";
+            this.columnHeaderLevel.Width = 50;
+            // 
+            // columnHeaderModules
+            // 
+            this.columnHeaderModules.Text = "Modules";
+            this.columnHeaderModules.Width = 140;
             // 
             // toolStrip
             // 
@@ -113,14 +133,18 @@
             this.toolStripButtonEdit});
             this.toolStrip.Location = new System.Drawing.Point(1, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(438, 31);
+            this.toolStrip.Size = new System.Drawing.Size(480, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
             // 
-            // columnHeaderName
+            // toolStripButtonTransfer
             // 
-            this.columnHeaderName.Text = "Name";
-            this.columnHeaderName.Width = 200;
+            this.toolStripButtonTransfer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTransfer.Image = global::JumpSaves.Properties.Resources.Transfer;
+            this.toolStripButtonTransfer.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonTransfer.Name = "toolStripButtonTransfer";
+            this.toolStripButtonTransfer.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonTransfer.Text = "Transfer a copy of selected items";
             // 
             // toolStripButtonAdd
             // 
@@ -140,30 +164,6 @@
             this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonRemove.Text = "Remove selected items";
             // 
-            // toolStripButtonTransfer
-            // 
-            this.toolStripButtonTransfer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonTransfer.Image = global::JumpSaves.Properties.Resources.Transfer;
-            this.toolStripButtonTransfer.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonTransfer.Name = "toolStripButtonTransfer";
-            this.toolStripButtonTransfer.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonTransfer.Text = "Transfer a copy of selected items";
-            // 
-            // columnHeaderRarity
-            // 
-            this.columnHeaderRarity.Text = "Rarity";
-            this.columnHeaderRarity.Width = 50;
-            // 
-            // columnHeaderLevel
-            // 
-            this.columnHeaderLevel.Text = "Level";
-            this.columnHeaderLevel.Width = 50;
-            // 
-            // columnHeaderModules
-            // 
-            this.columnHeaderModules.Text = "Modules";
-            this.columnHeaderModules.Width = 100;
-            // 
             // toolStripButtonEdit
             // 
             this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -181,7 +181,8 @@
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.list);
             this.Name = "MajorItemList";
-            this.Size = new System.Drawing.Size(438, 717);
+            this.Size = new System.Drawing.Size(480, 717);
+            this.EnabledChanged += new System.EventHandler(this.OnEnabledChanged);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);

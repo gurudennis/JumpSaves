@@ -108,6 +108,8 @@
     <None Include="Images\Save.png" />
     <None Include="Images\Remove.png" />
     <None Include="Images\Transfer.png" />
+    <None Include="Images\Riches.png" />
+    <None Include="Images\Riches_tiny.png" />
     <Content Include="JumpSaves.ico" />
   </ItemGroup>
   <ItemGroup>

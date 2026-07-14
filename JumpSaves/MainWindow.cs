@@ -203,13 +203,45 @@ namespace JumpSaves
             saveToolStripMenuItem.Visible = model_.IsOpen;
 
             // Editor panel
-            editorPanel.Visible = model_.IsOpen;
-            saveLabel.Text = model_.Path;
+            saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
+            editorMajorItemList.Editor = model_.Editor;
+            OnEditorStateChanged();
         }
 
         private void OnJumpSpaceGameStateChanged()
         {
+            // "Game running" indicator
             toolStripGameRunningLabel.Visible = model_.IsGameRunning;
+
+            // Editor panel
+            OnEditorStateChanged();
+        }
+
+        private void OnEditorStateChanged()
+        {
+            bool enableEditing = model_.IsOpen && !model_.IsMonitoring;
+            bool cleared = !model_.IsOpen;
+
+            numericCredits.Enabled = enableEditing;
+            numericGreen.Enabled = enableEditing;
+            numericBlue.Enabled = enableEditing;
+            numericPurple.Enabled = enableEditing;
+            numericOrange.Enabled = enableEditing;
+            numericRed.Enabled = enableEditing;
+
+            buttonMaxOut.Enabled = enableEditing;
+            
+            editorMajorItemList.Enabled = enableEditing;
+
+            if (cleared)
+            {
+                numericCredits.Value = 0;
+                numericGreen.Value = 0;
+                numericBlue.Value = 0;
+                numericPurple.Value = 0;
+                numericOrange.Value = 0;
+                numericRed.Value = 0;
+            }
         }
 
         private Model.Instance model_;

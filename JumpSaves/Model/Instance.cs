@@ -93,6 +93,8 @@ namespace JumpSaves.Model
 
         public bool IsGameRunning { get; private set; }
 
+        public bool IsMonitoring { get; private set; }
+
         public JSL.SaveEditor Editor { get; private set; }
 
         public event EventHandler<PeriodicInfoArgs> PeriodicInfoEvent;
