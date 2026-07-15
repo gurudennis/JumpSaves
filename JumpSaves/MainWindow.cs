@@ -18,8 +18,21 @@ namespace JumpSaves
         {
             toolStripComboBoxMode.SelectedIndex = 0;
 
+            editorMajorItemList.MaybeDirty += OnEditorMajorItemList_MaybeDirty;
+            editorResourceView.MaybeDirty += OnEditorResourceView_MaybeDirty;
+
             OnStateChanged();
             OpenDefaultDirectory();
+        }
+
+        private void OnEditorResourceView_MaybeDirty(object sender, EventArgs e)
+        {
+            OnStateChanged();
+        }
+
+        private void OnEditorMajorItemList_MaybeDirty(object sender, EventArgs e)
+        {
+            OnStateChanged();
         }
 
         private void toolStripOpenDefaultDirectoryButton_Click(object sender, EventArgs e)
@@ -223,6 +236,7 @@ namespace JumpSaves
             toolStripSaveButton.Visible = model_.IsOpen;
             closeToolStripMenuItem.Visible = model_.IsOpen;
             saveToolStripMenuItem.Visible = model_.IsOpen;
+            toolStripLabelDirty.Visible = model_.IsDirty;
             toolStripGameRunningLabel.Visible = model_.IsGameRunning;
 
             // Editor panel

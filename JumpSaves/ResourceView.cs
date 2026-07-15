@@ -17,45 +17,7 @@ namespace JumpSaves
             InitializeComponent();
         }
 
-        private void ResourceView_Load(object sender, EventArgs e)
-        {
-            OnStateChange();
-        }
-
-        private void numericCredits_ValueChanged(object sender, EventArgs e)
-        {
-            // Editor.Credits = numericCredits.Value;
-        }
-
-        private void numericGreen_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericBlue_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericPurple_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericOrange_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void numericRed_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void buttonMaxOut_Click(object sender, EventArgs e)
-        {
-
-        }
+        public EventHandler<EventArgs> MaybeDirty;
 
         public JSL.ResourceEditor Editor
         {
@@ -91,6 +53,76 @@ namespace JumpSaves
             }
         }
 
+        private void ResourceView_Load(object sender, EventArgs e)
+        {
+            OnStateChange();
+        }
+
+        private void numericCredits_ValueChanged(object sender, EventArgs e)
+        {
+            if (CanEdit)
+            {
+                Editor.Credits = Convert.ToInt32(numericCredits.Value);
+                EmitMaybeDirty();
+            }
+        }
+
+        private void numericGreen_ValueChanged(object sender, EventArgs e)
+        {
+            if (CanEdit)
+            {
+                Editor.GreenIngots = Convert.ToInt32(numericGreen.Value);
+                EmitMaybeDirty();
+            }
+        }
+
+        private void numericBlue_ValueChanged(object sender, EventArgs e)
+        {
+            if (CanEdit)
+            {
+                Editor.BlueIngots = Convert.ToInt32(numericBlue.Value);
+                EmitMaybeDirty();
+            }
+        }
+
+        private void numericPurple_ValueChanged(object sender, EventArgs e)
+        {
+            if (CanEdit)
+            {
+                Editor.PurpleIngots = Convert.ToInt32(numericPurple.Value);
+                EmitMaybeDirty();
+            }
+        }
+
+        private void numericOrange_ValueChanged(object sender, EventArgs e)
+        {
+            if (CanEdit)
+            {
+                Editor.OrangeIngots = Convert.ToInt32(numericOrange.Value);
+                EmitMaybeDirty();
+            }
+        }
+
+        private void numericRed_ValueChanged(object sender, EventArgs e)
+        {
+            if (CanEdit)
+            {
+                Editor.RedIngots = Convert.ToInt32(numericRed.Value);
+                EmitMaybeDirty();
+            }
+        }
+
+        private void buttonMaxOut_Click(object sender, EventArgs e)
+        {
+            Editor.Credits = JSL.ResourceEditor.MaxCredits;
+            Editor.GreenIngots = JSL.ResourceEditor.MaxIngots;
+            Editor.BlueIngots = JSL.ResourceEditor.MaxIngots;
+            Editor.PurpleIngots = JSL.ResourceEditor.MaxIngots;
+            Editor.OrangeIngots = JSL.ResourceEditor.MaxIngots;
+            Editor.RedIngots = JSL.ResourceEditor.MaxIngots;
+            OnStateChange();
+        }
+
         private void OnEnabledChanged(object sender, EventArgs e)
         {
             OnStateChange();
@@ -98,23 +130,26 @@ namespace JumpSaves
 
         private void OnStateChange()
         {
+            buttonMaxOut.Enabled = CanEdit && AllowCustomization;
+
             numericCredits.Enabled = CanEdit && AllowCustomization;
             numericGreen.Enabled = CanEdit && AllowCustomization;
             numericBlue.Enabled = CanEdit && AllowCustomization;
             numericPurple.Enabled = CanEdit && AllowCustomization;
             numericOrange.Enabled = CanEdit && AllowCustomization;
             numericRed.Enabled = CanEdit && AllowCustomization;
-            buttonMaxOut.Enabled = CanEdit && AllowCustomization;
             
-            if (Editor == null)
-            {
-                numericCredits.Value = 0;
-                numericGreen.Value = 0;
-                numericBlue.Value = 0;
-                numericPurple.Value = 0;
-                numericOrange.Value = 0;
-                numericRed.Value = 0;
-            }
+            numericCredits.Value = CanEdit ? Editor.Credits : 0;
+            numericGreen.Value = CanEdit ? Editor.GreenIngots : 0;
+            numericBlue.Value = CanEdit ? Editor.BlueIngots : 0;
+            numericPurple.Value = CanEdit ? Editor.PurpleIngots : 0;
+            numericOrange.Value = CanEdit ? Editor.OrangeIngots : 0;
+            numericRed.Value = CanEdit ? Editor.RedIngots : 0;
+        }
+
+        private void EmitMaybeDirty()
+        {
+            MaybeDirty?.Invoke(this, null);
         }
 
         private JSL.ResourceEditor editor_;

@@ -17,6 +17,8 @@ namespace JumpSaves
             InitializeComponent();
         }
 
+        public EventHandler<EventArgs> MaybeDirty;
+
         public JSL.SaveEditor Editor
         {
             get

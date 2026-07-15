@@ -111,6 +111,7 @@
     <None Include="Images\About.png" />
     <None Include="Images\Add.png" />
     <None Include="Images\Edit.png" />
+    <None Include="Images\Dirty.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />

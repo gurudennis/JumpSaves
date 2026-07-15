@@ -23,8 +23,11 @@ namespace JSL
             }
             set
             {
-                resources_.Credits = value;
-                rootEditor_.IsDirty = true;
+                if (value != resources_.Credits)
+                {
+                    resources_.Credits = value;
+                    rootEditor_.IsDirty = true;
+                }
             }
         }
 
@@ -36,8 +39,11 @@ namespace JSL
             }
             set
             {
-                resources_.GreenIngots = value;
-                rootEditor_.IsDirty = true;
+                if (value != resources_.GreenIngots)
+                {
+                    resources_.GreenIngots = value;
+                    rootEditor_.IsDirty = true;
+                }
             }
         }
 
@@ -49,8 +55,11 @@ namespace JSL
             }
             set
             {
-                resources_.BlueIngots = value;
-                rootEditor_.IsDirty = true;
+                if (value != resources_.BlueIngots)
+                {
+                    resources_.BlueIngots = value;
+                    rootEditor_.IsDirty = true;
+                }
             }
         }
 
@@ -62,8 +71,11 @@ namespace JSL
             }
             set
             {
-                resources_.PurpleIngots = value;
-                rootEditor_.IsDirty = true;
+                if (value != resources_.PurpleIngots)
+                {
+                    resources_.PurpleIngots = value;
+                    rootEditor_.IsDirty = true;
+                }
             }
         }
 
@@ -75,8 +87,11 @@ namespace JSL
             }
             set
             {
-                resources_.OrangeIngots = value;
-                rootEditor_.IsDirty = true;
+                if (value != resources_.OrangeIngots)
+                {
+                    resources_.OrangeIngots = value;
+                    rootEditor_.IsDirty = true;
+                }
             }
         }
 
@@ -88,10 +103,16 @@ namespace JSL
             }
             set
             {
-                resources_.RedIngots = value;
-                rootEditor_.IsDirty = true;
+                if (value != resources_.RedIngots)
+                {
+                    resources_.RedIngots = value;
+                    rootEditor_.IsDirty = true;
+                }
             }
         }
+
+        public static readonly int MaxCredits = 500000;
+        public static readonly int MaxIngots = 1000;
 
         private IRootEditor rootEditor_;
         private SaveState state_;

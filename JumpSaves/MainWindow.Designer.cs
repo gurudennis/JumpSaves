@@ -50,19 +50,18 @@
             this.toolStripAboutButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelMode = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxMode = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabelDirty = new System.Windows.Forms.ToolStripLabel();
             this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.editorPanel = new System.Windows.Forms.Panel();
             this.editTabControl = new System.Windows.Forms.TabControl();
             this.editTabPage1 = new System.Windows.Forms.TabPage();
-            this.editorResourceView = new JumpSaves.ResourceView();
-            this.labelPlayerName = new System.Windows.Forms.Label();
-            this.labelPlayerNameHeading = new System.Windows.Forms.Label();
-            this.editorMajorItemList = new JumpSaves.MajorItemList();
             this.saveLabel = new System.Windows.Forms.Label();
             this.libraryPanel = new System.Windows.Forms.Panel();
-            this.libraryMajorItemList = new JumpSaves.MajorItemList();
             this.label2 = new System.Windows.Forms.Label();
+            this.editorResourceView = new JumpSaves.ResourceView();
+            this.editorMajorItemList = new JumpSaves.MajorItemList();
+            this.libraryMajorItemList = new JumpSaves.MajorItemList();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -185,6 +184,7 @@
             this.toolStripAboutButton,
             this.toolStripLabelMode,
             this.toolStripComboBoxMode,
+            this.toolStripLabelDirty,
             this.toolStripGameRunningLabel});
             this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
@@ -272,13 +272,21 @@
             // toolStripComboBoxMode
             // 
             this.toolStripComboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBoxMode.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.toolStripComboBoxMode.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxMode.Items.AddRange(new object[] {
             "Transfer only",
             "Cheater"});
             this.toolStripComboBoxMode.Name = "toolStripComboBoxMode";
             this.toolStripComboBoxMode.Size = new System.Drawing.Size(121, 31);
             this.toolStripComboBoxMode.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxMode_SelectedIndexChanged);
+            // 
+            // toolStripLabelDirty
+            // 
+            this.toolStripLabelDirty.Image = global::JumpSaves.Properties.Resources.Dirty;
+            this.toolStripLabelDirty.Margin = new System.Windows.Forms.Padding(30, 1, 0, 2);
+            this.toolStripLabelDirty.Name = "toolStripLabelDirty";
+            this.toolStripLabelDirty.Size = new System.Drawing.Size(125, 28);
+            this.toolStripLabelDirty.Text = "Unsaved edits";
             // 
             // toolStripGameRunningLabel
             // 
@@ -337,8 +345,6 @@
             // editTabPage1
             // 
             this.editTabPage1.Controls.Add(this.editorResourceView);
-            this.editTabPage1.Controls.Add(this.labelPlayerName);
-            this.editTabPage1.Controls.Add(this.labelPlayerNameHeading);
             this.editTabPage1.Location = new System.Drawing.Point(4, 28);
             this.editTabPage1.Name = "editTabPage1";
             this.editTabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -346,45 +352,6 @@
             this.editTabPage1.TabIndex = 0;
             this.editTabPage1.Text = "Resources";
             this.editTabPage1.UseVisualStyleBackColor = true;
-            // 
-            // editorResourceView
-            // 
-            this.editorResourceView.Location = new System.Drawing.Point(8, 50);
-            this.editorResourceView.Name = "editorResourceView";
-            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
-            this.editorResourceView.TabIndex = 1;
-            // 
-            // labelPlayerName
-            // 
-            this.labelPlayerName.AutoSize = true;
-            this.labelPlayerName.Location = new System.Drawing.Point(130, 14);
-            this.labelPlayerName.Name = "labelPlayerName";
-            this.labelPlayerName.Size = new System.Drawing.Size(55, 16);
-            this.labelPlayerName.TabIndex = 0;
-            this.labelPlayerName.Text = "<name>";
-            // 
-            // labelPlayerNameHeading
-            // 
-            this.labelPlayerNameHeading.AutoSize = true;
-            this.labelPlayerNameHeading.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelPlayerNameHeading.Location = new System.Drawing.Point(11, 14);
-            this.labelPlayerNameHeading.Name = "labelPlayerNameHeading";
-            this.labelPlayerNameHeading.Size = new System.Drawing.Size(56, 16);
-            this.labelPlayerNameHeading.TabIndex = 0;
-            this.labelPlayerNameHeading.Text = "Player:";
-            // 
-            // editorMajorItemList
-            // 
-            this.editorMajorItemList.AllowCustomization = false;
-            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.editorMajorItemList.Editor = null;
-            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
-            this.editorMajorItemList.Name = "editorMajorItemList";
-            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
-            this.editorMajorItemList.TabIndex = 1;
             // 
             // saveLabel
             // 
@@ -410,6 +377,38 @@
             this.libraryPanel.Size = new System.Drawing.Size(622, 874);
             this.libraryPanel.TabIndex = 0;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 18);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "My Library";
+            // 
+            // editorResourceView
+            // 
+            this.editorResourceView.AllowCustomization = false;
+            this.editorResourceView.Editor = null;
+            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
+            this.editorResourceView.Name = "editorResourceView";
+            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
+            this.editorResourceView.TabIndex = 1;
+            // 
+            // editorMajorItemList
+            // 
+            this.editorMajorItemList.AllowCustomization = false;
+            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.editorMajorItemList.Editor = null;
+            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
+            this.editorMajorItemList.Name = "editorMajorItemList";
+            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
+            this.editorMajorItemList.TabIndex = 1;
+            // 
             // libraryMajorItemList
             // 
             this.libraryMajorItemList.AllowCustomization = false;
@@ -424,16 +423,6 @@
             this.libraryMajorItemList.Name = "libraryMajorItemList";
             this.libraryMajorItemList.Size = new System.Drawing.Size(621, 848);
             this.libraryMajorItemList.TabIndex = 2;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 18);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "My Library";
             // 
             // MainWindow
             // 
@@ -464,7 +453,6 @@
             this.editorPanel.ResumeLayout(false);
             this.editTabControl.ResumeLayout(false);
             this.editTabPage1.ResumeLayout(false);
-            this.editTabPage1.PerformLayout();
             this.libraryPanel.ResumeLayout(false);
             this.libraryPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -503,11 +491,10 @@
         private MajorItemList editorMajorItemList;
         private System.Windows.Forms.TabControl editTabControl;
         private System.Windows.Forms.TabPage editTabPage1;
-        private System.Windows.Forms.Label labelPlayerName;
-        private System.Windows.Forms.Label labelPlayerNameHeading;
         private System.Windows.Forms.ToolStripLabel toolStripLabelMode;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMode;
         private ResourceView editorResourceView;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelDirty;
     }
 }
 

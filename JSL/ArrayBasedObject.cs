@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace JSL
 {
+    public enum PropertySetMode
+    {
+        Adaptive,
+        Promote,
+        Force
+    }
+
     public class ArrayBasedObject
     {
         public ArrayBasedObject(object o, object[] parent)
@@ -79,20 +86,36 @@ namespace JSL
             return value;
         }
 
-        public bool SetProperty(int index, object value, bool adaptive = true)
+        public bool SetProperty(int index, object value, PropertySetMode mode = PropertySetMode.Adaptive)
         {
             if (index < 0 || index >= Root.Length)
             {
                 return false;
             }
 
-            if (adaptive)
+            if (mode == PropertySetMode.Force)
             {
-                if (Root[index] != null)
+                if (value != null && Root[index] != null && Root[index].GetType() != value.GetType())
+                {
+                    return false;
+                }
+
+                Root[index] = value;
+            }
+            else
+            {
+                if (Root[index] != null && value != null)
                 {
                     try
                     {
-                        Root[index] = Convert.ChangeType(value, Root[index].GetType());
+                        if (mode == PropertySetMode.Promote)
+                        {
+                            SetPropertyWithPromotion(index, value);
+                        }
+                        else
+                        {
+                            Root[index] = Convert.ChangeType(value, Root[index].GetType());
+                        }
                     }
                     catch (Exception)
                     {
@@ -104,22 +127,13 @@ namespace JSL
                     Root[index] = value;
                 }
             }
-            else
-            {
-                if (value != null && Root[index] != null && Root[index].GetType() != value.GetType())
-                {
-                    return false;
-                }
-
-                Root[index] = value;
-            }
 
             return true;
         }
 
-        public void SetPropertyStrict(int index, object value, bool adaptive = true)
+        public void SetPropertyStrict(int index, object value, PropertySetMode mode = PropertySetMode.Adaptive)
         {
-            if (!SetProperty(index, value, adaptive))
+            if (!SetProperty(index, value, mode))
             {
                 throw new Exception($"Failed to set property at index {index}.");
             }
@@ -265,7 +279,7 @@ namespace JSL
             T[] res = new T[Root.Length];
             for (int i = 0; i < Root.Length; ++i)
             {
-                res[i] = (T)Activator.CreateInstance(typeof(T), GetSubObjectStrict(i));
+                res[i] = (T)Activator.CreateInstance(typeof(T), GetSubObjectStrict(i), this.Root);
             }
 
             return res;
@@ -279,6 +293,46 @@ namespace JSL
             }
 
             return Array.IndexOf(Parent, Root);
+        }
+
+        private void SetPropertyWithPromotion(int index, object value)
+        {
+            try
+            {
+                Root[index] = Convert.ChangeType(value, Root[index].GetType());
+                return;
+            }
+            catch (Exception e) // incompatible type, perhaps
+            {
+                List<Type>[] promotionChains = new List<Type>[]
+                {
+                    new List<Type>{ typeof(byte), typeof(ushort), typeof(uint), typeof(ulong) },
+                    new List<Type>{ typeof(sbyte), typeof(short), typeof(int), typeof(long) },
+                };
+
+                foreach (List<Type> promotionChain in promotionChains)
+                {
+                    bool found = false;
+                    foreach (Type t in promotionChain)
+                    {
+                        if (t == Root[index].GetType())
+                        {
+                            found = true;
+                        }
+                        else if (found)
+                        {
+                            try
+                            {
+                                Root[index] = Convert.ChangeType(value, t);
+                                return;
+                            }
+                            catch { }
+                        }
+                    }
+                }
+
+                throw e;
+            }
         }
 
         private bool UpdateParent(int selfIndex)

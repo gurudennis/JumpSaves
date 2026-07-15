@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup19 = new System.Windows.Forms.ListViewGroup("Player Weapons", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup20 = new System.Windows.Forms.ListViewGroup("Multi Turrets", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup21 = new System.Windows.Forms.ListViewGroup("Pilot Cannons", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup22 = new System.Windows.Forms.ListViewGroup("Special Weapons", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup23 = new System.Windows.Forms.ListViewGroup("Engines", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup24 = new System.Windows.Forms.ListViewGroup("Shield Generators", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup25 = new System.Windows.Forms.ListViewGroup("Sensors", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup26 = new System.Windows.Forms.ListViewGroup("Reactors", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup27 = new System.Windows.Forms.ListViewGroup("Aux. Generators", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Player Weapons", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Multi Turrets", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Pilot Cannons", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Special Weapons", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Engines", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Shield Generators", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("Sensors", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("Reactors", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Aux. Generators", System.Windows.Forms.HorizontalAlignment.Left);
             this.list = new System.Windows.Forms.ListView();
             this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderRarity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -47,8 +47,8 @@
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
-            this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,34 +62,34 @@
             this.columnHeaderRarity,
             this.columnHeaderLevel,
             this.columnHeaderModules});
-            listViewGroup19.Header = "Player Weapons";
-            listViewGroup19.Name = "listViewGroupPlayerWeapons";
-            listViewGroup20.Header = "Multi Turrets";
-            listViewGroup20.Name = "listViewGroupMultiTurrets";
-            listViewGroup21.Header = "Pilot Cannons";
-            listViewGroup21.Name = "listViewGroupPilotCannons";
-            listViewGroup22.Header = "Special Weapons";
-            listViewGroup22.Name = "listViewGroupSpecialWeapons";
-            listViewGroup23.Header = "Engines";
-            listViewGroup23.Name = "listViewGroupEngines";
-            listViewGroup24.Header = "Shield Generators";
-            listViewGroup24.Name = "listViewGroupShieldGenerators";
-            listViewGroup25.Header = "Sensors";
-            listViewGroup25.Name = "listViewGroupSensors";
-            listViewGroup26.Header = "Reactors";
-            listViewGroup26.Name = "listViewGroupReactors";
-            listViewGroup27.Header = "Aux. Generators";
-            listViewGroup27.Name = "listViewGroupAuxGenerators";
+            listViewGroup1.Header = "Player Weapons";
+            listViewGroup1.Name = "listViewGroupPlayerWeapons";
+            listViewGroup2.Header = "Multi Turrets";
+            listViewGroup2.Name = "listViewGroupMultiTurrets";
+            listViewGroup3.Header = "Pilot Cannons";
+            listViewGroup3.Name = "listViewGroupPilotCannons";
+            listViewGroup4.Header = "Special Weapons";
+            listViewGroup4.Name = "listViewGroupSpecialWeapons";
+            listViewGroup5.Header = "Engines";
+            listViewGroup5.Name = "listViewGroupEngines";
+            listViewGroup6.Header = "Shield Generators";
+            listViewGroup6.Name = "listViewGroupShieldGenerators";
+            listViewGroup7.Header = "Sensors";
+            listViewGroup7.Name = "listViewGroupSensors";
+            listViewGroup8.Header = "Reactors";
+            listViewGroup8.Name = "listViewGroupReactors";
+            listViewGroup9.Header = "Aux. Generators";
+            listViewGroup9.Name = "listViewGroupAuxGenerators";
             this.list.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup19,
-            listViewGroup20,
-            listViewGroup21,
-            listViewGroup22,
-            listViewGroup23,
-            listViewGroup24,
-            listViewGroup25,
-            listViewGroup26,
-            listViewGroup27});
+            listViewGroup1,
+            listViewGroup2,
+            listViewGroup3,
+            listViewGroup4,
+            listViewGroup5,
+            listViewGroup6,
+            listViewGroup7,
+            listViewGroup8,
+            listViewGroup9});
             this.list.HideSelection = false;
             this.list.Location = new System.Drawing.Point(0, 32);
             this.list.Margin = new System.Windows.Forms.Padding(0);
@@ -177,10 +177,17 @@
             this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonEdit.Text = "Edit selected item";
             // 
+            // toolStripLabelFilter
+            // 
+            this.toolStripLabelFilter.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.toolStripLabelFilter.Name = "toolStripLabelFilter";
+            this.toolStripLabelFilter.Size = new System.Drawing.Size(48, 28);
+            this.toolStripLabelFilter.Text = "Show:";
+            // 
             // toolStripComboBoxFilter
             // 
             this.toolStripComboBoxFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBoxFilter.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.toolStripComboBoxFilter.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxFilter.Items.AddRange(new object[] {
             "All",
             "Stored only",
@@ -189,13 +196,6 @@
             this.toolStripComboBoxFilter.Name = "toolStripComboBoxFilter";
             this.toolStripComboBoxFilter.Size = new System.Drawing.Size(121, 31);
             this.toolStripComboBoxFilter.ToolTipText = "Filter";
-            // 
-            // toolStripLabelFilter
-            // 
-            this.toolStripLabelFilter.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
-            this.toolStripLabelFilter.Name = "toolStripLabelFilter";
-            this.toolStripLabelFilter.Size = new System.Drawing.Size(48, 28);
-            this.toolStripLabelFilter.Text = "Show:";
             // 
             // MajorItemList
             // 

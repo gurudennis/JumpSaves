@@ -32,12 +32,12 @@ namespace JSL
             }
             set
             {
-                SetPropertyStrict(Index_Value, value);
+                SetPropertyStrict(Index_Value, value, PropertySetMode.Promote);
             }
         }
 
         private const int Index_RawType = 0;
-        private const int Index_Value = 0;
+        private const int Index_Value = 1;
     }
 
     public class Resources : ArrayBasedObject
@@ -132,7 +132,7 @@ namespace JSL
 
         private const int ExpectedElementCount = 6;
 
-        private const int Index_Credits = 1;
+        private const int Index_Credits = 0;
         private const int Index_GreenIngots = 1;
         private const int Index_BlueIngots = 2;
         private const int Index_PurpleIngots = 3;
