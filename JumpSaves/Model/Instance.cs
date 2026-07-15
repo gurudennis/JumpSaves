@@ -28,7 +28,7 @@ namespace JumpSaves.Model
             Close();
         }
 
-        public string DefaultPath
+        public string DefaultSavePath
         {
             get
             {
@@ -40,11 +40,19 @@ namespace JumpSaves.Model
             }
         }
 
+        public string DefaultLibraryPath
+        {
+            get
+            {
+                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "Library");
+            }
+        }
+
         public void Open(string path)
         {
             Close();
 
-            Editor = JSL.SaveEditorFactory.Create(path);
+            Editor = JSL.EditorFactory.OpenSave(path);
         }
 
         public void Close()
@@ -98,7 +106,7 @@ namespace JumpSaves.Model
         {
             string selfPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             string cliPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(selfPath), "JumpSavesCLI.exe");
-            Process.Start(cliPath, $"-s {Editor?.Path ?? DefaultPath}");
+            Process.Start(cliPath, $"-s {Editor?.Path ?? DefaultSavePath}");
         }
 
         private void OnGlobalPeriodicInfo(object sender, GlobalPeriodicInfoEventArgs args)

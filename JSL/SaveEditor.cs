@@ -7,11 +7,21 @@ using System.Threading.Tasks;
 
 namespace JSL
 {
-    internal interface IRootEditor
+    public interface IRootEditor
     {
         bool IsDirty { get; set; }
 
         SaveState State { get; }
+    }
+
+    public abstract class Editor
+    {
+        protected Editor(IRootEditor rootEditor)
+        {
+            RootEditor = rootEditor;
+        }
+
+        protected IRootEditor RootEditor { get; private set; }
     }
 
     public abstract class SaveEditor : IRootEditor
@@ -42,6 +52,22 @@ namespace JSL
             get
             {
                 return new ResourceEditor(this);
+            }
+        }
+
+        public MajorItemListEditor StoredMajorItems
+        {
+            get
+            {
+                return new StoredMajorItemListEditor(State, this);
+            }
+        }
+
+        public MajorItemListEditor RecentMajorItems
+        {
+            get
+            {
+                return new RecentMajorItemListEditor(State, this);
             }
         }
 
@@ -125,9 +151,9 @@ namespace JSL
         private SaveDir dir_;
     }
 
-    public class SaveEditorFactory
+    public class EditorFactory
     {
-        public static SaveEditor Create(string path)
+        public static SaveEditor OpenSave(string path)
         {
             if (Directory.Exists(path))
             {
@@ -139,6 +165,11 @@ namespace JSL
             }
 
             throw new Exception($"The path is invalid: {path}");
+        }
+
+        public MajorItemListEditor OpenLibrary(string path)
+        {
+            return new LibraryMajorItemListEditor(path);
         }
     }
 }

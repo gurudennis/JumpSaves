@@ -137,6 +137,10 @@ namespace JSL
             {
                 return GetSubArrayStrict(Index_Ships);
             }
+            set
+            {
+                SetSubArrayStrict(Index_Ships, value);
+            }
         }
 
         public string CurrentShipRawType
@@ -153,6 +157,10 @@ namespace JSL
             {
                 return GetSubArrayStrict(Index_PlayerInventory);
             }
+            set
+            {
+                SetSubArrayStrict(Index_PlayerInventory, value);
+            }
         }
 
         public object[] StoredMajorItems
@@ -160,6 +168,10 @@ namespace JSL
             get
             {
                 return GetSubArrayStrict(Index_StoredMajorItems);
+            }
+            set
+            {
+                SetSubArrayStrict(Index_StoredMajorItems, value);
             }
         }
 
@@ -176,6 +188,10 @@ namespace JSL
             get
             {
                 return GetSubArrayStrict(Index_RecentMajorItems);
+            }
+            set
+            {
+                SetSubArrayStrict(Index_RecentMajorItems, value);
             }
         }
 

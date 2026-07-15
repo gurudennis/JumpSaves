@@ -143,7 +143,7 @@ namespace JumpSaves
 
         private void OpenDefaultDirectory()
         {
-            model_.Open(model_.DefaultPath);
+            model_.Open(model_.DefaultSavePath);
             OnStateChanged();
         }
 
@@ -151,7 +151,7 @@ namespace JumpSaves
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
-                dialog.SelectedPath = model_.DefaultPath;
+                dialog.SelectedPath = model_.DefaultSavePath;
                 dialog.Description = "Select the Jump Ship save directory";
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)

@@ -189,12 +189,11 @@
             this.toolStripComboBoxFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.toolStripComboBoxFilter.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxFilter.Items.AddRange(new object[] {
-            "All",
-            "Stored only",
-            "History only"});
+            "Stored",
+            "Recent"});
             this.toolStripComboBoxFilter.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
             this.toolStripComboBoxFilter.Name = "toolStripComboBoxFilter";
-            this.toolStripComboBoxFilter.Size = new System.Drawing.Size(121, 31);
+            this.toolStripComboBoxFilter.Size = new System.Drawing.Size(100, 31);
             this.toolStripComboBoxFilter.ToolTipText = "Filter";
             // 
             // MajorItemList
