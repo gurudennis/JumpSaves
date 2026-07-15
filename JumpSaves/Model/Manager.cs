@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JSL;
+using System;
 using System.Diagnostics;
 using System.Threading;
 
@@ -28,11 +29,18 @@ namespace JumpSaves.Model
             return new Instance(syncContext, this, new OnlyManagerShouldCreateThis());
         }
 
+        public JSL.Library Library
+        {
+            get; private set;
+        }
+
         public event EventHandler<GlobalPeriodicInfoEventArgs> PeriodicInfoEvent;
 
         private void ThreadProc()
         {
-            while (!stop_.WaitOne(2000))
+            Library = new Library(DefaultLibraryPath);
+
+            do
             {
                 GlobalPeriodicInfoEventArgs args = new GlobalPeriodicInfoEventArgs();
 
@@ -40,6 +48,15 @@ namespace JumpSaves.Model
                 args.IsGameRunning = (processes != null && processes.Length > 0);
 
                 PeriodicInfoEvent?.Invoke(this, args);
+            }
+            while (!stop_.WaitOne(2000));
+        }
+
+        private string DefaultLibraryPath
+        {
+            get
+            {
+                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "Library");
             }
         }
 

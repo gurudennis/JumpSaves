@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -13,7 +14,7 @@ namespace JumpSaves
 
         public EventHandler<EventArgs> MaybeDirty;
 
-        public JSL.SaveEditor Editor
+        public JSL.SaveEditor SaveEditor
         {
             get
             {
@@ -21,10 +22,31 @@ namespace JumpSaves
             }
             set
             {
-                editor_ = value;
-                OnStateChange();
+                if (editor_ != value)
+                {
+                    editor_ = value;
+                    OnStateChange();
+                }
             }
         }
+
+        public JSL.LibraryMajorItemListEditor LibraryEditor
+        {
+            get
+            {
+                return libraryEditor_;
+            }
+            set
+            {
+                if (libraryEditor_ != value)
+                {
+                    libraryEditor_ = value;
+                    OnStateChange();
+                }
+            }
+        }
+
+        public JSL.MajorItemListEditor Editor { get; private set; }
 
         public bool AllowCustomization
         {
@@ -34,8 +56,25 @@ namespace JumpSaves
             }
             set
             {
-                allowCustomization_ = value;
-                OnStateChange();
+                if (allowCustomization_ != value)
+                {
+                    allowCustomization_ = value;
+                    OnStateChange();
+                }
+            }
+        }
+
+        private void toolStripComboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Editor = null;
+            OnStateChange();
+        }
+
+        private bool IsLibraryEditor
+        {
+            get
+            {
+                return Editor == null || Editor.GetType() == typeof(JSL.LibraryMajorItemListEditor);
             }
         }
 
@@ -53,6 +92,8 @@ namespace JumpSaves
 
         private void OnStateChange()
         {
+            EnsureEditorAvailable();
+
             list.Enabled = Enabled;
             list.BackColor = Enabled ? SystemColors.Control : Color.Gainsboro;
 
@@ -63,9 +104,48 @@ namespace JumpSaves
             }
             toolStripButtonAdd.Enabled &= AllowCustomization;
             toolStripButtonEdit.Enabled &= AllowCustomization;
+            toolStripLabelFilter.Enabled = Enabled;
+            toolStripComboBoxFilter.Enabled = Enabled;
+            toolStripLabelFilter.Visible = !IsLibraryEditor;
+            toolStripComboBoxFilter.Visible = !IsLibraryEditor;
+        }
+
+        private void EnsureEditorAvailable()
+        {
+            if (Editor != null)
+            {
+                return;
+            }
+
+            if (LibraryEditor != null && SaveEditor != null)
+            {
+                throw new Exception("Can't edit the library and the save in the same control instance");
+            }
+
+            if (LibraryEditor != null)
+            {
+                Editor = LibraryEditor;
+            }
+            else if (SaveEditor != null)
+            {
+                if (storedEditor_ == null)
+                {
+                    storedEditor_ = SaveEditor.StoredMajorItems;
+                }
+
+                if (recentEditor_ == null)
+                {
+                    recentEditor_ = SaveEditor.RecentMajorItems;
+                }
+
+                Editor = toolStripComboBoxFilter.SelectedIndex == 0 ? storedEditor_ : recentEditor_;
+            }
         }
 
         private JSL.SaveEditor editor_;
+        private JSL.LibraryMajorItemListEditor libraryEditor_;
+        private JSL.MajorItemListEditor storedEditor_;
+        private JSL.MajorItemListEditor recentEditor_;
         private bool allowCustomization_;
     }
 }

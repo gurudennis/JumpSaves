@@ -66,7 +66,7 @@ namespace JSL
 
     // List of Stored or Recent major items (they have a lot in common
     // because both ultimately come from a safe file).
-    public abstract class MajorSaveFileItemListEditor : MajorItemListEditor
+    internal abstract class MajorSaveFileItemListEditor : MajorItemListEditor
     {
         protected MajorSaveFileItemListEditor(object[] items, IRootEditor rootEditor)
             : base(rootEditor)
@@ -102,11 +102,13 @@ namespace JSL
     }
 
     // List of Library major items
-    internal class LibraryMajorItemListEditor : MajorItemListEditor
+    public class LibraryMajorItemListEditor : MajorItemListEditor
     {
-        internal LibraryMajorItemListEditor(string path)
+        internal LibraryMajorItemListEditor(Library library)
             : base(null)
         {
         }
+
+        private Library library_;
     }
 }

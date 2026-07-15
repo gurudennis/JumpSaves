@@ -75,6 +75,11 @@ namespace JumpSaves
             CloseFileDir();
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         private void runCLIToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RunCLI();
@@ -241,7 +246,10 @@ namespace JumpSaves
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
-            editorMajorItemList.Editor = model_.Editor;
+            if (editorMajorItemList.SaveEditor == null)
+            {
+                editorMajorItemList.SaveEditor = model_.Editor;
+            }
             editorMajorItemList.AllowCustomization = IsCheaterMode;
             editorMajorItemList.Enabled = CanEdit;
             editorResourceView.Editor = model_.Editor?.Resources;
@@ -249,6 +257,11 @@ namespace JumpSaves
             editorResourceView.Enabled = CanEdit;
 
             // Library panel
+            if (libraryMajorItemList.LibraryEditor == null && model_.Library != null)
+            {
+                libraryMajorItemList.LibraryEditor = JSL.EditorFactory.OpenLibrary(model_.Library);
+            }
+            libraryMajorItemList.Enabled = libraryMajorItemList.LibraryEditor != null;
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
         }
 

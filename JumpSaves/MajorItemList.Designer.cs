@@ -195,6 +195,7 @@
             this.toolStripComboBoxFilter.Name = "toolStripComboBoxFilter";
             this.toolStripComboBoxFilter.Size = new System.Drawing.Size(100, 31);
             this.toolStripComboBoxFilter.ToolTipText = "Filter";
+            this.toolStripComboBoxFilter.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxFilter_SelectedIndexChanged);
             // 
             // MajorItemList
             // 

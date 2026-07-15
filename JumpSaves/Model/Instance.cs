@@ -40,14 +40,6 @@ namespace JumpSaves.Model
             }
         }
 
-        public string DefaultLibraryPath
-        {
-            get
-            {
-                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "Library");
-            }
-        }
-
         public void Open(string path)
         {
             Close();
@@ -100,6 +92,14 @@ namespace JumpSaves.Model
 
         public JSL.SaveEditor Editor { get; private set; }
 
+        public JSL.Library Library
+        {
+            get
+            {
+                return manager_.Library;
+            }
+        }
+
         public event EventHandler<PeriodicInfoArgs> PeriodicInfoEvent;
 
         public void RunCLI()
@@ -128,7 +128,7 @@ namespace JumpSaves.Model
             syncContext_.Post(_ => { action(); }, null);
         }
 
-        private Manager manager_;
+        private readonly Manager manager_;
         private readonly SynchronizationContext syncContext_;
     }
 }

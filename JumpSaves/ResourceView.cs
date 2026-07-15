@@ -27,8 +27,11 @@ namespace JumpSaves
             }
             set
             {
-                editor_ = value;
-                OnStateChange();
+                if (editor_ != value)
+                {
+                    editor_ = value;
+                    OnStateChange();
+                }
             }
         }
 
@@ -48,8 +51,11 @@ namespace JumpSaves
             }
             set
             {
-                allowCustomization_ = value;
-                OnStateChange();
+                if (allowCustomization_ != value)
+                {
+                    allowCustomization_ = value;
+                    OnStateChange();
+                }
             }
         }
 

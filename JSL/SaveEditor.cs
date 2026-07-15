@@ -167,9 +167,14 @@ namespace JSL
             throw new Exception($"The path is invalid: {path}");
         }
 
-        public MajorItemListEditor OpenLibrary(string path)
+        public static LibraryMajorItemListEditor OpenLibrary(string path)
         {
-            return new LibraryMajorItemListEditor(path);
+            return new LibraryMajorItemListEditor(new Library(path));
+        }
+
+        public static LibraryMajorItemListEditor OpenLibrary(Library library)
+        {
+            return new LibraryMajorItemListEditor(library);
         }
     }
 }

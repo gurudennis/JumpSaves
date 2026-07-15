@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Library.cs" />
     <Compile Include="MajorItemEditor.cs" />
     <Compile Include="ResourceEditor.cs" />
     <Compile Include="SaveEditor.cs" />

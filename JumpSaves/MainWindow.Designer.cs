@@ -56,12 +56,13 @@
             this.editorPanel = new System.Windows.Forms.Panel();
             this.editTabControl = new System.Windows.Forms.TabControl();
             this.editTabPage1 = new System.Windows.Forms.TabPage();
-            this.saveLabel = new System.Windows.Forms.Label();
-            this.libraryPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.editorResourceView = new JumpSaves.ResourceView();
             this.editorMajorItemList = new JumpSaves.MajorItemList();
+            this.saveLabel = new System.Windows.Forms.Label();
+            this.libraryPanel = new System.Windows.Forms.Panel();
             this.libraryMajorItemList = new JumpSaves.MajorItemList();
+            this.label2 = new System.Windows.Forms.Label();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -94,7 +95,8 @@
             this.openDirectoryToolStripMenuItem,
             this.openFileToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.closeToolStripMenuItem});
+            this.closeToolStripMenuItem,
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
@@ -353,6 +355,28 @@
             this.editTabPage1.Text = "Resources";
             this.editTabPage1.UseVisualStyleBackColor = true;
             // 
+            // editorResourceView
+            // 
+            this.editorResourceView.AllowCustomization = false;
+            this.editorResourceView.Editor = null;
+            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
+            this.editorResourceView.Name = "editorResourceView";
+            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
+            this.editorResourceView.TabIndex = 1;
+            // 
+            // editorMajorItemList
+            // 
+            this.editorMajorItemList.AllowCustomization = false;
+            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.editorMajorItemList.SaveEditor = null;
+            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
+            this.editorMajorItemList.Name = "editorMajorItemList";
+            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
+            this.editorMajorItemList.TabIndex = 1;
+            // 
             // saveLabel
             // 
             this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -377,6 +401,21 @@
             this.libraryPanel.Size = new System.Drawing.Size(622, 874);
             this.libraryPanel.TabIndex = 0;
             // 
+            // libraryMajorItemList
+            // 
+            this.libraryMajorItemList.AllowCustomization = false;
+            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.libraryMajorItemList.SaveEditor = null;
+            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
+            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
+            this.libraryMajorItemList.Name = "libraryMajorItemList";
+            this.libraryMajorItemList.Size = new System.Drawing.Size(621, 848);
+            this.libraryMajorItemList.TabIndex = 2;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -387,42 +426,12 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "My Library";
             // 
-            // editorResourceView
+            // exitToolStripMenuItem
             // 
-            this.editorResourceView.AllowCustomization = false;
-            this.editorResourceView.Editor = null;
-            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
-            this.editorResourceView.Name = "editorResourceView";
-            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
-            this.editorResourceView.TabIndex = 1;
-            // 
-            // editorMajorItemList
-            // 
-            this.editorMajorItemList.AllowCustomization = false;
-            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.editorMajorItemList.Editor = null;
-            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
-            this.editorMajorItemList.Name = "editorMajorItemList";
-            this.editorMajorItemList.Size = new System.Drawing.Size(623, 850);
-            this.editorMajorItemList.TabIndex = 1;
-            // 
-            // libraryMajorItemList
-            // 
-            this.libraryMajorItemList.AllowCustomization = false;
-            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.libraryMajorItemList.Editor = null;
-            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
-            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
-            this.libraryMajorItemList.Name = "libraryMajorItemList";
-            this.libraryMajorItemList.Size = new System.Drawing.Size(621, 848);
-            this.libraryMajorItemList.TabIndex = 2;
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // MainWindow
             // 
@@ -495,6 +504,7 @@
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMode;
         private ResourceView editorResourceView;
         private System.Windows.Forms.ToolStripLabel toolStripLabelDirty;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
