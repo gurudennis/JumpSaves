@@ -13,8 +13,17 @@ namespace JSL
 
     public class Module : ArrayBasedObject
     {
+        public Module() : base(New(), null)
+        {
+        }
+
         public Module(object o, object[] parent) : base(o, parent)
         {
+        }
+
+        public Module Clone()
+        {
+            return new Module(Bytes, null);
         }
 
         public string RawType
@@ -76,6 +85,13 @@ namespace JSL
             }
         }
 
+        private static object New()
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
+        }
+
         private const int Index_RawType = 0;
         private const int Index_ActivePips = 1;
         private const int Index_Rarity = 2;
@@ -84,8 +100,17 @@ namespace JSL
 
     public class MajorItemBlueprint : ArrayBasedObject
     {
+        public MajorItemBlueprint() : base(New(), null)
+        {
+        }
+
         public MajorItemBlueprint(object o, object[] parent) : base(o, parent)
         {
+        }
+
+        public MajorItemBlueprint Clone()
+        {
+            return new MajorItemBlueprint(Bytes, null);
         }
 
         public string RawType
@@ -156,6 +181,13 @@ namespace JSL
             }
         }
 
+        private static object New()
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
+        }
+
         private const int Index_RawType = 0;
         private const int Index_Level = 1;
         private const int Index_Rarity = 2;
@@ -165,8 +197,17 @@ namespace JSL
 
     public class StoredMajorItem : ArrayBasedObject
     {
+        public StoredMajorItem() : base(New(), null)
+        {
+        }
+
         public StoredMajorItem(object o, object[] parent) : base(o, parent)
         {
+        }
+
+        public StoredMajorItem Clone()
+        {
+            return new StoredMajorItem(Bytes, null);
         }
 
         public string RawCategory
@@ -203,6 +244,13 @@ namespace JSL
             {
                 SetPropertyStrict(Index_PlacementInCategory, value);
             }
+        }
+
+        private static object New()
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
         }
 
         private const int Index_RawCategory = 0;
@@ -267,8 +315,17 @@ namespace JSL
 
     public class RecentMajorItem : ArrayBasedObject
     {
+        public RecentMajorItem() : base(New(), null)
+        {
+        }
+
         public RecentMajorItem(object o, object[] parent) : base(o, parent)
         {
+        }
+
+        public RecentMajorItem Clone()
+        {
+            return new RecentMajorItem(Bytes, null);
         }
 
         public string RawCategory
@@ -295,6 +352,13 @@ namespace JSL
             }
         }
 
+        private static object New()
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
+        }
+
         private const int Index_RawCategory = 0;
         private const int Index_Blueprint = 1;
     }
@@ -304,6 +368,10 @@ namespace JSL
     // serialized.
     public class LibraryMajorItem : RecentMajorItem
     {
+        public LibraryMajorItem() : base(New(), null)
+        {
+        }
+
         public LibraryMajorItem(object o) : base(o, null)
         {
         }
@@ -312,7 +380,7 @@ namespace JSL
         {
         }
 
-        public LibraryMajorItem Clone()
+        public new LibraryMajorItem Clone()
         {
             return new LibraryMajorItem(Bytes);
         }
@@ -328,6 +396,13 @@ namespace JSL
         private static object Deserialize(byte[] b)
         {
             return MessagePackSerializer.Deserialize<object[]>(b);
+        }
+
+        private static object New()
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
         }
     }
 }

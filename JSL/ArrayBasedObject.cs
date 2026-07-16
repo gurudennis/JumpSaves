@@ -45,7 +45,7 @@ namespace JSL
             }
         }
 
-        public object[] Parent { get; private set; }
+        public object[] Parent { get; set; }
 
         public virtual byte[] Bytes
         {
