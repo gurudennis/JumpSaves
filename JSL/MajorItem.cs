@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 
 namespace JSL
 {
@@ -296,5 +297,37 @@ namespace JSL
 
         private const int Index_RawCategory = 0;
         private const int Index_Blueprint = 1;
+    }
+
+    // Library items largely mimick the recent item format,
+    // with the exception of a small custom header when
+    // serialized.
+    public class LibraryMajorItem : RecentMajorItem
+    {
+        public LibraryMajorItem(object o) : base(o, null)
+        {
+        }
+
+        public LibraryMajorItem(byte[] b) : base(Deserialize(b), null)
+        {
+        }
+
+        public LibraryMajorItem Clone()
+        {
+            return new LibraryMajorItem(Bytes);
+        }
+
+        public override byte[] Bytes
+        {
+            get
+            {
+                return MessagePackSerializer.Serialize(Root);
+            }
+        }
+
+        private static object Deserialize(byte[] b)
+        {
+            return MessagePackSerializer.Deserialize<object[]>(b);
+        }
     }
 }

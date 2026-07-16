@@ -107,6 +107,17 @@ namespace JSL
         internal LibraryMajorItemListEditor(Library library)
             : base(null)
         {
+            if (library == null)
+            {
+                throw new ArgumentNullException("Invalid library object");
+            }
+
+            library_ = library;
+        }
+
+        public IReadOnlyList<string> TakeFailedFiles()
+        {
+            return library_.TakeFailedFiles();
         }
 
         private Library library_;
