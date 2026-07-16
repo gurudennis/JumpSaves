@@ -39,7 +39,7 @@ namespace JSL
             return prev;
         }
 
-        public void AddEntry(LibraryMajorItem item)
+        public void AddEntry(LibraryMajorItem item) // TODO: need to take MajorItem
         {
             if (item == null || ContainsItem(item))
             {
@@ -57,7 +57,7 @@ namespace JSL
             entries_.Add(entry);
         }
 
-        public void ReplaceEntry(int index, LibraryMajorItem item)
+        public void ReplaceEntry(int index, LibraryMajorItem item) // TODO: need to take MajorItem
         {
             if (item == null || ContainsItem(item))
             {
@@ -181,7 +181,7 @@ namespace JSL
             }
         }
 
-        private bool ContainsItem(LibraryMajorItem item)
+        private bool ContainsItem(ArrayBasedObject item)
         {
             return entries_.Any(e => e.Item == item);
         }

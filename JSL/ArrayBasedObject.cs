@@ -18,14 +18,30 @@ namespace JSL
     {
         public ArrayBasedObject(object o, object[] parent)
         {
-            Root = o as object[];
+            if (o == null)
+            {
+                throw new ArgumentNullException("Attempted to construct an ArrayBasedObject from a null object");
+            }
+
+            if (o is object[])
+            {
+                Root = (object[])o;
+            }
+            else if (o is byte[])
+            {
+                Root = MessagePackSerializer.Deserialize<object[]>((byte[])o);
+            }
+            else
+            {
+                throw new ArgumentException($"Attempted to construct an ArrayBasedObject from an incompatible object of type {o.GetType().FullName}");
+            }
+
             Parent = parent;
         }
 
-        public ArrayBasedObject(byte[] b, object[] parent)
+        public ArrayBasedObject Clone()
         {
-            Root = MessagePackSerializer.Deserialize<object[]>(b);
-            Parent = parent;
+            return new ArrayBasedObject(Bytes, null);
         }
 
         public object[] Root

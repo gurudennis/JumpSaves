@@ -21,7 +21,7 @@ namespace JSL
         {
         }
 
-        public Module Clone()
+        public new Module Clone()
         {
             return new Module(Bytes, null);
         }
@@ -108,7 +108,7 @@ namespace JSL
         {
         }
 
-        public MajorItemBlueprint Clone()
+        public new MajorItemBlueprint Clone()
         {
             return new MajorItemBlueprint(Bytes, null);
         }
@@ -195,7 +195,16 @@ namespace JSL
         private const int Index_Name = 12;
     }
 
-    public class StoredMajorItem : ArrayBasedObject
+    public abstract class MajorItem : ArrayBasedObject
+    {
+        public MajorItem(object o, object[] parent) : base(o, parent)
+        {
+        }
+
+        public abstract MajorItemBlueprint Blueprint { get; set; }
+    }
+
+    public class StoredMajorItem : MajorItem
     {
         public StoredMajorItem() : base(New(), null)
         {
@@ -205,7 +214,14 @@ namespace JSL
         {
         }
 
-        public StoredMajorItem Clone()
+        public static StoredMajorItem FromLibrary(LibraryMajorItem library)
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
+        }
+
+        public new StoredMajorItem Clone()
         {
             return new StoredMajorItem(Bytes, null);
         }
@@ -222,7 +238,7 @@ namespace JSL
             }
         }
 
-        public MajorItemBlueprint Blueprint
+        public override MajorItemBlueprint Blueprint
         {
             get
             {
@@ -313,7 +329,7 @@ namespace JSL
         private const int ExpectedElementCount = 9;
     }
 
-    public class RecentMajorItem : ArrayBasedObject
+    public class RecentMajorItem : MajorItem
     {
         public RecentMajorItem() : base(New(), null)
         {
@@ -323,7 +339,12 @@ namespace JSL
         {
         }
 
-        public RecentMajorItem Clone()
+        public static RecentMajorItem FromLibrary(LibraryMajorItem lib)
+        {
+            return new RecentMajorItem(lib.Clone().Root, null);
+        }
+
+        public new RecentMajorItem Clone()
         {
             return new RecentMajorItem(Bytes, null);
         }
@@ -340,7 +361,7 @@ namespace JSL
             }
         }
 
-        public MajorItemBlueprint Blueprint
+        public override MajorItemBlueprint Blueprint
         {
             get
             {
@@ -352,7 +373,7 @@ namespace JSL
             }
         }
 
-        private static object New()
+        protected static object New()
         {
             // ...
 
@@ -363,9 +384,7 @@ namespace JSL
         private const int Index_Blueprint = 1;
     }
 
-    // Library items largely mimick the recent item format,
-    // with the exception of a small custom header when
-    // serialized.
+    // Library items use the recent item format.
     public class LibraryMajorItem : RecentMajorItem
     {
         public LibraryMajorItem() : base(New(), null)
@@ -378,6 +397,18 @@ namespace JSL
 
         public LibraryMajorItem(byte[] b) : base(Deserialize(b), null)
         {
+        }
+
+        public static LibraryMajorItem FromRecent(RecentMajorItem recent)
+        {
+            return new LibraryMajorItem(recent.Clone().Root);
+        }
+
+        public static LibraryMajorItem FromStored(StoredMajorItem recent)
+        {
+            // ...
+
+            throw new NotImplementedException("Not yet implemented");
         }
 
         public new LibraryMajorItem Clone()
@@ -396,13 +427,6 @@ namespace JSL
         private static object Deserialize(byte[] b)
         {
             return MessagePackSerializer.Deserialize<object[]>(b);
-        }
-
-        private static object New()
-        {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
         }
     }
 }
