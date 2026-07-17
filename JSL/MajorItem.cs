@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using System;
+using System.Diagnostics;
 
 namespace JSL
 {
@@ -9,6 +10,85 @@ namespace JSL
         Uncommon = 1,
         Rare = 2,
         Superior = 3,
+    }
+
+    public static class MajorItemCategory
+    {
+        public enum Enum
+        {
+            Unknown,
+            PlayerWeapons,
+            Multiturrets,
+            PilotCannons,
+            SpecialWeapons,
+            Engines,
+            ShieldGenerators,
+            Sensors,
+            Reactors,
+            AuxGenerators
+        }
+
+        public static int Count
+        {
+            get
+            {
+                return ((int)Enum.AuxGenerators) + 1;
+            }
+        }
+
+        public static string GetTitle(Enum e)
+        {
+            Debug.Assert(Titles.Length == Count);
+            return Titles[(int)e];
+        }
+
+        public static string GetRaw(Enum e)
+        {
+            Debug.Assert(Raw.Length == Count);
+            return Raw[(int)e];
+        }
+
+        public static Enum FromRaw(string raw)
+        {
+            Debug.Assert(Raw.Length == Count);
+            for (int i = 0; i < Raw.Length; ++i)
+            {
+                if (Raw[i].ToLower() == raw.ToLower())
+                {
+                    return (Enum)i;
+                }
+            }
+
+            return Enum.Unknown;
+        }
+
+        private static string[] Titles = new string[]
+        {
+            "Unknown",
+            "Player Weapons",
+            "Multiturrets",
+            "Pilot Cannons",
+            "Special Weapons",
+            "Engines",
+            "Shield Generators",
+            "Sensors",
+            "Reactors",
+            "Aux. Generators"
+        };
+
+        private static string[] Raw = new string[]
+        {
+            null,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        };
     }
 
     public class Module : ArrayBasedObject

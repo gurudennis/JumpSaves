@@ -1,4 +1,6 @@
-﻿namespace JumpSaves
+﻿using BrightIdeasSoftware;
+
+namespace JumpSaves
 {
     partial class MajorItemList
     {
@@ -28,20 +30,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Player Weapons", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Multi Turrets", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Pilot Cannons", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Special Weapons", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup5 = new System.Windows.Forms.ListViewGroup("Engines", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("Shield Generators", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("Sensors", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup8 = new System.Windows.Forms.ListViewGroup("Reactors", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup9 = new System.Windows.Forms.ListViewGroup("Aux. Generators", System.Windows.Forms.HorizontalAlignment.Left);
-            this.list = new System.Windows.Forms.ListView();
-            this.columnHeaderName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderRarity = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderLevel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeaderModules = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.list = new BrightIdeasSoftware.VirtualObjectListView();
+            this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModules = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
@@ -49,76 +42,71 @@
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
+            ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // list
             // 
+            this.list.AllColumns.Add(this.olvColumnName);
+            this.list.AllColumns.Add(this.olvColumnRarity);
+            this.list.AllColumns.Add(this.olvColumnLevel);
+            this.list.AllColumns.Add(this.olvColumnModules);
             this.list.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.list.CellEditUseWholeCell = false;
             this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeaderName,
-            this.columnHeaderRarity,
-            this.columnHeaderLevel,
-            this.columnHeaderModules});
-            listViewGroup1.Header = "Player Weapons";
-            listViewGroup1.Name = "listViewGroupPlayerWeapons";
-            listViewGroup2.Header = "Multi Turrets";
-            listViewGroup2.Name = "listViewGroupMultiTurrets";
-            listViewGroup3.Header = "Pilot Cannons";
-            listViewGroup3.Name = "listViewGroupPilotCannons";
-            listViewGroup4.Header = "Special Weapons";
-            listViewGroup4.Name = "listViewGroupSpecialWeapons";
-            listViewGroup5.Header = "Engines";
-            listViewGroup5.Name = "listViewGroupEngines";
-            listViewGroup6.Header = "Shield Generators";
-            listViewGroup6.Name = "listViewGroupShieldGenerators";
-            listViewGroup7.Header = "Sensors";
-            listViewGroup7.Name = "listViewGroupSensors";
-            listViewGroup8.Header = "Reactors";
-            listViewGroup8.Name = "listViewGroupReactors";
-            listViewGroup9.Header = "Aux. Generators";
-            listViewGroup9.Name = "listViewGroupAuxGenerators";
-            this.list.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2,
-            listViewGroup3,
-            listViewGroup4,
-            listViewGroup5,
-            listViewGroup6,
-            listViewGroup7,
-            listViewGroup8,
-            listViewGroup9});
+            this.olvColumnName,
+            this.olvColumnRarity,
+            this.olvColumnLevel,
+            this.olvColumnModules});
+            this.list.Cursor = System.Windows.Forms.Cursors.Default;
             this.list.HideSelection = false;
             this.list.Location = new System.Drawing.Point(0, 32);
             this.list.Margin = new System.Windows.Forms.Padding(0);
             this.list.Name = "list";
+            this.list.ShowGroups = false;
             this.list.Size = new System.Drawing.Size(479, 684);
             this.list.TabIndex = 0;
             this.list.UseCompatibleStateImageBehavior = false;
             this.list.View = System.Windows.Forms.View.Details;
             this.list.VirtualMode = true;
             // 
-            // columnHeaderName
+            // olvColumnName
             // 
-            this.columnHeaderName.Text = "Name";
-            this.columnHeaderName.Width = 200;
+            this.olvColumnName.AspectName = "Name";
+            this.olvColumnName.FillsFreeSpace = true;
+            this.olvColumnName.Sortable = false;
+            this.olvColumnName.Text = "Name";
+            this.olvColumnName.Width = 200;
             // 
-            // columnHeaderRarity
+            // olvColumnRarity
             // 
-            this.columnHeaderRarity.Text = "Rarity";
-            this.columnHeaderRarity.Width = 50;
+            this.olvColumnRarity.IsEditable = false;
+            this.olvColumnRarity.MaximumWidth = 50;
+            this.olvColumnRarity.MinimumWidth = 50;
+            this.olvColumnRarity.Sortable = false;
+            this.olvColumnRarity.Text = "Rarity";
+            this.olvColumnRarity.Width = 50;
             // 
-            // columnHeaderLevel
+            // olvColumnLevel
             // 
-            this.columnHeaderLevel.Text = "Level";
-            this.columnHeaderLevel.Width = 50;
+            this.olvColumnLevel.IsEditable = false;
+            this.olvColumnLevel.MaximumWidth = 50;
+            this.olvColumnLevel.MinimumWidth = 50;
+            this.olvColumnLevel.Sortable = false;
+            this.olvColumnLevel.Text = "Level";
+            this.olvColumnLevel.Width = 50;
             // 
-            // columnHeaderModules
+            // olvColumnModules
             // 
-            this.columnHeaderModules.Text = "Modules";
-            this.columnHeaderModules.Width = 140;
+            this.olvColumnModules.IsEditable = false;
+            this.olvColumnModules.MaximumWidth = 140;
+            this.olvColumnModules.MinimumWidth = 140;
+            this.olvColumnModules.Sortable = false;
+            this.olvColumnModules.Text = "Modules";
+            this.olvColumnModules.Width = 140;
             // 
             // toolStrip
             // 
@@ -137,7 +125,7 @@
             this.toolStripComboBoxFilter});
             this.toolStrip.Location = new System.Drawing.Point(1, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(480, 31);
+            this.toolStrip.Size = new System.Drawing.Size(478, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
             // 
@@ -199,8 +187,7 @@
             // 
             // MajorItemList
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.BackColor = System.Drawing.Color.Silver;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.list);
@@ -208,6 +195,7 @@
             this.Size = new System.Drawing.Size(480, 717);
             this.Load += new System.EventHandler(this.OnLoad);
             this.EnabledChanged += new System.EventHandler(this.OnEnabledChanged);
+            ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -215,18 +203,17 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListView list;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
         private System.Windows.Forms.ToolStripButton toolStripButtonRemove;
-        private System.Windows.Forms.ColumnHeader columnHeaderName;
         private System.Windows.Forms.ToolStripButton toolStripButtonTransfer;
-        private System.Windows.Forms.ColumnHeader columnHeaderRarity;
-        private System.Windows.Forms.ColumnHeader columnHeaderLevel;
-        private System.Windows.Forms.ColumnHeader columnHeaderModules;
         private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxFilter;
         private System.Windows.Forms.ToolStripLabel toolStripLabelFilter;
+        private VirtualObjectListView list;
+        private OLVColumn olvColumnName;
+        private OLVColumn olvColumnRarity;
+        private OLVColumn olvColumnLevel;
+        private OLVColumn olvColumnModules;
     }
 }

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BrightIdeasSoftware;
+using JSL;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -18,13 +20,13 @@ namespace JumpSaves
         {
             get
             {
-                return editor_;
+                return saveEditor_;
             }
             set
             {
-                if (editor_ != value)
+                if (saveEditor_ != value)
                 {
-                    editor_ = value;
+                    saveEditor_ = value;
                     OnStateChange();
                 }
             }
@@ -64,6 +66,28 @@ namespace JumpSaves
             }
         }
 
+        private class Row
+        {
+            public Row(MajorItemEditor editor)
+            {
+                Editor = editor;
+            }
+
+            public string Name
+            {
+                get
+                {
+                    return String.IsNullOrEmpty(Editor.Name) ? "(unnamed)" : Editor.Name;
+                }
+                set
+                {
+                    Editor.Name = value;
+                }
+            }
+
+            public MajorItemEditor Editor { get; private set; }
+        }
+
         private void toolStripComboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             Editor = null;
@@ -80,9 +104,16 @@ namespace JumpSaves
 
         private void OnLoad(object sender, EventArgs e)
         {
+            list.RowGetter += GetRow;
+
             toolStripComboBoxFilter.SelectedIndex = 0;
 
             OnStateChange();
+        }
+
+        private object GetRow(int index)
+        {
+            return new Row(Editor[index]);
         }
 
         private void OnEnabledChanged(object sender, EventArgs e)
@@ -95,7 +126,9 @@ namespace JumpSaves
             EnsureEditorAvailable();
 
             list.Enabled = Enabled;
-            list.BackColor = Enabled ? SystemColors.Control : Color.Gainsboro;
+            list.BackColor = Enabled ? Color.White : Color.Gainsboro;
+            list.VirtualListSize = Editor?.Count ?? 0;
+            list.Invalidate();
 
             toolStrip.Enabled = Enabled;
             foreach (ToolStripItem item in toolStrip.Items)
@@ -112,6 +145,23 @@ namespace JumpSaves
 
         private void EnsureEditorAvailable()
         {
+            if (SaveEditor == null)
+            {
+                storedEditor_ = null;
+                recentEditor_ = null;
+            }
+
+            if (LibraryEditor == null)
+            {
+                libraryEditor_ = null;
+            }
+
+            if (SaveEditor == null && LibraryEditor == null)
+            {
+                Editor = null;
+                return;
+            }
+
             if (Editor != null)
             {
                 return;
@@ -142,7 +192,7 @@ namespace JumpSaves
             }
         }
 
-        private JSL.SaveEditor editor_;
+        private JSL.SaveEditor saveEditor_;
         private JSL.LibraryMajorItemListEditor libraryEditor_;
         private JSL.MajorItemListEditor storedEditor_;
         private JSL.MajorItemListEditor recentEditor_;

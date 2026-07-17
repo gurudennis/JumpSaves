@@ -14,19 +14,35 @@ namespace JSL
         {
         }
 
-        protected MajorItemEditor(object item, IRootEditor rootEditor)
+        protected MajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(rootEditor)
         {
             Item = item;
         }
 
-        protected object Item { get; set; }
+        public string Name
+        {
+            get
+            {
+                return Item.Blueprint.Name;
+            }
+            set
+            {
+                if (Item.Blueprint.Name != value)
+                {
+                    Item.Blueprint.Name = value;
+                    RootEditor.IsDirty = true;
+                }
+            }
+        }
+
+        internal MajorItem Item { get; set; }
     }
 
     // Stored major item
     internal class StoredMajorItemEditor : MajorItemEditor
     {
-        internal StoredMajorItemEditor(object item, IRootEditor rootEditor)
+        internal StoredMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
         }
@@ -35,7 +51,7 @@ namespace JSL
     // Recent major item
     internal class RecentMajorItemEditor : MajorItemEditor
     {
-        internal RecentMajorItemEditor(object item, IRootEditor rootEditor)
+        internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
         }
@@ -48,20 +64,16 @@ namespace JSL
             : base(rootEditor)
         {
             library_ = library;
-            // LibraryItem = ... make a new one ...
-            Item = LibraryItem.Root;
+            // Item = ... make a new one ...
 
         }
 
         internal LibraryMajorItemEditor(Library library, int index, IRootEditor rootEditor)
-            : base(library.Entries[index].Item.Root, rootEditor)
+            : base(library.Entries[index].Item, rootEditor)
         {
             library_ = library;
             index_ = index;
-            LibraryItem = library_.Entries[index_].Item;
         }
-
-        internal LibraryMajorItem LibraryItem { get; private set; }
 
         private int index_ = -1;
         private Library library_;
@@ -105,6 +117,14 @@ namespace JSL
             }
         }
 
+        protected object[] Items
+        {
+            get
+            {
+                return items_;
+            }
+        }
+
         protected SaveState State { get; private set; }
 
         private object[] items_;
@@ -122,9 +142,7 @@ namespace JSL
         {
             get
             {
-                // ...
-
-                return null;
+                return new StoredMajorItemEditor(new StoredMajorItem(Items[index], Items), RootEditor);
             }
         }
 
@@ -163,9 +181,7 @@ namespace JSL
         {
             get
             {
-                // ...
-
-                return null;
+                return new RecentMajorItemEditor(new RecentMajorItem(Items[index], Items), RootEditor);
             }
         }
 
@@ -218,8 +234,6 @@ namespace JSL
         {
             get
             {
-                // TODO: Can this be made more efficient? Caching seems complicated since
-                //       each edit would have to invalidate only a given element.
                 return new LibraryMajorItemEditor(library_, index, RootEditor);
             }
         }
@@ -238,7 +252,7 @@ namespace JSL
 
             LibraryMajorItemEditor libraryItem = (LibraryMajorItemEditor)item;
 
-            library_.AddEntry(libraryItem.LibraryItem);
+            library_.AddEntry((LibraryMajorItem)libraryItem.Item);
         }
 
         public override void Remove(int index)

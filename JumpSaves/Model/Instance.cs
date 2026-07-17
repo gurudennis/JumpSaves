@@ -102,11 +102,11 @@ namespace JumpSaves.Model
 
         public event EventHandler<PeriodicInfoArgs> PeriodicInfoEvent;
 
-        public void RunCLI()
+        public void RunCLI(string path = null)
         {
             string selfPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             string cliPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(selfPath), "JumpSavesCLI.exe");
-            Process.Start(cliPath, $"-s {Editor?.Path ?? DefaultSavePath}");
+            Process.Start(cliPath, $"-s {path ?? (Editor?.Path ?? DefaultSavePath)}");
         }
 
         private void OnGlobalPeriodicInfo(object sender, GlobalPeriodicInfoEventArgs args)

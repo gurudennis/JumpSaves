@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JSL;
+using System;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -16,6 +18,8 @@ namespace JumpSaves
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            Text = $"JumpSaves {Assembly.GetExecutingAssembly().GetName().Version} (beta)";
+
             toolStripComboBoxMode.SelectedIndex = 0;
 
             editorMajorItemList.MaybeDirty += OnEditorMajorItemList_MaybeDirty;
@@ -143,6 +147,7 @@ namespace JumpSaves
 
         private void onFormClosed(object sender, FormClosedEventArgs e)
         {
+            model_.PeriodicInfoEvent -= OnPeriodicInfo;
             model_?.Dispose();
         }
 
@@ -215,17 +220,20 @@ namespace JumpSaves
 
         private void RunCLI()
         {
+            string path = model_.Editor?.Path ?? model_.DefaultSavePath;
+
             CloseFileDir();
 
             if (!model_.IsOpen)
             {
-                model_.RunCLI();
+                model_.RunCLI(path);
             }
         }
 
         private void ShowAboutBox()
         {
-            string credits = "JumpSaves, a Jump Space save file editor.\n\nProgramming: gurudennis (gurudenis <at> gmail.com)\nBeta testing: Snakeyes";
+            string credits = $"JumpSaves, a Jump Space save file editor.\nVersion {Assembly.GetExecutingAssembly().GetName().Version} (beta)" +
+                              "\n\nProgramming: gurudennis (gurudenis <at> gmail.com)\nBeta testing: Snakeyes";
             MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -246,10 +254,7 @@ namespace JumpSaves
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
-            if (editorMajorItemList.SaveEditor == null)
-            {
-                editorMajorItemList.SaveEditor = model_.Editor;
-            }
+            editorMajorItemList.SaveEditor = model_.Editor;
             editorMajorItemList.AllowCustomization = IsCheaterMode;
             editorMajorItemList.Enabled = CanEdit;
             editorResourceView.Editor = model_.Editor?.Resources;
@@ -257,7 +262,7 @@ namespace JumpSaves
             editorResourceView.Enabled = CanEdit;
 
             // Library panel
-            if (libraryMajorItemList.LibraryEditor == null && model_.Library != null)
+            if (model_.Library != null)
             {
                 libraryMajorItemList.LibraryEditor = JSL.EditorFactory.OpenLibrary(model_.Library);
             }
