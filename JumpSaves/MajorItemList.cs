@@ -1,5 +1,4 @@
 ﻿using BrightIdeasSoftware;
-using JSL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -48,7 +47,22 @@ namespace JumpSaves
             }
         }
 
-        public JSL.MajorItemListEditor Editor { get; private set; }
+        public JSL.MajorItemListEditor Editor
+        {
+            get
+            {
+                return editor_;
+            }
+            private set
+            {
+                if (editor_ != value)
+                {
+                    editor_ = value;
+                    list.VirtualListSize = Editor?.Count ?? 0;
+                    list.BuildList();
+                }
+            }
+        }
 
         public bool AllowCustomization
         {
@@ -68,24 +82,26 @@ namespace JumpSaves
 
         private class Row
         {
-            public Row(MajorItemEditor editor)
+            public Row(JSL.MajorItemEditor editor)
             {
                 Editor = editor;
             }
+
+            public static readonly string Unnamed = "(unnamed)";
 
             public string Name
             {
                 get
                 {
-                    return String.IsNullOrEmpty(Editor.Name) ? "(unnamed)" : Editor.Name;
+                    return String.IsNullOrEmpty(Editor.Name) ? Unnamed : Editor.Name;
                 }
                 set
                 {
-                    Editor.Name = value;
+                    Editor.Name = (value == Unnamed) ? null : value;
                 }
             }
 
-            public MajorItemEditor Editor { get; private set; }
+            public JSL.MajorItemEditor Editor { get; private set; }
         }
 
         private void toolStripComboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -127,8 +143,6 @@ namespace JumpSaves
 
             list.Enabled = Enabled;
             list.BackColor = Enabled ? Color.White : Color.Gainsboro;
-            list.VirtualListSize = Editor?.Count ?? 0;
-            list.Invalidate();
 
             toolStrip.Enabled = Enabled;
             foreach (ToolStripItem item in toolStrip.Items)
@@ -196,6 +210,7 @@ namespace JumpSaves
         private JSL.LibraryMajorItemListEditor libraryEditor_;
         private JSL.MajorItemListEditor storedEditor_;
         private JSL.MajorItemListEditor recentEditor_;
+        private JSL.MajorItemListEditor editor_;
         private bool allowCustomization_;
     }
 }

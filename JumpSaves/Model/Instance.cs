@@ -33,7 +33,7 @@ namespace JumpSaves.Model
             get
             {
 #if DEBUG
-                return "C:\\Prj\\JumpSpaceSaves\\Data\\FakeDir";
+                return "C:\\Prj\\JumpSpaceSaves\\Data\\NewVersion";
 #else
                 return JSL.SaveDir.Default.Path;
 #endif
