@@ -36,6 +36,57 @@ namespace JSL
             }
         }
 
+        public MajorItemCategory.Enum Category
+        {
+            get
+            {
+                return MajorItemCategory.FromRaw(Item.RawCategory);
+            }
+            set
+            {
+                string raw = MajorItemCategory.GetRaw(value);
+                if (Item.RawCategory != raw)
+                {
+                    Item.RawCategory = raw;
+                    RootEditor.IsDirty = true;
+                }
+            }
+        }
+
+        public abstract int PlacementInCategory { get; }
+
+        public Rarity Rarity
+        {
+            get
+            {
+                return Item.Blueprint.Rarity;
+            }
+            set
+            {
+                if (Item.Blueprint.Rarity != value)
+                {
+                    Item.Blueprint.Rarity = value;
+                    RootEditor.IsDirty = true;
+                }
+            }
+        }
+
+        public int Level
+        {
+            get
+            {
+                return Item.Blueprint.Level;
+            }
+            set
+            {
+                if (Item.Blueprint.Level != value)
+                {
+                    Item.Blueprint.Level = value;
+                    RootEditor.IsDirty = true;
+                }
+            }
+        }
+
         internal MajorItem Item { get; set; }
     }
 
@@ -46,6 +97,14 @@ namespace JSL
             : base(item, rootEditor)
         {
         }
+
+        public override int PlacementInCategory
+        {
+            get
+            {
+                return ((StoredMajorItem)Item).PlacementInCategory;
+            }
+        }
     }
 
     // Recent major item
@@ -54,6 +113,15 @@ namespace JSL
         internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
+        }
+
+        public override int PlacementInCategory
+        {
+            get
+            {
+                // Not technically correct because the values will be sparse, but OK for relative ordering.
+                return (int)(((RecentMajorItem)Item).Timestamp.Ticks & 0x7FFFFFFFL);
+            }
         }
     }
 
@@ -73,6 +141,15 @@ namespace JSL
         {
             library_ = library;
             index_ = index;
+        }
+
+        public override int PlacementInCategory
+        {
+            get
+            {
+                // Not technically correct because the values will be sparse, but OK for relative ordering.
+                return index_;
+            }
         }
 
         private int index_ = -1;

@@ -46,10 +46,24 @@ namespace JSL
             return Raw[(int)e];
         }
 
+        public static Enum FromTitle(string title)
+        {
+            Debug.Assert(Titles.Length == Count);
+            for (int i = 1; i < Raw.Length; ++i)
+            {
+                if (Titles[i].ToLower() == title.ToLower())
+                {
+                    return (Enum)i;
+                }
+            }
+
+            return Enum.Unknown;
+        }
+
         public static Enum FromRaw(string raw)
         {
             Debug.Assert(Raw.Length == Count);
-            for (int i = 0; i < Raw.Length; ++i)
+            for (int i = 1; i < Raw.Length; ++i)
             {
                 if (Raw[i].ToLower() == raw.ToLower())
                 {
@@ -78,14 +92,14 @@ namespace JSL
         {
             null,
             "fd51532d25c4d4841b1c439708726682",
-            "5e4082467be3c344698f724e74c6660a",
-            "00ef3c858516b02498fcf9e8ee5497de",
+            "110603b5e382aec438ef983ddde55f81",
+            "00ef3c858516b02498fcf9e8ee5497de", 
             "9eb5cd7261a6dba439db975e7e05d069",
             "d7c2724a0c49930438f6d6ed3da628ba",
             "1292627bbf531c84ba2c56e6e55af6d3",
             "6ef31e2e90989364d8e2d4958615b299",
             "2546892240b110847b64e524e9bd1d39",
-            "2c60b00a88d34b546865a36738fabc2a"
+            "0c28f786865a0b142926742a182c0011"
         };
     }
 }

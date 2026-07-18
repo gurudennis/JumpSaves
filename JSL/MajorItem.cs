@@ -47,11 +47,11 @@ namespace JSL
         {
             get
             {
-                return GetPropertyStrict<Rarity>(Index_Rarity);
+                return (Rarity)GetPropertyStrict<byte>(Index_Rarity);
             }
             set
             {
-                SetPropertyStrict(Index_Rarity, value);
+                SetPropertyStrict(Index_Rarity, (byte)value);
             }
         }
 
@@ -142,11 +142,11 @@ namespace JSL
         {
             get
             {
-                return GetPropertyStrict<Rarity>(Index_Rarity);
+                return (Rarity)GetPropertyStrict<byte>(Index_Rarity);
             }
             set
             {
-                SetPropertyStrict(Index_Rarity, value);
+                SetPropertyStrict(Index_Rarity, (byte)value);
             }
         }
 
@@ -194,6 +194,8 @@ namespace JSL
         {
         }
 
+        public abstract string RawCategory { get; set; }
+
         public abstract MajorItemBlueprint Blueprint { get; set; }
     }
 
@@ -219,7 +221,7 @@ namespace JSL
             return new StoredMajorItem(Bytes, null);
         }
 
-        public string RawCategory
+        public override string RawCategory
         {
             get
             {
@@ -342,7 +344,7 @@ namespace JSL
             return new RecentMajorItem(Bytes, null);
         }
 
-        public string RawCategory
+        public override string RawCategory
         {
             get
             {
@@ -351,6 +353,18 @@ namespace JSL
             set
             {
                 SetPropertyStrict(Index_RawCategory, value);
+            }
+        }
+
+        public DateTime Timestamp
+        {
+            get
+            {
+                return new DateTime(GetPropertyStrict<long>(Index_Timestamp));
+            }
+            set
+            {
+                SetPropertyStrict(Index_Timestamp, value.Ticks);
             }
         }
 
@@ -375,6 +389,7 @@ namespace JSL
 
         private const int Index_RawCategory = 0;
         private const int Index_Blueprint = 1;
+        private const int Index_Timestamp = 2;
     }
 
     // Library items use the recent item format.

@@ -1,4 +1,5 @@
 ﻿using BrightIdeasSoftware;
+using JSL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -58,8 +59,7 @@ namespace JumpSaves
                 if (editor_ != value)
                 {
                     editor_ = value;
-                    list.VirtualListSize = Editor?.Count ?? 0;
-                    list.BuildList();
+                    ApplyEditor(editor_);
                 }
             }
         }
@@ -80,7 +80,7 @@ namespace JumpSaves
             }
         }
 
-        private class Row
+        public class Row
         {
             public Row(JSL.MajorItemEditor editor)
             {
@@ -101,7 +101,71 @@ namespace JumpSaves
                 }
             }
 
+            public string Category
+            {
+                get
+                {
+                    return JSL.MajorItemCategory.GetTitle(Editor.Category);
+                }
+            }
+
+            public int SlotIndex
+            {
+                get
+                {
+                    return Editor.PlacementInCategory;
+                }
+            }
+
+            public int Rarity
+            {
+                get
+                {
+                    return (int)Editor.Rarity;
+                }
+            }
+
+            public int Level
+            {
+                get
+                {
+                    return Editor.Level;
+                }
+            }
+
             public JSL.MajorItemEditor Editor { get; private set; }
+        }
+
+        private class GroupComparer : IComparer<OLVGroup>
+        {
+            public int Compare(OLVGroup x, OLVGroup y)
+            {
+                JSL.MajorItemCategory.Enum xe = JSL.MajorItemCategory.FromTitle((string)x.Key);
+                JSL.MajorItemCategory.Enum ye = JSL.MajorItemCategory.FromTitle((string)y.Key);
+
+                if (xe == JSL.MajorItemCategory.Enum.Unknown && ye == JSL.MajorItemCategory.Enum.Unknown)
+                {
+                    return 0;
+                }
+                else if (xe == JSL.MajorItemCategory.Enum.Unknown)
+                {
+                    return 1;
+                }
+                else if (ye == JSL.MajorItemCategory.Enum.Unknown)
+                {
+                    return -1;
+                }
+
+                return ((int)xe).CompareTo((int)ye);
+            }
+        }
+
+        private void list_BeforeCreatingGroups(object sender, CreateGroupsEventArgs e)
+        {
+            e.Parameters.SortItemsByPrimaryColumn = false;
+            e.Parameters.PrimarySort = olvColumnSlotInCategory;
+            e.Parameters.SecondarySort = olvColumnName;
+            e.Parameters.GroupComparer = new GroupComparer(); 
         }
 
         private void toolStripComboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -120,16 +184,12 @@ namespace JumpSaves
 
         private void OnLoad(object sender, EventArgs e)
         {
-            list.RowGetter += GetRow;
+            list.ShowGroups = true;
+            list.AlwaysGroupByColumn = olvColumnCategory;
 
             toolStripComboBoxFilter.SelectedIndex = 0;
 
             OnStateChange();
-        }
-
-        private object GetRow(int index)
-        {
-            return new Row(Editor[index]);
         }
 
         private void OnEnabledChanged(object sender, EventArgs e)
@@ -206,11 +266,27 @@ namespace JumpSaves
             }
         }
 
+        private void ApplyEditor(MajorItemListEditor editor)
+        {
+            rows_ = new List<Row>();
+
+            if (editor != null)
+            {
+                for (int i = 0; i < editor.Count; ++i)
+                {
+                    rows_.Add(new Row(editor[i]));
+                }
+            }
+
+            list.SetObjects(rows_);
+        }
+
         private JSL.SaveEditor saveEditor_;
         private JSL.LibraryMajorItemListEditor libraryEditor_;
         private JSL.MajorItemListEditor storedEditor_;
         private JSL.MajorItemListEditor recentEditor_;
         private JSL.MajorItemListEditor editor_;
+        private List<Row> rows_;
         private bool allowCustomization_;
     }
 }

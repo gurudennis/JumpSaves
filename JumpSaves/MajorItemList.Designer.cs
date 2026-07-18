@@ -30,8 +30,10 @@ namespace JumpSaves
         /// </summary>
         private void InitializeComponent()
         {
-            this.list = new BrightIdeasSoftware.VirtualObjectListView();
+            this.list = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnSlotInCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnModules = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -49,6 +51,8 @@ namespace JumpSaves
             // list
             // 
             this.list.AllColumns.Add(this.olvColumnName);
+            this.list.AllColumns.Add(this.olvColumnCategory);
+            this.list.AllColumns.Add(this.olvColumnSlotInCategory);
             this.list.AllColumns.Add(this.olvColumnRarity);
             this.list.AllColumns.Add(this.olvColumnLevel);
             this.list.AllColumns.Add(this.olvColumnModules);
@@ -62,16 +66,22 @@ namespace JumpSaves
             this.olvColumnLevel,
             this.olvColumnModules});
             this.list.Cursor = System.Windows.Forms.Cursors.Default;
+            this.list.HasCollapsibleGroups = false;
+            this.list.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.list.HideSelection = false;
             this.list.Location = new System.Drawing.Point(0, 32);
             this.list.Margin = new System.Windows.Forms.Padding(0);
             this.list.Name = "list";
             this.list.ShowGroups = false;
+            this.list.ShowItemCountOnGroups = true;
+            this.list.ShowSortIndicators = false;
             this.list.Size = new System.Drawing.Size(479, 684);
+            this.list.SpaceBetweenGroups = 10;
             this.list.TabIndex = 0;
             this.list.UseCompatibleStateImageBehavior = false;
             this.list.View = System.Windows.Forms.View.Details;
             this.list.VirtualMode = true;
+            this.list.BeforeCreatingGroups += new System.EventHandler<BrightIdeasSoftware.CreateGroupsEventArgs>(this.list_BeforeCreatingGroups);
             // 
             // olvColumnName
             // 
@@ -81,8 +91,23 @@ namespace JumpSaves
             this.olvColumnName.Text = "Name";
             this.olvColumnName.Width = 200;
             // 
+            // olvColumnCategory
+            // 
+            this.olvColumnCategory.AspectName = "Category";
+            this.olvColumnCategory.DisplayIndex = 1;
+            this.olvColumnCategory.IsVisible = false;
+            this.olvColumnCategory.Text = "Category";
+            this.olvColumnCategory.Width = 0;
+            // 
+            // olvColumnSlotInCategory
+            // 
+            this.olvColumnSlotInCategory.AspectName = "SlotIndex";
+            this.olvColumnSlotInCategory.IsVisible = false;
+            this.olvColumnSlotInCategory.Text = "Slot in category";
+            // 
             // olvColumnRarity
             // 
+            this.olvColumnRarity.AspectName = "Rarity";
             this.olvColumnRarity.IsEditable = false;
             this.olvColumnRarity.MaximumWidth = 50;
             this.olvColumnRarity.MinimumWidth = 50;
@@ -92,6 +117,7 @@ namespace JumpSaves
             // 
             // olvColumnLevel
             // 
+            this.olvColumnLevel.AspectName = "Level";
             this.olvColumnLevel.IsEditable = false;
             this.olvColumnLevel.MaximumWidth = 50;
             this.olvColumnLevel.MinimumWidth = 50;
@@ -210,10 +236,12 @@ namespace JumpSaves
         private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxFilter;
         private System.Windows.Forms.ToolStripLabel toolStripLabelFilter;
-        private VirtualObjectListView list;
+        private FastObjectListView list;
         private OLVColumn olvColumnName;
         private OLVColumn olvColumnRarity;
         private OLVColumn olvColumnLevel;
         private OLVColumn olvColumnModules;
+        private OLVColumn olvColumnSlotInCategory;
+        private OLVColumn olvColumnCategory;
     }
 }
