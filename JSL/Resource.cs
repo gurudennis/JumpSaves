@@ -10,6 +10,10 @@ namespace JSL
     {
         public Resource(object o, object[] parent) : base(o, parent)
         {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in Resource, found {Root.Length}.");
+            }
         }
 
         public string RawType
@@ -38,6 +42,7 @@ namespace JSL
 
         private const int Index_RawType = 0;
         private const int Index_Value = 1;
+        private const int ExpectedElementCount = 2;
     }
 
     public class Resources : ArrayBasedObject
@@ -130,13 +135,12 @@ namespace JSL
             }
         }
 
-        private const int ExpectedElementCount = 6;
-
         private const int Index_Credits = 0;
         private const int Index_GreenIngots = 1;
         private const int Index_BlueIngots = 2;
         private const int Index_PurpleIngots = 3;
         private const int Index_OrangeIngots = 4;
         private const int Index_RedIngots = 5;
+        private const int ExpectedElementCount = 6;
     }
 }

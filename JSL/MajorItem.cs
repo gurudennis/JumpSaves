@@ -6,12 +6,16 @@ namespace JSL
 {
     public class Module : ArrayBasedObject
     {
-        public Module() : base(New(), null)
+        public Module() : this(New(), null)
         {
         }
 
         public Module(object o, object[] parent) : base(o, parent)
         {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in Module, found {Root.Length}.");
+            }
         }
 
         public new Module Clone()
@@ -80,7 +84,7 @@ namespace JSL
 
         private static object New()
         {
-            Module module = new Module(new object[ElementCount], null);
+            Module module = new Module(new object[ExpectedElementCount], null);
             module.SetPropertyStrict(Index_RawType, string.Empty);
             module.SetPropertyStrict(Index_ActivePips, (byte)1);
             module.SetPropertyStrict(Index_Rarity, (byte)0);
@@ -92,17 +96,21 @@ namespace JSL
         private const int Index_ActivePips = 1;
         private const int Index_Rarity = 2;
         private const int Index_Potencies = 3;
-        private const int ElementCount = 4;
+        private const int ExpectedElementCount = 4;
     }
 
     public class MajorItemBlueprint : ArrayBasedObject
     {
-        public MajorItemBlueprint() : base(New(), null)
+        public MajorItemBlueprint() : this(New(), null)
         {
         }
 
         public MajorItemBlueprint(object o, object[] parent) : base(o, parent)
         {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in MajorItemBlueprint, found {Root.Length}.");
+            }
         }
 
         public new MajorItemBlueprint Clone()
@@ -240,7 +248,7 @@ namespace JSL
 
         private static object New()
         {
-            MajorItemBlueprint blueprint = new MajorItemBlueprint(new object[ElementCount], null);
+            MajorItemBlueprint blueprint = new MajorItemBlueprint(new object[ExpectedElementCount], null);
             blueprint.SetPropertyStrict(Index_RawType, string.Empty);
             blueprint.SetPropertyStrict(Index_Level, (byte)1);
             blueprint.SetPropertyStrict(Index_Rarity, (byte)0);
@@ -272,7 +280,7 @@ namespace JSL
         private const int Index_ID = 13;
         private const int Index_OwningPlayerID = 14;
         private const int Index_OriginLobbyID = 15;
-        private const int ElementCount = 16;
+        private const int ExpectedElementCount = 16;
     }
 
     public abstract class MajorItem : ArrayBasedObject
@@ -288,12 +296,16 @@ namespace JSL
 
     public class StoredMajorItem : MajorItem
     {
-        public StoredMajorItem() : base(New(), null)
+        public StoredMajorItem() : this(New(), null)
         {
         }
 
         public StoredMajorItem(object o, object[] parent) : base(o, parent)
         {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in StoredMajorItem, found {Root.Length}.");
+            }
         }
 
         public static StoredMajorItem FromLibrary(LibraryMajorItem library)
@@ -383,7 +395,7 @@ namespace JSL
         private static object New()
         {
             MajorItemBlueprint blueprint = new MajorItemBlueprint();
-            StoredMajorItem item = new StoredMajorItem(new object[ElementCount], null);
+            StoredMajorItem item = new StoredMajorItem(new object[ExpectedElementCount], null);
             item.SetPropertyStrict(Index_RawCategory, string.Empty);
             item.SetPropertyStrict(Index_Blueprint, blueprint.Root);
             item.SetPropertyStrict(Index_Timestamp, (ulong)DateTime.Now.Ticks);
@@ -399,7 +411,7 @@ namespace JSL
         private const int Index_PlacementInCategory = 3;
         private const int Index_BlueprintID = 4;
         private const int Index_HasEverBeenStored = 5;
-        private const int ElementCount = 6;
+        private const int ExpectedElementCount = 6;
     }
 
     public class MajorItemSlotUpgrade : ArrayBasedObject
@@ -459,12 +471,16 @@ namespace JSL
 
     public class RecentMajorItem : MajorItem
     {
-        public RecentMajorItem() : base(New(), null)
+        public RecentMajorItem() : this(New(), null)
         {
         }
 
         public RecentMajorItem(object o, object[] parent) : base(o, parent)
         {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in RecentMajorItem, found {Root.Length}.");
+            }
         }
 
         public static RecentMajorItem FromLibrary(LibraryMajorItem lib)
@@ -527,7 +543,7 @@ namespace JSL
 
         protected static object New()
         {
-            StoredMajorItem item = new StoredMajorItem(new object[ElementCount], null);
+            StoredMajorItem item = new StoredMajorItem(new object[ExpectedElementCount], null);
             item.SetPropertyStrict(Index_RawCategory, string.Empty);
             item.SetPropertyStrict(Index_Blueprint, (new MajorItemBlueprint()).Root);
             item.SetPropertyStrict(Index_Timestamp, (ulong)DateTime.Now.Ticks);
@@ -540,7 +556,7 @@ namespace JSL
         private const int Index_Blueprint = 1;
         private const int Index_Timestamp = 2;
         private const int Index_HasEverBeenStored = 4;
-        private const int ElementCount = 5;
+        private const int ExpectedElementCount = 5;
     }
 
     // Library items use the recent item format.

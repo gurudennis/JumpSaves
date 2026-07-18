@@ -6,6 +6,46 @@ using System.Text.Json;
 
 namespace JSL
 {
+    public class SaveMetadata : ArrayBasedObject
+    {
+        public SaveMetadata(object o, object[] parent) : base(o, parent)
+        {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in SaveMetadata, found {Root.Length}.");
+            }
+        }
+
+        public string RawType
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_RawType);
+            }
+        }
+
+        public int SaveVersion
+        {
+            get
+            {
+                return GetPropertyStrict<int>(Index_SaveVersion);
+            }
+        }
+
+        public string PlayerID
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_PlayerID);
+            }
+        }
+
+        private const int Index_RawType = 0;
+        private const int Index_SaveVersion = 1;
+        private const int Index_PlayerID = 2;
+        private const int ExpectedElementCount = 3;
+    }
+
     public class SaveState : ArrayBasedObject
     {
         public SaveState(byte[] bytes) : base(Initialize(bytes), null)
@@ -129,6 +169,14 @@ namespace JSL
             }
 
             return JsonSerializer.Deserialize(json, type);
+        }
+
+        public SaveMetadata SaveMetadata
+        {
+            get
+            {
+                return new SaveMetadata(GetSubObjectStrict(Index_SaveMetadata), Root);
+            }
         }
 
         public object[] Ships
