@@ -80,15 +80,19 @@ namespace JSL
 
         private static object New()
         {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
+            Module module = new Module(new object[ElementCount], null);
+            module.SetPropertyStrict(Index_RawType, string.Empty);
+            module.SetPropertyStrict(Index_ActivePips, (byte)1);
+            module.SetPropertyStrict(Index_Rarity, (byte)0);
+            module.SetPropertyStrict(Index_Potencies, new object[0]);
+            return module.Root;
         }
 
         private const int Index_RawType = 0;
         private const int Index_ActivePips = 1;
         private const int Index_Rarity = 2;
         private const int Index_Potencies = 3;
+        private const int ElementCount = 4;
     }
 
     public class MajorItemBlueprint : ArrayBasedObject
@@ -162,6 +166,30 @@ namespace JSL
             }
         }
 
+        public string CraftedBy
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_CraftedBy);
+            }
+            set
+            {
+                SetPropertyStrict(Index_CraftedBy, value);
+            }
+        }
+
+        public string RawOrigin
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_RawOrigin);
+            }
+            set
+            {
+                SetPropertyStrict(Index_RawOrigin, value);
+            }
+        }
+
         public string Name
         {
             get
@@ -174,18 +202,77 @@ namespace JSL
             }
         }
 
+        public string ID
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_ID);
+            }
+            set
+            {
+                SetPropertyStrict(Index_ID, value);
+            }
+        }
+
+        public string OwningPlayerID
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_OwningPlayerID);
+            }
+            set
+            {
+                SetPropertyStrict(Index_OwningPlayerID, value);
+            }
+        }
+
+        public string OriginLobbyID
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_OriginLobbyID);
+            }
+            set
+            {
+                SetPropertyStrict(Index_OriginLobbyID, value);
+            }
+        }
+
         private static object New()
         {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
+            MajorItemBlueprint blueprint = new MajorItemBlueprint(new object[ElementCount], null);
+            blueprint.SetPropertyStrict(Index_RawType, string.Empty);
+            blueprint.SetPropertyStrict(Index_Level, (byte)1);
+            blueprint.SetPropertyStrict(Index_Rarity, (byte)0);
+            blueprint.SetPropertyStrict(Index_Modules, new object[0]);
+            blueprint.SetPropertyStrict(Index_Furniture, new object[0]);
+            blueprint.SetPropertyStrict(5, (uint)1342734106); // unknown, always in this ballpark
+            blueprint.SetPropertyStrict(6, (byte)5); // unknown constant
+            blueprint.SetPropertyStrict(7, Guid.NewGuid().ToString("D")); // unknown, always unique
+            blueprint.SetPropertyStrict(Index_SaveVersion, (byte)0); // same for all modules in a given save, must be copied from SaveMetadata.SaveVersion
+            blueprint.SetPropertyStrict(Index_CraftedBy, null);
+            blueprint.SetPropertyStrict(10, false); // unknown constant
+            blueprint.SetPropertyStrict(Index_RawOrigin, "4c508dd3046b4cb4b8bd5a0e24877f12");
+            blueprint.SetPropertyStrict(Index_Name, null);
+            blueprint.SetPropertyStrict(Index_ID, Guid.NewGuid().ToString("D"));
+            blueprint.SetPropertyStrict(Index_OwningPlayerID, string.Empty); // same for all modules in a given save, must be copied from SaveMetadata.PlayerID
+            blueprint.SetPropertyStrict(Index_OriginLobbyID, "Tv2HrDk8AJM5rEKi");
+            return blueprint.Root;
         }
 
         private const int Index_RawType = 0;
         private const int Index_Level = 1;
         private const int Index_Rarity = 2;
         private const int Index_Modules = 3;
+        private const int Index_Furniture = 4;
+        private const int Index_SaveVersion = 8;
+        private const int Index_CraftedBy = 9;
+        private const int Index_RawOrigin = 11;
         private const int Index_Name = 12;
+        private const int Index_ID = 13;
+        private const int Index_OwningPlayerID = 14;
+        private const int Index_OriginLobbyID = 15;
+        private const int ElementCount = 16;
     }
 
     public abstract class MajorItem : ArrayBasedObject
@@ -245,6 +332,18 @@ namespace JSL
             }
         }
 
+        public DateTime Timestamp
+        {
+            get
+            {
+                return new DateTime(GetPropertyStrict<long>(Index_Timestamp));
+            }
+            set
+            {
+                SetPropertyStrict(Index_Timestamp, value.Ticks);
+            }
+        }
+
         public int PlacementInCategory // in-format type: byte
         {
             get
@@ -257,16 +356,50 @@ namespace JSL
             }
         }
 
+        public string BlueprintID
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_BlueprintID);
+            }
+            set
+            {
+                SetPropertyStrict(Index_BlueprintID, value);
+            }
+        }
+
+        public bool HasEverBeenStored
+        {
+            get
+            {
+                return GetPropertyStrict<bool>(Index_HasEverBeenStored);
+            }
+            set
+            {
+                SetPropertyStrict(Index_HasEverBeenStored, value);
+            }
+        }
+
         private static object New()
         {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
+            MajorItemBlueprint blueprint = new MajorItemBlueprint();
+            StoredMajorItem item = new StoredMajorItem(new object[ElementCount], null);
+            item.SetPropertyStrict(Index_RawCategory, string.Empty);
+            item.SetPropertyStrict(Index_Blueprint, blueprint.Root);
+            item.SetPropertyStrict(Index_Timestamp, (ulong)DateTime.Now.Ticks);
+            item.SetPropertyStrict(Index_PlacementInCategory, (byte)0);
+            item.SetPropertyStrict(Index_BlueprintID, blueprint.ID);
+            item.SetPropertyStrict(Index_HasEverBeenStored, true);
+            return item;
         }
 
         private const int Index_RawCategory = 0;
         private const int Index_Blueprint = 1;
+        private const int Index_Timestamp = 2;
         private const int Index_PlacementInCategory = 3;
+        private const int Index_BlueprintID = 4;
+        private const int Index_HasEverBeenStored = 5;
+        private const int ElementCount = 6;
     }
 
     public class MajorItemSlotUpgrade : ArrayBasedObject
@@ -356,18 +489,6 @@ namespace JSL
             }
         }
 
-        public DateTime Timestamp
-        {
-            get
-            {
-                return new DateTime(GetPropertyStrict<long>(Index_Timestamp));
-            }
-            set
-            {
-                SetPropertyStrict(Index_Timestamp, value.Ticks);
-            }
-        }
-
         public override MajorItemBlueprint Blueprint
         {
             get
@@ -380,16 +501,46 @@ namespace JSL
             }
         }
 
+        public DateTime Timestamp
+        {
+            get
+            {
+                return new DateTime(GetPropertyStrict<long>(Index_Timestamp));
+            }
+            set
+            {
+                SetPropertyStrict(Index_Timestamp, value.Ticks);
+            }
+        }
+
+        public bool HasEverBeenStored
+        {
+            get
+            {
+                return GetPropertyStrict<bool>(Index_HasEverBeenStored);
+            }
+            set
+            {
+                SetPropertyStrict(Index_HasEverBeenStored, value);
+            }
+        }
+
         protected static object New()
         {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
+            StoredMajorItem item = new StoredMajorItem(new object[ElementCount], null);
+            item.SetPropertyStrict(Index_RawCategory, string.Empty);
+            item.SetPropertyStrict(Index_Blueprint, (new MajorItemBlueprint()).Root);
+            item.SetPropertyStrict(Index_Timestamp, (ulong)DateTime.Now.Ticks);
+            item.SetPropertyStrict(3, "efa565eb7189aa54fb0bcbc11e1b54f0"); // unknown identifier with a few distinct repeating values
+            item.SetPropertyStrict(Index_HasEverBeenStored, false);
+            return item;
         }
 
         private const int Index_RawCategory = 0;
         private const int Index_Blueprint = 1;
         private const int Index_Timestamp = 2;
+        private const int Index_HasEverBeenStored = 4;
+        private const int ElementCount = 5;
     }
 
     // Library items use the recent item format.

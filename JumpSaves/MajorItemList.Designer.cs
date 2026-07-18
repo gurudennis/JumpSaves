@@ -127,6 +127,7 @@ namespace JumpSaves
             // 
             // olvColumnModules
             // 
+            this.olvColumnModules.AspectName = "Modules";
             this.olvColumnModules.IsEditable = false;
             this.olvColumnModules.MaximumWidth = 140;
             this.olvColumnModules.MinimumWidth = 140;

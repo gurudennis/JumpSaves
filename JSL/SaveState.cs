@@ -263,6 +263,7 @@ namespace JSL
 
         private const int DeepIndex_ObjectPlacement = 3;
 
+        private const int Index_SaveMetadata = 0;
         private const int Index_Ships = 3;
         private const int Index_CurrentShipRawType = 6;
         private const int Index_PlayerInventory = 7;

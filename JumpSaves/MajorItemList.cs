@@ -133,6 +133,14 @@ namespace JumpSaves
                 }
             }
 
+            public JSL.MajorItemEditor Modules
+            {
+                get
+                {
+                    return Editor;
+                }
+            }
+
             public JSL.MajorItemEditor Editor { get; private set; }
         }
 

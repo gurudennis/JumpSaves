@@ -1,11 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JSL
 {
+    // Any module of a major item
+    public class ModuleEditor : Editor
+    {
+        internal ModuleEditor(IRootEditor rootEditor)
+            : base(rootEditor)
+        {
+        }
+
+        internal ModuleEditor(object module, object[] parent, IRootEditor rootEditor)
+            : base(rootEditor)
+        {
+            module_ = new Module(module, parent);
+        }
+
+        private Module module_;
+    }
+
     // Any major item
     public abstract class MajorItemEditor : Editor
     {
@@ -87,12 +101,45 @@ namespace JSL
             }
         }
 
+        public int ModuleCount
+        {
+            get
+            {
+                return Item.Blueprint.Modules.Length;
+            }
+        }
+
+        public ModuleEditor GetModule(int index)
+        {
+            return new ModuleEditor(Item.Blueprint.Modules[index], Item.Blueprint.Modules, RootEditor);
+        }
+
+        public void AddModule(ModuleEditor module)
+        {
+            throw new NotImplementedException("Adding modules is not yet implemented");
+        }
+
+        public void RemoveModule(int index)
+        {
+            throw new NotImplementedException("Removing modules is not yet implemented");
+        }
+
+        public ModuleEditor NewModule()
+        {
+            return new ModuleEditor(RootEditor);
+        }
+
         internal MajorItem Item { get; set; }
     }
 
     // Stored major item
     internal class StoredMajorItemEditor : MajorItemEditor
     {
+        internal StoredMajorItemEditor(IRootEditor rootEditor)
+            : base(rootEditor)
+        {
+        }
+
         internal StoredMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
@@ -110,6 +157,11 @@ namespace JSL
     // Recent major item
     internal class RecentMajorItemEditor : MajorItemEditor
     {
+        internal RecentMajorItemEditor(IRootEditor rootEditor)
+            : base(rootEditor)
+        {
+        }
+
         internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
@@ -132,8 +184,7 @@ namespace JSL
             : base(rootEditor)
         {
             library_ = library;
-            // Item = ... make a new one ...
-
+            Item = (new RecentMajorItemEditor(rootEditor)).Item;
         }
 
         internal LibraryMajorItemEditor(Library library, int index, IRootEditor rootEditor)
@@ -225,9 +276,7 @@ namespace JSL
 
         public override MajorItemEditor New()
         {
-            // ...
-
-            return null;
+            return new StoredMajorItemEditor(RootEditor);
         }
 
         public override void Add(MajorItemEditor item)
@@ -237,12 +286,12 @@ namespace JSL
                 throw new ArgumentException($"Expected to be adding {typeof(StoredMajorItemEditor).FullName}, received {item.GetType().FullName}");
             }
 
-            // ...
+            throw new NotImplementedException("Adding major items is not implemented yet");
         }
 
         public override void Remove(int index)
         {
-            // ...
+            throw new NotImplementedException("Removing major items is not implemented yet");
         }
     }
 
@@ -264,9 +313,7 @@ namespace JSL
 
         public override MajorItemEditor New()
         {
-            // ...
-
-            return null;
+            return new RecentMajorItemEditor(RootEditor);
         }
 
         public override void Add(MajorItemEditor item)
@@ -276,12 +323,12 @@ namespace JSL
                 throw new ArgumentException($"Expected to be adding {typeof(RecentMajorItemEditor).FullName}, received {item.GetType().FullName}");
             }
 
-            // ...
+            throw new NotImplementedException("Adding major items is not implemented yet");
         }
 
         public override void Remove(int index)
         {
-            // ...
+            throw new NotImplementedException("Removing major items is not implemented yet");
         }
     }
 
