@@ -9,6 +9,7 @@ namespace JSL
         internal ModuleEditor(IRootEditor rootEditor)
             : base(rootEditor)
         {
+            module_ = new Module();
         }
 
         internal ModuleEditor(object module, object[] parent, IRootEditor rootEditor)
@@ -16,6 +17,8 @@ namespace JSL
         {
             module_ = new Module(module, parent);
         }
+
+        // ...
 
         private Module module_;
     }
@@ -58,10 +61,36 @@ namespace JSL
             }
             set
             {
+                if (Category == MajorItemCategory.Enum.Unknown)
+                {
+                    throw new ArgumentException("Can't set major item category to Unknown");
+                }
+
                 string raw = MajorItemCategory.GetRaw(value);
                 if (Item.RawCategory != raw)
                 {
                     Item.RawCategory = raw;
+                    RootEditor.IsDirty = true;
+                }
+            }
+        }
+
+        public string RawCategory
+        {
+            get
+            {
+                return Item.RawCategory;
+            }
+            set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Can't set raw category to an empty or null string");
+                }
+
+                if (Item.RawCategory != value)
+                {
+                    Item.RawCategory = value;
                     RootEditor.IsDirty = true;
                 }
             }
@@ -378,7 +407,7 @@ namespace JSL
 
             LibraryMajorItemEditor libraryItem = (LibraryMajorItemEditor)item;
 
-            library_.AddEntry((LibraryMajorItem)libraryItem.Item);
+            library_.AddEntry((LibraryMajorItem)libraryItem.Item, Library.ConflictBehavior.Error);
         }
 
         public override void Remove(int index)

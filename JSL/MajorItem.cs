@@ -258,6 +258,22 @@ namespace JSL
             }
         }
 
+        public void ResetActivePips()
+        {
+            object[] modules = Modules;
+            if (modules != null)
+            {
+                foreach (object o in modules)
+                {
+                    if (o != null)
+                    {
+                        Module m = new Module(o, modules);
+                        m.ActivePips = 1;
+                    }
+                }
+            }
+        }
+
         private static object New()
         {
             MajorItemBlueprint blueprint = new MajorItemBlueprint(new object[ExpectedElementCount], null);
@@ -438,15 +454,15 @@ namespace JSL
         {
         }
 
-        public string RawType
+        public string RawCategory
         {
             get
             {
-                return GetPropertyStrict<string>(Index_RawType);
+                return GetPropertyStrict<string>(Index_RawCategory);
             }
             set
             {
-                SetPropertyStrict(Index_RawType, value);
+                SetPropertyStrict(Index_RawCategory, value);
             }
         }
 
@@ -462,7 +478,7 @@ namespace JSL
             }
         }
 
-        private const int Index_RawType = 0;
+        private const int Index_RawCategory = 0;
         private const int Index_SlotCount = 0;
     }
 

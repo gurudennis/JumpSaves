@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 namespace JSL
@@ -39,34 +38,39 @@ namespace JSL
             return prev;
         }
 
-        public void AddEntry(LibraryMajorItem item) // TODO: need to take MajorItem
+        public enum ConflictBehavior
         {
-            if (item == null || ContainsItem(item))
-            {
-                throw new ArgumentException("Invalid or duplicate item");
-            }
-
-            byte[] serialized = item.Bytes;
-
-            Entry entry = new Entry();
-            entry.FileName = MakeFileName(item.Blueprint.Name, MakeHash(serialized));
-            entry.Item = item;
-
-            WriteEntry(entry, serialized);
-
-            entries_.Add(entry);
+            Error,
+            Overwrite,
         }
 
-        public void ReplaceEntry(int index, LibraryMajorItem item) // TODO: need to take MajorItem
+        public void AddEntry(LibraryMajorItem item, ConflictBehavior onConflict)
+        {
+            AddEntry(item, item.Bytes, MakeHash(item), onConflict);
+        }
+
+        public void ReplaceEntry(int index, LibraryMajorItem item)
         {
             if (item == null || ContainsItem(item))
             {
                 throw new ArgumentException("Invalid or duplicate item");
             }
 
-            byte[] serialized = item.Bytes; // to make it less likely that we remove and then fail to add
+            // Prepare everything so as to make it less likely that we remove and then fail to add
+            byte[] serialized = item.Bytes;
+            string hash = MakeHash(item);
+            string fileName = MakeFileName(item.Blueprint.Name, hash);
+
+            // There can be an identical item only if it's the one being replaced
+            Entry previous = FindByFileName(fileName);
+            if (previous != null && entries_.IndexOf(previous) != index)
+            {
+                throw new Exception($"Intended to replace {entries_[index].FileName} but actually would replace {previous.FileName}. Skipping!");
+            }
+
             RemoveEntry(index);
-            AddEntry(item, serialized);
+
+            AddEntry(item, serialized, hash, ConflictBehavior.Overwrite);
         }
 
         public void RemoveEntry(int index)
@@ -106,13 +110,18 @@ namespace JSL
             }
         }
 
-        private void AddEntry(LibraryMajorItem item, byte[] serialized)
+        private void AddEntry(LibraryMajorItem item, byte[] serialized, string hash, ConflictBehavior onConflict)
         {
+            if (item == null || ContainsItem(item))
+            {
+                throw new ArgumentException("Invalid or duplicate item");
+            }
+
             Entry entry = new Entry();
-            entry.FileName = MakeFileName(item.Blueprint.Name, MakeHash(serialized));
+            entry.FileName = MakeFileName(item.Blueprint.Name, hash);
             entry.Item = item;
 
-            WriteEntry(entry, serialized);
+            WriteEntry(entry, serialized, onConflict);
 
             entries_.Add(entry);
         }
@@ -153,12 +162,25 @@ namespace JSL
             return entry;
         }
 
-        private void WriteEntry(Entry entry, byte[] serialized)
+        private void WriteEntry(Entry entry, byte[] serialized, ConflictBehavior onConflict)
         {
             string path = MakeFilePath(entry.FileName);
             if (string.IsNullOrEmpty(path))
             {
                 throw new Exception("Invalid entry path");
+            }
+
+            Entry previous = FindByFileName(entry.FileName);
+            if (previous != null)
+            {
+                if (onConflict == ConflictBehavior.Error)
+                {
+                    throw new Exception($"Would overwrite an existing item at {previous.FileName}, skipping!");
+                }
+                else // if (onConflict == ConflictBehavior.Overwrite)
+                {
+                    RemoveEntry(previous);
+                }
             }
 
             byte[] versionBytes = BitConverter.GetBytes(Version);
@@ -181,9 +203,19 @@ namespace JSL
             }
         }
 
+        private void RemoveEntry(Entry entry)
+        {
+            RemoveEntry(entries_.IndexOf(entry));
+        }
+
         private bool ContainsItem(ArrayBasedObject item)
         {
             return entries_.Any(e => e.Item == item);
+        }
+
+        private Entry FindByFileName(string fileName)
+        {
+            return entries_.Where(e => e.FileName == fileName).FirstOrDefault();
         }
 
         private void AddFailure(string path)
@@ -218,11 +250,19 @@ namespace JSL
             return System.IO.Path.Combine(Path, fileName);
         }
 
-        private static string MakeHash(byte[] b)
+        private static string MakeHash(LibraryMajorItem item)
         {
+            // Clone, and reset all volatile values
+            LibraryMajorItem clone = item.Clone();
+            clone.Timestamp = DateTime.MinValue;
+            clone.HasEverBeenStored = false;
+            clone.Blueprint.OwningPlayerID = string.Empty;
+            clone.Blueprint.ResetActivePips();
+
+            // Serialize, and compute the hash
             using (SHA256 sha256 = SHA256.Create())
             {
-                byte[] hashBytes = sha256.ComputeHash(b);
+                byte[] hashBytes = sha256.ComputeHash(clone.Bytes);
                 return BitConverter.ToString(hashBytes).Replace("-", "");
             }
         }
@@ -230,7 +270,7 @@ namespace JSL
         private static readonly int VersionSize = 4;
         private static readonly int DataLengthSize = 4;
         private static readonly int HeaderSize = VersionSize + DataLengthSize;
-        private static readonly uint Version = 1; // version of the format; unlikely to change unless we want to store more metadata
+        private static readonly uint Version = 1; // version of the format of the library itself
 
         private List<Entry> entries_ = new List<Entry>();
         private List<string> failedFiles_ = new List<string>();
