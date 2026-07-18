@@ -6,7 +6,14 @@ using System.Text.Json;
 
 namespace JSL
 {
-    public class SaveMetadata : ArrayBasedObject
+    public interface ISaveMetadata
+    {
+        int SaveVersion { get; }
+
+        string PlayerID { get; }
+    }
+
+    public class SaveMetadata : ArrayBasedObject, ISaveMetadata
     {
         public SaveMetadata(object o, object[] parent) : base(o, parent)
         {

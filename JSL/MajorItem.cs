@@ -174,6 +174,18 @@ namespace JSL
             }
         }
 
+        public int SaveVersion
+        {
+            get
+            {
+                return GetPropertyStrict<int>(Index_SaveVersion);
+            }
+            set
+            {
+                SetPropertyStrict(Index_SaveVersion, value);
+            }
+        }
+
         public string CraftedBy
         {
             get
@@ -308,11 +320,16 @@ namespace JSL
             }
         }
 
+        public static StoredMajorItem FromRecent(RecentMajorItem recent)
+        {
+            StoredMajorItem stored = new StoredMajorItem();
+            stored.Blueprint = recent.Blueprint.Clone();
+            return stored;
+        }
+
         public static StoredMajorItem FromLibrary(LibraryMajorItem library)
         {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
+            return FromRecent(library);
         }
 
         public new StoredMajorItem Clone()
@@ -341,6 +358,7 @@ namespace JSL
             set
             {
                 SetSubObjectStrict(Index_Blueprint, value.Root);
+                BlueprintID = value?.ID ?? string.Empty;
             }
         }
 
@@ -488,6 +506,13 @@ namespace JSL
             return new RecentMajorItem(lib.Clone().Root, null);
         }
 
+        public static RecentMajorItem FromStored(StoredMajorItem stored)
+        {
+            RecentMajorItem recent = new RecentMajorItem();
+            recent.Blueprint = stored.Blueprint.Clone();
+            return recent;
+        }
+
         public new RecentMajorItem Clone()
         {
             return new RecentMajorItem(Bytes, null);
@@ -579,11 +604,9 @@ namespace JSL
             return new LibraryMajorItem(recent.Clone().Root);
         }
 
-        public static LibraryMajorItem FromStored(StoredMajorItem recent)
+        public static new LibraryMajorItem FromStored(StoredMajorItem stored)
         {
-            // ...
-
-            throw new NotImplementedException("Not yet implemented");
+            return new LibraryMajorItem(RecentMajorItem.FromStored(stored).Root);
         }
 
         public new LibraryMajorItem Clone()
@@ -603,5 +626,44 @@ namespace JSL
         {
             return MessagePackSerializer.Deserialize<object[]>(b);
         }
+    }
+
+    public class MajorItemFactory
+    {
+        public MajorItemFactory(ISaveMetadata metadata)
+        {
+            metadata_ = metadata;
+            if (metadata_ == null)
+            {
+                throw new ArgumentNullException("MajorItemFactory created with invalid SaveMetadata");
+            }
+        }
+
+        public StoredMajorItem CreateStored()
+        {
+            StoredMajorItem item = new StoredMajorItem();
+            FixBlueprint(item.Blueprint);
+            return item;
+        }
+
+        public RecentMajorItem CreateRecent()
+        {
+            RecentMajorItem item = new RecentMajorItem();
+            FixBlueprint(item.Blueprint);
+            return item;
+        }
+
+        public LibraryMajorItem CreateLibrary()
+        {
+            return new LibraryMajorItem(CreateRecent().Root);
+        }
+
+        private void FixBlueprint(MajorItemBlueprint blueprint)
+        {
+            blueprint.OwningPlayerID = metadata_.PlayerID;
+            blueprint.SaveVersion = metadata_.SaveVersion;
+        }
+
+        private ISaveMetadata metadata_;
     }
 }

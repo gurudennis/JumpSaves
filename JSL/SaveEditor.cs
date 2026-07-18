@@ -9,9 +9,9 @@ namespace JSL
 {
     public interface IRootEditor
     {
-        bool IsDirty { get; set; }
+        ISaveMetadata SaveMetadata { get; }
 
-        SaveState State { get; }
+        bool IsDirty { get; set; }
     }
 
     public abstract class Editor
@@ -37,21 +37,21 @@ namespace JSL
 
         public abstract DateTime LastEditTime { get; }
 
-        public bool IsDirty { get; set; }
-
-        public SaveState State
+        public ISaveMetadata SaveMetadata
         {
             get
             {
-                return File?.State;
+                return File?.State?.SaveMetadata;
             }
         }
+
+        public bool IsDirty { get; set; }
 
         public ResourceEditor Resources
         {
             get
             {
-                return new ResourceEditor(this);
+                return new ResourceEditor(File.State.Resources, this);
             }
         }
 
@@ -59,7 +59,7 @@ namespace JSL
         {
             get
             {
-                return new StoredMajorItemListEditor(State, this);
+                return new StoredMajorItemListEditor(File.State, this);
             }
         }
 
@@ -67,7 +67,7 @@ namespace JSL
         {
             get
             {
-                return new RecentMajorItemListEditor(State, this);
+                return new RecentMajorItemListEditor(File.State, this);
             }
         }
 
@@ -169,12 +169,56 @@ namespace JSL
 
         public static LibraryMajorItemListEditor OpenLibrary(string path)
         {
-            return new LibraryMajorItemListEditor(new Library(path));
+            return new LibraryMajorItemListEditor(new Library(path), new LibraryRootEditor());
         }
 
         public static LibraryMajorItemListEditor OpenLibrary(Library library)
         {
-            return new LibraryMajorItemListEditor(library);
+            return new LibraryMajorItemListEditor(library, new LibraryRootEditor());
+        }
+
+        private class LibraryRootEditor : IRootEditor
+        {
+            public ISaveMetadata SaveMetadata
+            {
+                get
+                {
+                    return metadata_;
+                }
+            }
+
+            public bool IsDirty
+            {
+                get
+                {
+                    return false;
+                }
+                set
+                {
+                    // Does nothing.
+                }
+            }
+
+            private class LibrarySaveMetadata : ISaveMetadata
+            {
+                public int SaveVersion
+                {
+                    get
+                    {
+                        return 56; // the version that the library currently implements
+                    }
+                }
+
+                public string PlayerID
+                {
+                    get
+                    {
+                        return string.Empty;
+                    }
+                }
+            }
+
+            private LibrarySaveMetadata metadata_ = new LibrarySaveMetadata();
         }
     }
 }

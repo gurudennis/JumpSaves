@@ -138,6 +138,7 @@ namespace JSL
         internal StoredMajorItemEditor(IRootEditor rootEditor)
             : base(rootEditor)
         {
+            Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateStored();
         }
 
         internal StoredMajorItemEditor(MajorItem item, IRootEditor rootEditor)
@@ -160,6 +161,7 @@ namespace JSL
         internal RecentMajorItemEditor(IRootEditor rootEditor)
             : base(rootEditor)
         {
+            Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateRecent();
         }
 
         internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
@@ -184,7 +186,7 @@ namespace JSL
             : base(rootEditor)
         {
             library_ = library;
-            Item = (new RecentMajorItemEditor(rootEditor)).Item;
+            Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateLibrary();
         }
 
         internal LibraryMajorItemEditor(Library library, int index, IRootEditor rootEditor)
@@ -335,8 +337,8 @@ namespace JSL
     // List of Library major items
     public class LibraryMajorItemListEditor : MajorItemListEditor
     {
-        internal LibraryMajorItemListEditor(Library library)
-            : base(null)
+        internal LibraryMajorItemListEditor(Library library, IRootEditor rootEditor)
+            : base(rootEditor)
         {
             if (library == null)
             {

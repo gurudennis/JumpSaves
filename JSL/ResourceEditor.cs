@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JSL
+﻿namespace JSL
 {
     public class ResourceEditor : Editor
     {
-        internal ResourceEditor(IRootEditor rootEditor)
+        internal ResourceEditor(Resources resources, IRootEditor rootEditor)
             : base(rootEditor)
         {
-            state_ = RootEditor.State;
-            resources_ = state_.Resources;
+            resources_ = resources;
         }
 
         public int Credits
@@ -114,7 +107,6 @@ namespace JSL
         public static readonly int MaxCredits = 500000;
         public static readonly int MaxIngots = 1000;
 
-        private SaveState state_;
         private Resources resources_;
     }
 }
