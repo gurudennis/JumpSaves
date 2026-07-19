@@ -227,6 +227,11 @@ namespace JSL
 
         public ModuleEditor GetModule(int index)
         {
+            if (index < 0 || index > Modules.Length)
+            {
+                return null;
+            }
+
             return Modules[index];
         }
 

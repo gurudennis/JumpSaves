@@ -164,6 +164,7 @@ namespace JumpSaves
         private void list_FormatCell(object sender, FormatCellEventArgs e)
         {
             Row row = (Row)e.Model;
+
             if (e.Column == olvColumnName)
             {
                 e.Item.Text = row.Name;
@@ -193,13 +194,36 @@ namespace JumpSaves
 
         private void list_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
         {
+            Row row = (Row)e.Model;
+
             if (e.ModifierKeys.HasFlag(Keys.Alt)) // developer popup
             {
                 if (e.Column == olvColumnName)
                 {
-                    Row row = (Row)e.Model;
                     e.Text = row.Editor.JSON;
+                    return;
                 }
+            }
+
+            if (e.Column == olvColumnModule1)
+            {
+                FormatModuleColumnTooltip(row, 0, e);
+            }
+            else if (e.Column == olvColumnModule2)
+            {
+                FormatModuleColumnTooltip(row, 1, e);
+            }
+            else if (e.Column == olvColumnModule3)
+            {
+                FormatModuleColumnTooltip(row, 2, e);
+            }
+            else if (e.Column == olvColumnModule4)
+            {
+                FormatModuleColumnTooltip(row, 3, e);
+            }
+            else if (e.Column == olvColumnModule5)
+            {
+                FormatModuleColumnTooltip(row, 4, e);
             }
         }
 
@@ -230,6 +254,17 @@ namespace JumpSaves
             JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
             e.SubItem.Text = module?.TypeAbbreviation ?? "Unk";
             e.SubItem.ForeColor = GetRarityColor(module?.Rarity ?? Rarity.Unknown, true);
+        }
+
+        private void FormatModuleColumnTooltip(Row row, int moduleIndex, ToolTipShowingEventArgs e)
+        {
+            if (moduleIndex >= row.Editor.ModuleCount)
+            {
+                return;
+            }
+
+            JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
+            e.Text = module?.TypeName ?? "Unknown";
         }
 
         private bool IsLibraryEditor
