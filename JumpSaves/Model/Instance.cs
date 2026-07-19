@@ -86,9 +86,38 @@ namespace JumpSaves.Model
             }
         }
 
+        public bool IsGameSaveOpen
+        {
+            get
+            {
+                if (!IsOpen)
+                {
+                    return false;
+                }
+
+                if (Path == DefaultSavePath)
+                {
+                    return true;
+                }
+
+                if (System.IO.Path.GetDirectoryName(Path) == DefaultSavePath)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         public bool IsGameRunning { get; private set; }
 
-        public bool IsMonitoring { get; private set; }
+        public bool IsMonitoring
+        {
+            get
+            {
+                return IsGameSaveOpen && IsGameRunning && !IsDirty;
+            }
+        }
 
         public JSL.SaveEditor Editor { get; private set; }
 

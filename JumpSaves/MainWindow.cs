@@ -246,17 +246,19 @@ namespace JumpSaves
         {
             // Menu and toolbar
             toolStripCloseButton.Visible = model_.IsOpen;
-            toolStripSaveButton.Visible = model_.IsOpen;
+            toolStripSaveButton.Visible = model_.IsOpen && !model_.IsMonitoring;
             closeToolStripMenuItem.Visible = model_.IsOpen;
             saveToolStripMenuItem.Visible = model_.IsOpen;
             toolStripLabelDirty.Visible = model_.IsDirty;
-            toolStripGameRunningLabel.Visible = model_.IsGameRunning;
+            toolStripGameRunningLabel.Visible = model_.IsGameRunning && !model_.IsMonitoring;
+            toolStripLabelMonitoring.Visible = model_.IsMonitoring;
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
             editorMajorItemList.SaveEditor = model_.Editor;
             editorMajorItemList.AllowCustomization = IsCheaterMode;
-            editorMajorItemList.Enabled = CanEdit;
+            editorMajorItemList.CanEdit = CanEdit;
+            editorMajorItemList.CanTransfer = model_.IsOpen;
             editorResourceView.Editor = model_.Editor?.Resources;
             editorResourceView.AllowCustomization = IsCheaterMode;
             editorResourceView.Enabled = CanEdit;
@@ -268,8 +270,27 @@ namespace JumpSaves
             }
             libraryMajorItemList.Enabled = libraryMajorItemList.LibraryEditor != null;
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
+            libraryMajorItemList.CanEdit = true;
+            libraryMajorItemList.CanTransfer = CanEdit;
+
+            // Now that the game is started, warn about a dirty file
+            if (!gameWasRunning_ && model_.IsGameRunning)
+            {
+                gameWasRunning_ = true;
+
+                if (model_.IsDirty && !model_.IsMonitoring)
+                {
+                    string msg = "There are unsaved changes. The game will not be monitoring the save until these are discarded. Saving is not recommended at this point.";
+                    MessageBox.Show(this, msg, "JumpSaves WARNING: Unsaved changes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else if (!model_.IsGameRunning)
+            {
+                gameWasRunning_ = false;
+            }
         }
 
         private Model.Instance model_;
+        private bool gameWasRunning_;
     }
 }

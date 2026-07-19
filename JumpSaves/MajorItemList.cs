@@ -1,5 +1,4 @@
 ﻿using BrightIdeasSoftware;
-using JSL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -79,6 +78,48 @@ namespace JumpSaves
                     OnStateChange();
                 }
             }
+        }
+
+        public bool CanEdit
+        {
+            get
+            {
+                return canEdit_;
+            }
+            set
+            {
+                if (canEdit_ != value)
+                {
+                    canEdit_ = value;
+                    OnStateChange();
+                }
+            }
+        }
+
+        public bool CanTransfer
+        {
+            get
+            {
+                return canTransfer_;
+            }
+            set
+            {
+                if (canTransfer_ != value)
+                {
+                    canTransfer_ = value;
+                    OnStateChange();
+                }
+            }
+        }
+
+        public bool IsInterestedInItem(JSL.MajorItemEditor item)
+        {
+            if (toolStripComboBoxMonitor.SelectedIndex == 0) // Superior only
+            {
+                return item.Rarity == JSL.Rarity.Superior;
+            }
+
+            return true;
         }
 
         public class Row
@@ -253,7 +294,7 @@ namespace JumpSaves
 
             JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
             e.SubItem.Text = module?.TypeAbbreviation ?? "Unk";
-            e.SubItem.ForeColor = GetRarityColor(module?.Rarity ?? Rarity.Unknown, true);
+            e.SubItem.ForeColor = GetRarityColor(module?.Rarity ?? JSL.Rarity.Unknown, true);
         }
 
         private void FormatModuleColumnTooltip(Row row, int moduleIndex, ToolTipShowingEventArgs e)
@@ -303,6 +344,7 @@ namespace JumpSaves
             list.AlwaysGroupByColumn = olvColumnCategory;
 
             toolStripComboBoxFilter.SelectedIndex = 0;
+            toolStripComboBoxMonitor.SelectedIndex = 0;
 
             OnStateChange();
         }
@@ -316,20 +358,32 @@ namespace JumpSaves
         {
             EnsureEditorAvailable();
 
+            // List
             list.Enabled = Enabled;
             list.BackColor = Enabled ? Color.White : Color.Gainsboro;
 
+            // Tool strip buttons
             toolStrip.Enabled = Enabled;
             foreach (ToolStripItem item in toolStrip.Items)
             {
                 item.Enabled = toolStrip.Enabled;
             }
-            toolStripButtonAdd.Enabled &= AllowCustomization;
-            toolStripButtonEdit.Enabled &= AllowCustomization;
+            toolStripButtonAdd.Enabled &= AllowCustomization && CanEdit;
+            toolStripButtonEdit.Enabled &= AllowCustomization && CanEdit;
+            toolStripButtonRemove.Enabled &= CanEdit;
+            toolStripButtonTransfer.Enabled &= CanTransfer;
+
+            // Tool strip filter
             toolStripLabelFilter.Enabled = Enabled;
             toolStripComboBoxFilter.Enabled = Enabled;
             toolStripLabelFilter.Visible = !IsLibraryEditor;
             toolStripComboBoxFilter.Visible = !IsLibraryEditor;
+
+            // Tool strip monitor
+            toolStripLabelMonitor.Enabled = Enabled;
+            toolStripComboBoxMonitor.Enabled = Enabled;
+            toolStripLabelMonitor.Visible = IsLibraryEditor;
+            toolStripComboBoxMonitor.Visible = IsLibraryEditor;
         }
 
         private void EnsureEditorAvailable()
@@ -381,7 +435,7 @@ namespace JumpSaves
             }
         }
 
-        private void ApplyEditor(MajorItemListEditor editor)
+        private void ApplyEditor(JSL.MajorItemListEditor editor)
         {
             rows_ = new List<Row>();
 
@@ -404,5 +458,7 @@ namespace JumpSaves
         private JSL.MajorItemListEditor editor_;
         private List<Row> rows_;
         private bool allowCustomization_;
+        private bool canEdit_;
+        private bool canTransfer_;
     }
 }

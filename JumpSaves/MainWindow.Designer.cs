@@ -53,16 +53,17 @@
             this.toolStripComboBoxMode = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelDirty = new System.Windows.Forms.ToolStripLabel();
             this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabelMonitoring = new System.Windows.Forms.ToolStripLabel();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.editorPanel = new System.Windows.Forms.Panel();
             this.editTabControl = new System.Windows.Forms.TabControl();
             this.editTabPage1 = new System.Windows.Forms.TabPage();
-            this.saveLabel = new System.Windows.Forms.Label();
-            this.libraryPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
             this.editorResourceView = new JumpSaves.ResourceView();
             this.editorMajorItemList = new JumpSaves.MajorItemList();
+            this.saveLabel = new System.Windows.Forms.Label();
+            this.libraryPanel = new System.Windows.Forms.Panel();
             this.libraryMajorItemList = new JumpSaves.MajorItemList();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -194,7 +195,8 @@
             this.toolStripLabelMode,
             this.toolStripComboBoxMode,
             this.toolStripLabelDirty,
-            this.toolStripGameRunningLabel});
+            this.toolStripGameRunningLabel,
+            this.toolStripLabelMonitoring});
             this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1637, 31);
@@ -302,8 +304,16 @@
             this.toolStripGameRunningLabel.Image = global::JumpSaves.Properties.Resources.Running;
             this.toolStripGameRunningLabel.Margin = new System.Windows.Forms.Padding(30, 1, 0, 2);
             this.toolStripGameRunningLabel.Name = "toolStripGameRunningLabel";
-            this.toolStripGameRunningLabel.Size = new System.Drawing.Size(180, 28);
-            this.toolStripGameRunningLabel.Text = "Jump Space is running";
+            this.toolStripGameRunningLabel.Size = new System.Drawing.Size(313, 28);
+            this.toolStripGameRunningLabel.Text = "Jump Space is running but NOT monitored";
+            // 
+            // toolStripLabelMonitoring
+            // 
+            this.toolStripLabelMonitoring.Image = global::JumpSaves.Properties.Resources.Monitoring;
+            this.toolStripLabelMonitoring.Margin = new System.Windows.Forms.Padding(30, 1, 0, 2);
+            this.toolStripLabelMonitoring.Name = "toolStripLabelMonitoring";
+            this.toolStripLabelMonitoring.Size = new System.Drawing.Size(252, 28);
+            this.toolStripLabelMonitoring.Text = "Monitoring to auto acquire items";
             // 
             // splitContainer
             // 
@@ -362,6 +372,31 @@
             this.editTabPage1.Text = "Resources";
             this.editTabPage1.UseVisualStyleBackColor = true;
             // 
+            // editorResourceView
+            // 
+            this.editorResourceView.AllowCustomization = false;
+            this.editorResourceView.Editor = null;
+            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
+            this.editorResourceView.Name = "editorResourceView";
+            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
+            this.editorResourceView.TabIndex = 1;
+            // 
+            // editorMajorItemList
+            // 
+            this.editorMajorItemList.AllowCustomization = false;
+            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.editorMajorItemList.CanEdit = false;
+            this.editorMajorItemList.CanTransfer = false;
+            this.editorMajorItemList.LibraryEditor = null;
+            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
+            this.editorMajorItemList.Name = "editorMajorItemList";
+            this.editorMajorItemList.SaveEditor = null;
+            this.editorMajorItemList.Size = new System.Drawing.Size(612, 846);
+            this.editorMajorItemList.TabIndex = 1;
+            // 
             // saveLabel
             // 
             this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -386,6 +421,24 @@
             this.libraryPanel.Size = new System.Drawing.Size(631, 874);
             this.libraryPanel.TabIndex = 0;
             // 
+            // libraryMajorItemList
+            // 
+            this.libraryMajorItemList.AllowCustomization = false;
+            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.libraryMajorItemList.CanEdit = false;
+            this.libraryMajorItemList.CanTransfer = false;
+            this.libraryMajorItemList.LibraryEditor = null;
+            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
+            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
+            this.libraryMajorItemList.Name = "libraryMajorItemList";
+            this.libraryMajorItemList.SaveEditor = null;
+            this.libraryMajorItemList.Size = new System.Drawing.Size(628, 846);
+            this.libraryMajorItemList.TabIndex = 2;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -395,45 +448,6 @@
             this.label2.Size = new System.Drawing.Size(88, 18);
             this.label2.TabIndex = 1;
             this.label2.Text = "My Library";
-            // 
-            // editorResourceView
-            // 
-            this.editorResourceView.AllowCustomization = false;
-            this.editorResourceView.Editor = null;
-            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
-            this.editorResourceView.Name = "editorResourceView";
-            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
-            this.editorResourceView.TabIndex = 1;
-            // 
-            // editorMajorItemList
-            // 
-            this.editorMajorItemList.AllowCustomization = false;
-            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.editorMajorItemList.LibraryEditor = null;
-            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
-            this.editorMajorItemList.Name = "editorMajorItemList";
-            this.editorMajorItemList.SaveEditor = null;
-            this.editorMajorItemList.Size = new System.Drawing.Size(612, 846);
-            this.editorMajorItemList.TabIndex = 1;
-            // 
-            // libraryMajorItemList
-            // 
-            this.libraryMajorItemList.AllowCustomization = false;
-            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.libraryMajorItemList.LibraryEditor = null;
-            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
-            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
-            this.libraryMajorItemList.Name = "libraryMajorItemList";
-            this.libraryMajorItemList.SaveEditor = null;
-            this.libraryMajorItemList.Size = new System.Drawing.Size(628, 846);
-            this.libraryMajorItemList.TabIndex = 2;
             // 
             // MainWindow
             // 
@@ -507,6 +521,7 @@
         private ResourceView editorResourceView;
         private System.Windows.Forms.ToolStripLabel toolStripLabelDirty;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelMonitoring;
     }
 }
 

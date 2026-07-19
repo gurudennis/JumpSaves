@@ -37,6 +37,10 @@ namespace JumpSaves
             this.olvColumnRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnModule1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
@@ -45,10 +49,8 @@ namespace JumpSaves
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
-            this.olvColumnModule2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnModule3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnModule4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnModule5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.toolStripLabelMonitor = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBoxMonitor = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -87,7 +89,7 @@ namespace JumpSaves
             this.list.ShowGroups = false;
             this.list.ShowItemCountOnGroups = true;
             this.list.ShowSortIndicators = false;
-            this.list.Size = new System.Drawing.Size(479, 684);
+            this.list.Size = new System.Drawing.Size(581, 684);
             this.list.SpaceBetweenGroups = 10;
             this.list.TabIndex = 0;
             this.list.UseCellFormatEvents = true;
@@ -152,6 +154,42 @@ namespace JumpSaves
             this.olvColumnModule1.Text = "Mods";
             this.olvColumnModule1.Width = 45;
             // 
+            // olvColumnModule2
+            // 
+            this.olvColumnModule2.AspectName = "Module2";
+            this.olvColumnModule2.IsEditable = false;
+            this.olvColumnModule2.MaximumWidth = 45;
+            this.olvColumnModule2.MinimumWidth = 45;
+            this.olvColumnModule2.Text = "";
+            this.olvColumnModule2.Width = 45;
+            // 
+            // olvColumnModule3
+            // 
+            this.olvColumnModule3.AspectName = "Module3";
+            this.olvColumnModule3.IsEditable = false;
+            this.olvColumnModule3.MaximumWidth = 45;
+            this.olvColumnModule3.MinimumWidth = 45;
+            this.olvColumnModule3.Text = "";
+            this.olvColumnModule3.Width = 45;
+            // 
+            // olvColumnModule4
+            // 
+            this.olvColumnModule4.AspectName = "Module4";
+            this.olvColumnModule4.IsEditable = false;
+            this.olvColumnModule4.MaximumWidth = 45;
+            this.olvColumnModule4.MinimumWidth = 45;
+            this.olvColumnModule4.Text = "";
+            this.olvColumnModule4.Width = 45;
+            // 
+            // olvColumnModule5
+            // 
+            this.olvColumnModule5.AspectName = "Module5";
+            this.olvColumnModule5.IsEditable = false;
+            this.olvColumnModule5.MaximumWidth = 45;
+            this.olvColumnModule5.MinimumWidth = 45;
+            this.olvColumnModule5.Text = "";
+            this.olvColumnModule5.Width = 45;
+            // 
             // toolStrip
             // 
             this.toolStrip.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -167,10 +205,12 @@ namespace JumpSaves
             this.toolStripButtonEdit,
             this.toolStripLabelFilter,
             this.toolStripComboBoxFilter,
-            this.toolStripLabelTotal});
+            this.toolStripLabelTotal,
+            this.toolStripLabelMonitor,
+            this.toolStripComboBoxMonitor});
             this.toolStrip.Location = new System.Drawing.Point(1, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(478, 31);
+            this.toolStrip.Size = new System.Drawing.Size(580, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
             // 
@@ -237,41 +277,24 @@ namespace JumpSaves
             this.toolStripLabelTotal.Size = new System.Drawing.Size(57, 28);
             this.toolStripLabelTotal.Text = "Total: 0";
             // 
-            // olvColumnModule2
+            // toolStripLabelMonitor
             // 
-            this.olvColumnModule2.AspectName = "Module2";
-            this.olvColumnModule2.IsEditable = false;
-            this.olvColumnModule2.MaximumWidth = 45;
-            this.olvColumnModule2.MinimumWidth = 45;
-            this.olvColumnModule2.Text = "";
-            this.olvColumnModule2.Width = 45;
+            this.toolStripLabelMonitor.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.toolStripLabelMonitor.Name = "toolStripLabelMonitor";
+            this.toolStripLabelMonitor.Size = new System.Drawing.Size(97, 28);
+            this.toolStripLabelMonitor.Text = "Auto acquire:";
             // 
-            // olvColumnModule3
+            // toolStripComboBoxMonitor
             // 
-            this.olvColumnModule3.AspectName = "Module3";
-            this.olvColumnModule3.IsEditable = false;
-            this.olvColumnModule3.MaximumWidth = 45;
-            this.olvColumnModule3.MinimumWidth = 45;
-            this.olvColumnModule3.Text = "";
-            this.olvColumnModule3.Width = 45;
-            // 
-            // olvColumnModule4
-            // 
-            this.olvColumnModule4.AspectName = "Module4";
-            this.olvColumnModule4.IsEditable = false;
-            this.olvColumnModule4.MaximumWidth = 45;
-            this.olvColumnModule4.MinimumWidth = 45;
-            this.olvColumnModule4.Text = "";
-            this.olvColumnModule4.Width = 45;
-            // 
-            // olvColumnModule5
-            // 
-            this.olvColumnModule5.AspectName = "Module5";
-            this.olvColumnModule5.IsEditable = false;
-            this.olvColumnModule5.MaximumWidth = 45;
-            this.olvColumnModule5.MinimumWidth = 45;
-            this.olvColumnModule5.Text = "";
-            this.olvColumnModule5.Width = 45;
+            this.toolStripComboBoxMonitor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxMonitor.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxMonitor.Items.AddRange(new object[] {
+            "Superior",
+            "All"});
+            this.toolStripComboBoxMonitor.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+            this.toolStripComboBoxMonitor.Name = "toolStripComboBoxMonitor";
+            this.toolStripComboBoxMonitor.Size = new System.Drawing.Size(100, 31);
+            this.toolStripComboBoxMonitor.ToolTipText = "Filter";
             // 
             // MajorItemList
             // 
@@ -280,7 +303,7 @@ namespace JumpSaves
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.list);
             this.Name = "MajorItemList";
-            this.Size = new System.Drawing.Size(480, 717);
+            this.Size = new System.Drawing.Size(582, 717);
             this.Load += new System.EventHandler(this.OnLoad);
             this.EnabledChanged += new System.EventHandler(this.OnEnabledChanged);
             ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
@@ -310,5 +333,7 @@ namespace JumpSaves
         private OLVColumn olvColumnModule3;
         private OLVColumn olvColumnModule4;
         private OLVColumn olvColumnModule5;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelMonitor;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMonitor;
     }
 }
