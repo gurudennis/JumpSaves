@@ -117,11 +117,11 @@ namespace JumpSaves
                 }
             }
 
-            public int Rarity
+            public JSL.Rarity Rarity
             {
                 get
                 {
-                    return (int)Editor.Rarity;
+                    return Editor.Rarity;
                 }
             }
 
@@ -165,6 +165,27 @@ namespace JumpSaves
                 }
 
                 return ((int)xe).CompareTo((int)ye);
+            }
+        }
+
+        private void list_FormatRow(object sender, FormatRowEventArgs e)
+        {
+            Row row = (Row)e.Model;
+            if (row.Rarity == JSL.Rarity.Common)
+            {
+                e.Item.BackColor = Color.FromArgb(217, 242, 208);
+            }
+            else if (row.Rarity == JSL.Rarity.Uncommon)
+            {
+                e.Item.BackColor = Color.FromArgb(193, 216, 247);
+            }
+            else if (row.Rarity == JSL.Rarity.Rare)
+            {
+                e.Item.BackColor = Color.FromArgb(205, 187, 250);
+            }
+            else if (row.Rarity == JSL.Rarity.Superior)
+            {
+                e.Item.BackColor = Color.FromArgb(240, 175, 175);
             }
         }
 
@@ -287,6 +308,7 @@ namespace JumpSaves
             }
 
             list.SetObjects(rows_);
+            toolStripLabelTotal.Text = $"Total: {rows_.Count}";
         }
 
         private JSL.SaveEditor saveEditor_;

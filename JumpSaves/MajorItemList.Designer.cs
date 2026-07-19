@@ -44,6 +44,7 @@ namespace JumpSaves
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +63,6 @@ namespace JumpSaves
             this.list.CellEditUseWholeCell = false;
             this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName,
-            this.olvColumnRarity,
             this.olvColumnLevel,
             this.olvColumnModules});
             this.list.Cursor = System.Windows.Forms.Cursors.Default;
@@ -82,6 +82,7 @@ namespace JumpSaves
             this.list.View = System.Windows.Forms.View.Details;
             this.list.VirtualMode = true;
             this.list.BeforeCreatingGroups += new System.EventHandler<BrightIdeasSoftware.CreateGroupsEventArgs>(this.list_BeforeCreatingGroups);
+            this.list.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.list_FormatRow);
             // 
             // olvColumnName
             // 
@@ -108,32 +109,33 @@ namespace JumpSaves
             // olvColumnRarity
             // 
             this.olvColumnRarity.AspectName = "Rarity";
+            this.olvColumnRarity.DisplayIndex = 1;
             this.olvColumnRarity.IsEditable = false;
-            this.olvColumnRarity.MaximumWidth = 50;
-            this.olvColumnRarity.MinimumWidth = 50;
+            this.olvColumnRarity.IsVisible = false;
+            this.olvColumnRarity.MaximumWidth = 0;
+            this.olvColumnRarity.MinimumWidth = 0;
             this.olvColumnRarity.Sortable = false;
             this.olvColumnRarity.Text = "Rarity";
-            this.olvColumnRarity.Width = 50;
+            this.olvColumnRarity.Width = 0;
             // 
             // olvColumnLevel
             // 
             this.olvColumnLevel.AspectName = "Level";
             this.olvColumnLevel.IsEditable = false;
-            this.olvColumnLevel.MaximumWidth = 50;
-            this.olvColumnLevel.MinimumWidth = 50;
+            this.olvColumnLevel.MaximumWidth = 45;
+            this.olvColumnLevel.MinimumWidth = 45;
             this.olvColumnLevel.Sortable = false;
             this.olvColumnLevel.Text = "Level";
-            this.olvColumnLevel.Width = 50;
+            this.olvColumnLevel.Width = 45;
             // 
             // olvColumnModules
             // 
             this.olvColumnModules.AspectName = "Modules";
             this.olvColumnModules.IsEditable = false;
-            this.olvColumnModules.MaximumWidth = 140;
             this.olvColumnModules.MinimumWidth = 140;
             this.olvColumnModules.Sortable = false;
             this.olvColumnModules.Text = "Modules";
-            this.olvColumnModules.Width = 140;
+            this.olvColumnModules.Width = 190;
             // 
             // toolStrip
             // 
@@ -149,7 +151,8 @@ namespace JumpSaves
             this.toolStripButtonRemove,
             this.toolStripButtonEdit,
             this.toolStripLabelFilter,
-            this.toolStripComboBoxFilter});
+            this.toolStripComboBoxFilter,
+            this.toolStripLabelTotal});
             this.toolStrip.Location = new System.Drawing.Point(1, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(478, 31);
@@ -212,6 +215,13 @@ namespace JumpSaves
             this.toolStripComboBoxFilter.ToolTipText = "Filter";
             this.toolStripComboBoxFilter.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxFilter_SelectedIndexChanged);
             // 
+            // toolStripLabelTotal
+            // 
+            this.toolStripLabelTotal.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabelTotal.Name = "toolStripLabelTotal";
+            this.toolStripLabelTotal.Size = new System.Drawing.Size(57, 28);
+            this.toolStripLabelTotal.Text = "Total: 0";
+            // 
             // MajorItemList
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -244,5 +254,6 @@ namespace JumpSaves
         private OLVColumn olvColumnModules;
         private OLVColumn olvColumnSlotInCategory;
         private OLVColumn olvColumnCategory;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelTotal;
     }
 }
