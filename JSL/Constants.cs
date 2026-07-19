@@ -298,6 +298,7 @@ namespace JSL
             C_KillsRestoreHealth,
             C_CorrosionChanceOnHit,
             C_AdditionalProjectiles,
+            C_Damage,
             __COUNT__
         }
 
@@ -384,19 +385,20 @@ namespace JSL
             new EnumInfo { Title = "Reload speed",               Abbr = "Rel", Raw = "13cec6085efd0a342a6ecfef9f5aa2da", PotencyCount = 1, Kind = ModuleKind.Feature },
             // ModuleKind.Custom:
             new EnumInfo { Title = "Reload speed",               Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Mag size but less damage",   Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Consecutive crit damage",    Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Chance to chain enemies",    Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Breach chance on hit",       Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Crits return ammo",          Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Rupture after damage",       Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Damage but lower fire rate", Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Damage but lower mag size",  Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "EMP on crit",                Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Rupture chance on hit",      Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Kills restore health",       Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Corrosion chance on hit",    Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Additional projectiles",     Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Mag size but less damage",   Abbr = "Mag", Raw = "425315a74cef11542b1c3fcb07d8d934", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Consecutive crit damage",    Abbr = "Crt", Raw = "676bc98f5878db4409a11c68b7e2bd59", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Chance to chain enemies",    Abbr = "Chn", Raw = "5ef2583dd770e944e84c8ab47e12b50f", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Breach chance on hit",       Abbr = "Bre", Raw = "13cec6085efd0a342a6ecfef9f5aa2da", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Crits return ammo",          Abbr = "Amm", Raw = "87320adbde1d5a6448effd71fcba76b3", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Rupture after damage",       Abbr = "Rup", Raw = "3d864ddf5a372664ebcad63c686b0ceb", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage but lower fire rate", Abbr = "Dmg", Raw = "4e049bf738976824ebdfd81f9fd34796", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage but lower mag size",  Abbr = "Dmg", Raw = "4ec6f7c2d7fa7734792a2db069c46d9c", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "EMP on crit",                Abbr = "EMP", Raw = "749c007fa80faf840ade9af6e8d7584f", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Rupture chance on hit",      Abbr = "Dup", Raw = "15748cbe448ab444c990e086e31fea7b", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Kills restore health",       Abbr = "Hel", Raw = "71a93d1d5c620864c93e796b0218a90b", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Corrosion chance on hit",    Abbr = "Cor", Raw = "3ad789a04e7a05e42affc0e22f0a309a", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Additional projectiles",     Abbr = "Fle", Raw = "f893ca79dbff4b448bdf21715d8e6d1d", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage",                     Abbr = "Dmg", Raw = "4ab19bf28b038444d904a1032d398ac7", PotencyCount = 1, Kind = ModuleKind.Custom  },
         };
     }
 

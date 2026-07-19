@@ -277,12 +277,26 @@ namespace JSL
                     // by rarity.
                     Array.Sort(modules_, (l, r) =>
                     {
-                        if (l.Kind == r.Kind || l.Kind == ModuleKind.Unknown || r.Kind == ModuleKind.Unknown)
+                        int rarityComp =  l.Rarity.CompareTo(r.Rarity) * -1;
+                        if (rarityComp != 0)
                         {
-                            return l.Rarity.CompareTo(r.Rarity) * -1;
+                            return rarityComp; // features are always the highest rarity possible for a component anyway
                         }
 
-                        return l.Kind.CompareTo(r.Kind) * -1;
+                        if (l.Kind == ModuleKind.Unknown && r.Kind == ModuleKind.Unknown)
+                        {
+                            return 0;
+                        }
+                        else if (l.Kind == ModuleKind.Unknown)
+                        {
+                            return 1;
+                        }
+                        else if (r.Kind == ModuleKind.Unknown)
+                        {
+                            return -1;
+                        }
+
+                        return l.Kind.CompareTo(r.Kind);
                     });
                 }
 
