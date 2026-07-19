@@ -1,0 +1,26 @@
+name: Build .NET Framework
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v3 # Adds MSBuild.exe to the PATH
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2 # Ensures NuGet is available
+
+    - name: Restore NuGet Packages
+      run: nuget restore JumpSaves.slnx
+
+    - name: Build Solution
+      run: msbuild JumpSaves.slnx /p:Configuration=Release
