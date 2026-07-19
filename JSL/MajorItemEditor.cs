@@ -37,15 +37,45 @@ namespace JSL
             Item = item;
         }
 
+        public string TypeName
+        {
+            get
+            {
+                if (Category == MajorItemCategory.Enum.PlayerWeapons)
+                {
+                    PlayerWeaponType.Enum type = PlayerWeaponType.FromRaw(Item.Blueprint.RawType);
+                    if (type != PlayerWeaponType.Enum.Unknown)
+                    {
+                        return PlayerWeaponType.GetTitle(type);
+                    }
+                }
+
+                return null; // unknown
+            }
+        }
+
         public string Name
         {
             get
             {
-                return Item.Blueprint.Name;
+                string name = Item.Blueprint.Name;
+                if (string.IsNullOrEmpty(name))
+                {
+                    return TypeName;
+                }
+                else
+                {
+                    return name;
+                }
             }
             set
             {
-                if (Item.Blueprint.Name != value)
+                if (value == string.Empty)
+                {
+                    value = null; // shouldn't assign an empty string
+                }
+
+                if (Name != value) // note that we are comparing with the default name here if one is not explicitly assigned
                 {
                     Item.Blueprint.Name = value;
                     RootEditor.IsDirty = true;

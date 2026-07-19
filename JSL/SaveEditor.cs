@@ -1,15 +1,13 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JSL
 {
     public interface IRootEditor
     {
         ISaveMetadata SaveMetadata { get; }
+
+        IMajorItemSlotLimits MajorItemSlotLimits { get; }
 
         bool IsDirty { get; set; }
     }
@@ -68,6 +66,14 @@ namespace JSL
             get
             {
                 return new RecentMajorItemListEditor(File.State, this);
+            }
+        }
+
+        public IMajorItemSlotLimits MajorItemSlotLimits
+        {
+            get
+            {
+                return File.State.MajorItemSlotUpgrades;
             }
         }
 
@@ -177,13 +183,21 @@ namespace JSL
             return new LibraryMajorItemListEditor(library, new LibraryRootEditor());
         }
 
-        private class LibraryRootEditor : IRootEditor
+        private class LibraryRootEditor : IRootEditor, ISaveMetadata, IMajorItemSlotLimits
         {
             public ISaveMetadata SaveMetadata
             {
                 get
                 {
-                    return metadata_;
+                    return this;
+                }
+            }
+
+            public IMajorItemSlotLimits MajorItemSlotLimits
+            {
+                get
+                {
+                    return this;
                 }
             }
 
@@ -199,26 +213,31 @@ namespace JSL
                 }
             }
 
-            private class LibrarySaveMetadata : ISaveMetadata
+            public int SaveVersion
             {
-                public int SaveVersion
+                get
                 {
-                    get
-                    {
-                        return 56; // the version that the library currently implements
-                    }
-                }
-
-                public string PlayerID
-                {
-                    get
-                    {
-                        return string.Empty;
-                    }
+                    return 56; // the version that the library currently implements
                 }
             }
 
-            private LibrarySaveMetadata metadata_ = new LibrarySaveMetadata();
+            public string PlayerID
+            {
+                get
+                {
+                    return string.Empty;
+                }
+            }
+
+            public int GetMaxMajorItemSlots(MajorItemCategory.Enum category)
+            {
+                return int.MaxValue; // no limit
+            }
+
+            public void SetMaxMajorItemSlots(MajorItemCategory.Enum category, int slots)
+            {
+                // Does nothing.
+            }
         }
     }
 }

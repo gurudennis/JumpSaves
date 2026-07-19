@@ -1,6 +1,5 @@
 ﻿using MessagePack;
 using System;
-using System.Diagnostics;
 
 namespace JSL
 {
@@ -446,61 +445,6 @@ namespace JSL
         private const int Index_BlueprintID = 4;
         private const int Index_HasEverBeenStored = 5;
         private const int ExpectedElementCount = 6;
-    }
-
-    public class MajorItemSlotUpgrade : ArrayBasedObject
-    {
-        public MajorItemSlotUpgrade(object o, object[] parent) : base(o, parent)
-        {
-        }
-
-        public string RawCategory
-        {
-            get
-            {
-                return GetPropertyStrict<string>(Index_RawCategory);
-            }
-            set
-            {
-                SetPropertyStrict(Index_RawCategory, value);
-            }
-        }
-
-        public int SlotCount
-        {
-            get
-            {
-                return GetPropertyStrict<int>(Index_SlotCount);
-            }
-            set
-            {
-                SetPropertyStrict(Index_SlotCount, value);
-            }
-        }
-
-        private const int Index_RawCategory = 0;
-        private const int Index_SlotCount = 0;
-    }
-
-    public class MajorItemSlotUpgrades : ArrayBasedObject
-    {
-        public MajorItemSlotUpgrades(object o, object[] parent) : base(o, parent)
-        {
-            if (Root.Length != ExpectedElementCount)
-            {
-                throw new ArgumentException($"Expected {ExpectedElementCount} elements in MajorItemSlotUpgrades, found {Root.Length}.");
-            }
-        }
-
-        public MajorItemSlotUpgrade[] Elements
-        {
-            get
-            {
-                return GetFixedElementsStrict<MajorItemSlotUpgrade>();
-            }
-        }
-
-        private const int ExpectedElementCount = 9;
     }
 
     public class RecentMajorItem : MajorItem
