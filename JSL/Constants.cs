@@ -5,6 +5,7 @@ namespace JSL
     // Rarity as it pertains to items (not ingots)
     public enum Rarity
     {
+        Unknown = -1,
         Common = 0,   // green
         Uncommon = 1, // blue
         Rare = 2,     // purple
@@ -399,6 +400,60 @@ namespace JSL
         };
     }
 
+    public static class ModuleType
+    {
+        public static string GetTitleFromRaw(string raw)
+        {
+            ShipModuleType.Enum shipEnum = ShipModuleType.FromRaw(raw);
+            if (shipEnum != ShipModuleType.Enum.Unknown)
+            {
+                return ShipModuleType.GetTitle(shipEnum);
+            }
+
+            PlayerWeaponModuleType.Enum playerEnum = PlayerWeaponModuleType.FromRaw(raw);
+            if (playerEnum != PlayerWeaponModuleType.Enum.Unknown)
+            {
+                return PlayerWeaponModuleType.GetTitle(playerEnum);
+            }
+
+            return null;
+        }
+
+        public static string GetAbbreviationFromRaw(string raw)
+        {
+            ShipModuleType.Enum shipEnum = ShipModuleType.FromRaw(raw);
+            if (shipEnum != ShipModuleType.Enum.Unknown)
+            {
+                return ShipModuleType.GetAbbreviation(shipEnum);
+            }
+
+            PlayerWeaponModuleType.Enum playerEnum = PlayerWeaponModuleType.FromRaw(raw);
+            if (playerEnum != PlayerWeaponModuleType.Enum.Unknown)
+            {
+                return PlayerWeaponModuleType.GetAbbreviation(playerEnum);
+            }
+
+            return null;
+        }
+
+        public static ModuleKind GetKindFromRaw(string raw)
+        {
+            ShipModuleType.Enum shipEnum = ShipModuleType.FromRaw(raw);
+            if (shipEnum != ShipModuleType.Enum.Unknown)
+            {
+                return ShipModuleType.GetKind(shipEnum);
+            }
+
+            PlayerWeaponModuleType.Enum playerEnum = PlayerWeaponModuleType.FromRaw(raw);
+            if (playerEnum != PlayerWeaponModuleType.Enum.Unknown)
+            {
+                return PlayerWeaponModuleType.GetKind(playerEnum);
+            }
+
+            return ModuleKind.Unknown;
+        }
+    }
+
     static class PlayerWeaponType
     {
         static PlayerWeaponType()
@@ -486,7 +541,7 @@ namespace JSL
             new EnumInfo { Title = "CX-305 Sideclip (SMG)",  Raw = "ea1f1e6ac3c88fe469708ce10b5e451a" },
             new EnumInfo { Title = "MAW-23 (Shotgun)",       Raw = "11d2d7e9f079ed4499c9591d8d68c7a7" },
             new EnumInfo { Title = "SR.99 Javelin (Sniper)", Raw = "2cbd789d647fa9a4d96f462001a99c91" },
-            new EnumInfo { Title = "Ironbelt (LMG)",         Raw = "fd51532d25c4d4841b1c439708726682" },
+            new EnumInfo { Title = "Ironbelt (LMG)",         Raw = "55b2b5f6d20d4eb4ab9ef216e5237928" },
             new EnumInfo { Title = "Heat Blade (Melee)",     Raw = "046383b13f53ad144805f5dca98b4b86" },
             new EnumInfo { Title = "Wrench (Melee)",         Raw = "a52219e07db611248800766fe8d53744" },
             new EnumInfo { Title = "Crowbar (Melee)",        Raw = "f077b42a85cfb7f4bb0d55729c4fc5c0" },

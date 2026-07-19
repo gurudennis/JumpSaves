@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack.Formatters;
+using System;
 using System.Collections.Generic;
 
 namespace JSL
@@ -18,9 +19,65 @@ namespace JSL
             module_ = new Module(module, parent);
         }
 
-        // ...
+        public Rarity Rarity
+        {
+            get
+            {
+                return module_.Rarity;
+            }
+            set
+            {
+                if (module_.Rarity != value)
+                {
+                    module_.Rarity = value;
+                    RootEditor.IsDirty = true;
+                }
+            }
+        }
+
+        public ModuleKind Kind
+        {
+            get
+            {
+                if (kind_ == null)
+                {
+                    kind_ = ModuleType.GetKindFromRaw(module_.RawType);
+                }
+
+                return kind_ ?? ModuleKind.Unknown;
+            }
+        }
+
+        public string TypeName
+        {
+            get
+            {
+                if (typeName_ == null)
+                {
+                    typeName_ = ModuleType.GetTitleFromRaw(module_.RawType);
+                }
+
+                return typeName_;
+            }
+        }
+
+        public string TypeAbbreviation
+        {
+            get
+            {
+                if (typeAbbreviation_ == null)
+                {
+                    typeAbbreviation_ = ModuleType.GetAbbreviationFromRaw(module_.RawType);
+                }
+
+                return typeAbbreviation_;
+            }
+        }
 
         private Module module_;
+        private ModuleKind? kind_ = null;
+        private string typeName_;
+        private string typeAbbreviation_;
     }
 
     // Any major item
@@ -126,7 +183,7 @@ namespace JSL
             }
         }
 
-        public abstract int PlacementInCategory { get; }
+        public abstract long PlacementInCategory { get; }
 
         public Rarity Rarity
         {
@@ -164,13 +221,13 @@ namespace JSL
         {
             get
             {
-                return Item.Blueprint.Modules.Length;
+                return Modules.Length;
             }
         }
 
         public ModuleEditor GetModule(int index)
         {
-            return new ModuleEditor(Item.Blueprint.Modules[index], Item.Blueprint.Modules, RootEditor);
+            return Modules[index];
         }
 
         public void AddModule(ModuleEditor module)
@@ -188,7 +245,47 @@ namespace JSL
             return new ModuleEditor(RootEditor);
         }
 
+        public string JSON
+        {
+            get
+            {
+                return SaveState.JSONFromObject(Item.Root);
+            }
+        }
+
         internal MajorItem Item { get; set; }
+
+        private ModuleEditor[] Modules
+        {
+            get
+            {
+                if (modules_ == null)
+                {
+                    modules_ = new ModuleEditor[Item.Blueprint.Modules.Length];
+                    for (int i = 0; i < modules_.Length; ++i)
+                    {
+                        modules_[i] = new ModuleEditor(Item.Blueprint.Modules[i], Item.Blueprint.Modules, RootEditor);
+                    }
+
+                    // Sort such that ModuleKind.Feature comes first,
+                    // ModuleKind.Unknown comes last, and otherwise
+                    // by rarity.
+                    Array.Sort(modules_, (l, r) =>
+                    {
+                        if (l.Kind == r.Kind || l.Kind == ModuleKind.Unknown || r.Kind == ModuleKind.Unknown)
+                        {
+                            return l.Rarity.CompareTo(r.Rarity) * -1;
+                        }
+
+                        return l.Kind.CompareTo(r.Kind) * -1;
+                    });
+                }
+
+                return modules_;
+            }
+        }
+
+        private ModuleEditor[] modules_;
     }
 
     // Stored major item
@@ -205,7 +302,7 @@ namespace JSL
         {
         }
 
-        public override int PlacementInCategory
+        public override long PlacementInCategory
         {
             get
             {
@@ -228,12 +325,12 @@ namespace JSL
         {
         }
 
-        public override int PlacementInCategory
+        public override long PlacementInCategory
         {
             get
             {
                 // Not technically correct because the values will be sparse, but OK for relative ordering.
-                return (int)(((RecentMajorItem)Item).Timestamp.Ticks & 0x7FFFFFFFL);
+                return -((RecentMajorItem)Item).Timestamp.Ticks;
             }
         }
     }
@@ -255,12 +352,11 @@ namespace JSL
             index_ = index;
         }
 
-        public override int PlacementInCategory
+        public override long PlacementInCategory
         {
             get
             {
-                // Not technically correct because the values will be sparse, but OK for relative ordering.
-                return index_;
+                return -1; // intentionally unused
             }
         }
 

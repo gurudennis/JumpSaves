@@ -36,7 +36,7 @@ namespace JumpSaves
             this.olvColumnSlotInCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnModules = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
@@ -45,6 +45,10 @@ namespace JumpSaves
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
+            this.olvColumnModule2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnModule5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +60,11 @@ namespace JumpSaves
             this.list.AllColumns.Add(this.olvColumnSlotInCategory);
             this.list.AllColumns.Add(this.olvColumnRarity);
             this.list.AllColumns.Add(this.olvColumnLevel);
-            this.list.AllColumns.Add(this.olvColumnModules);
+            this.list.AllColumns.Add(this.olvColumnModule1);
+            this.list.AllColumns.Add(this.olvColumnModule2);
+            this.list.AllColumns.Add(this.olvColumnModule3);
+            this.list.AllColumns.Add(this.olvColumnModule4);
+            this.list.AllColumns.Add(this.olvColumnModule5);
             this.list.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -64,7 +72,11 @@ namespace JumpSaves
             this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName,
             this.olvColumnLevel,
-            this.olvColumnModules});
+            this.olvColumnModule1,
+            this.olvColumnModule2,
+            this.olvColumnModule3,
+            this.olvColumnModule4,
+            this.olvColumnModule5});
             this.list.Cursor = System.Windows.Forms.Cursors.Default;
             this.list.HasCollapsibleGroups = false;
             this.list.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
@@ -78,11 +90,13 @@ namespace JumpSaves
             this.list.Size = new System.Drawing.Size(479, 684);
             this.list.SpaceBetweenGroups = 10;
             this.list.TabIndex = 0;
+            this.list.UseCellFormatEvents = true;
             this.list.UseCompatibleStateImageBehavior = false;
             this.list.View = System.Windows.Forms.View.Details;
             this.list.VirtualMode = true;
             this.list.BeforeCreatingGroups += new System.EventHandler<BrightIdeasSoftware.CreateGroupsEventArgs>(this.list_BeforeCreatingGroups);
-            this.list.FormatRow += new System.EventHandler<BrightIdeasSoftware.FormatRowEventArgs>(this.list_FormatRow);
+            this.list.CellToolTipShowing += new System.EventHandler<BrightIdeasSoftware.ToolTipShowingEventArgs>(this.list_CellToolTipShowing);
+            this.list.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.list_FormatCell);
             // 
             // olvColumnName
             // 
@@ -128,14 +142,15 @@ namespace JumpSaves
             this.olvColumnLevel.Text = "Level";
             this.olvColumnLevel.Width = 45;
             // 
-            // olvColumnModules
+            // olvColumnModule1
             // 
-            this.olvColumnModules.AspectName = "Modules";
-            this.olvColumnModules.IsEditable = false;
-            this.olvColumnModules.MinimumWidth = 140;
-            this.olvColumnModules.Sortable = false;
-            this.olvColumnModules.Text = "Modules";
-            this.olvColumnModules.Width = 190;
+            this.olvColumnModule1.AspectName = "Module1";
+            this.olvColumnModule1.IsEditable = false;
+            this.olvColumnModule1.MaximumWidth = 45;
+            this.olvColumnModule1.MinimumWidth = 45;
+            this.olvColumnModule1.Sortable = false;
+            this.olvColumnModule1.Text = "Mods";
+            this.olvColumnModule1.Width = 45;
             // 
             // toolStrip
             // 
@@ -222,6 +237,42 @@ namespace JumpSaves
             this.toolStripLabelTotal.Size = new System.Drawing.Size(57, 28);
             this.toolStripLabelTotal.Text = "Total: 0";
             // 
+            // olvColumnModule2
+            // 
+            this.olvColumnModule2.AspectName = "Module2";
+            this.olvColumnModule2.IsEditable = false;
+            this.olvColumnModule2.MaximumWidth = 45;
+            this.olvColumnModule2.MinimumWidth = 45;
+            this.olvColumnModule2.Text = "";
+            this.olvColumnModule2.Width = 45;
+            // 
+            // olvColumnModule3
+            // 
+            this.olvColumnModule3.AspectName = "Module3";
+            this.olvColumnModule3.IsEditable = false;
+            this.olvColumnModule3.MaximumWidth = 45;
+            this.olvColumnModule3.MinimumWidth = 45;
+            this.olvColumnModule3.Text = "";
+            this.olvColumnModule3.Width = 45;
+            // 
+            // olvColumnModule4
+            // 
+            this.olvColumnModule4.AspectName = "Module4";
+            this.olvColumnModule4.IsEditable = false;
+            this.olvColumnModule4.MaximumWidth = 45;
+            this.olvColumnModule4.MinimumWidth = 45;
+            this.olvColumnModule4.Text = "";
+            this.olvColumnModule4.Width = 45;
+            // 
+            // olvColumnModule5
+            // 
+            this.olvColumnModule5.AspectName = "Module5";
+            this.olvColumnModule5.IsEditable = false;
+            this.olvColumnModule5.MaximumWidth = 45;
+            this.olvColumnModule5.MinimumWidth = 45;
+            this.olvColumnModule5.Text = "";
+            this.olvColumnModule5.Width = 45;
+            // 
             // MajorItemList
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -251,9 +302,13 @@ namespace JumpSaves
         private OLVColumn olvColumnName;
         private OLVColumn olvColumnRarity;
         private OLVColumn olvColumnLevel;
-        private OLVColumn olvColumnModules;
+        private OLVColumn olvColumnModule1;
         private OLVColumn olvColumnSlotInCategory;
         private OLVColumn olvColumnCategory;
         private System.Windows.Forms.ToolStripLabel toolStripLabelTotal;
+        private OLVColumn olvColumnModule2;
+        private OLVColumn olvColumnModule3;
+        private OLVColumn olvColumnModule4;
+        private OLVColumn olvColumnModule5;
     }
 }

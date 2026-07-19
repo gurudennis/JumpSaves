@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using static JumpSaves.MajorItemList;
 
 namespace JumpSaves
 {
@@ -109,7 +110,7 @@ namespace JumpSaves
                 }
             }
 
-            public int SlotIndex
+            public long SlotIndex
             {
                 get
                 {
@@ -130,14 +131,6 @@ namespace JumpSaves
                 get
                 {
                     return Editor.Level;
-                }
-            }
-
-            public JSL.MajorItemEditor Modules
-            {
-                get
-                {
-                    return Editor;
                 }
             }
 
@@ -168,24 +161,45 @@ namespace JumpSaves
             }
         }
 
-        private void list_FormatRow(object sender, FormatRowEventArgs e)
+        private void list_FormatCell(object sender, FormatCellEventArgs e)
         {
             Row row = (Row)e.Model;
-            if (row.Rarity == JSL.Rarity.Common)
+            if (e.Column == olvColumnName)
             {
-                e.Item.BackColor = Color.FromArgb(217, 242, 208);
+                e.Item.Text = row.Name;
+                e.Item.ForeColor = GetRarityColor(row.Rarity, true);
             }
-            else if (row.Rarity == JSL.Rarity.Uncommon)
+            else if (e.Column == olvColumnModule1)
             {
-                e.Item.BackColor = Color.FromArgb(193, 216, 247);
+                FormatModuleColumn(row, 0, e);
             }
-            else if (row.Rarity == JSL.Rarity.Rare)
+            else if (e.Column == olvColumnModule2)
             {
-                e.Item.BackColor = Color.FromArgb(205, 187, 250);
+                FormatModuleColumn(row, 1, e);
             }
-            else if (row.Rarity == JSL.Rarity.Superior)
+            else if (e.Column == olvColumnModule3)
             {
-                e.Item.BackColor = Color.FromArgb(240, 175, 175);
+                FormatModuleColumn(row, 2, e);
+            }
+            else if (e.Column == olvColumnModule4)
+            {
+                FormatModuleColumn(row, 3, e);
+            }
+            else if (e.Column == olvColumnModule5)
+            {
+                FormatModuleColumn(row, 4, e);
+            }
+        }
+
+        private void list_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
+        {
+            if (e.ModifierKeys.HasFlag(Keys.Alt)) // developer popup
+            {
+                if (e.Column == olvColumnName)
+                {
+                    Row row = (Row)e.Model;
+                    e.Text = row.Editor.JSON;
+                }
             }
         }
 
@@ -193,8 +207,10 @@ namespace JumpSaves
         {
             e.Parameters.SortItemsByPrimaryColumn = false;
             e.Parameters.PrimarySort = olvColumnSlotInCategory;
+            e.Parameters.PrimarySortOrder = SortOrder.Ascending;
             e.Parameters.SecondarySort = olvColumnName;
-            e.Parameters.GroupComparer = new GroupComparer(); 
+            e.Parameters.SecondarySortOrder = SortOrder.Ascending;
+            e.Parameters.GroupComparer = new GroupComparer();
         }
 
         private void toolStripComboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
@@ -203,12 +219,47 @@ namespace JumpSaves
             OnStateChange();
         }
 
+        private void FormatModuleColumn(Row row, int moduleIndex, FormatCellEventArgs e)
+        {
+            if (moduleIndex >= row.Editor.ModuleCount)
+            {
+                e.SubItem.Text = string.Empty;
+                return;
+            }
+
+            JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
+            e.SubItem.Text = module?.TypeAbbreviation ?? "Unk";
+            e.SubItem.ForeColor = GetRarityColor(module?.Rarity ?? Rarity.Unknown, true);
+        }
+
         private bool IsLibraryEditor
         {
             get
             {
                 return Editor == null || Editor.GetType() == typeof(JSL.LibraryMajorItemListEditor);
             }
+        }
+
+        private Color GetRarityColor(JSL.Rarity rarity, bool fore)
+        {
+            if (rarity == JSL.Rarity.Common)
+            {
+                return fore ? Color.FromArgb(30, 112, 0) : Color.FromArgb(217, 242, 208);
+            }
+            else if (rarity == JSL.Rarity.Uncommon)
+            {
+                return fore ? Color.FromArgb(0, 67, 112) : Color.FromArgb(193, 216, 247);
+            }
+            else if (rarity == JSL.Rarity.Rare)
+            {
+                return fore ? Color.FromArgb(62, 6, 153) : Color.FromArgb(205, 187, 250);
+            }
+            else if (rarity == JSL.Rarity.Superior)
+            {
+                return fore ? Color.FromArgb(181, 59, 7) : Color.FromArgb(240, 175, 175);
+            }
+
+            return fore ? Color.Black : Color.White;
         }
 
         private void OnLoad(object sender, EventArgs e)
