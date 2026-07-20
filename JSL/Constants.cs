@@ -164,6 +164,10 @@ namespace JSL
             C_Boost,
             C_TurnRate,
             C_Acceleration,
+            C_FasterShieldRecharge,
+            C_LowerShieldBreakChance,
+            C_ShorterShieldDowntime,
+            C_ReactorCapacity,
             __COUNT__
         }
 
@@ -243,28 +247,32 @@ namespace JSL
 
         private static EnumInfo[] All = new EnumInfo[]
         {
-            new EnumInfo { Title = "Unknown",                  Abbr = "Unk", Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown, Purpose = MajorItemPurpose.Unknown    },
+            new EnumInfo { Title = "Unknown",                   Abbr = "Unk", Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown, Purpose = MajorItemPurpose.Unknown    },
             // ModuleKind.Feature:
-            new EnumInfo { Title = "Reload speed",             Abbr = "Rel", Raw = "9009aa4df2ad3a04ba4dea5518e1d611", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Magazine size",            Abbr = "Mag", Raw = "cafc9599b386ee84a890c2c760b62f5e", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Damage",                   Abbr = "Dmg", Raw = "df5b391e9981fdd47af8f2f6e74a9fd9", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Reload speed",              Abbr = "Rel", Raw = "9009aa4df2ad3a04ba4dea5518e1d611", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Magazine size",             Abbr = "Mag", Raw = "cafc9599b386ee84a890c2c760b62f5e", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Damage",                    Abbr = "Dmg", Raw = "df5b391e9981fdd47af8f2f6e74a9fd9", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             // ModuleKind.Custom:
-            new EnumInfo { Title = "Reduced materia cost",     Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Corrosion chance on hit",  Abbr = "Cor", Raw = "bb680a7ce4769fa4396b560d36435371", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Additional projectiles",   Abbr = "Frg", Raw = "b4c71cf386f6f3a42aaf7fe311eb202c", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Additional shots per mag", Abbr = "Mag", Raw = "09dd872497cec754bba28c7616b8810f", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "EMP chance on hit",        Abbr = "EMP", Raw = "c70b3f3ddb76d4141bc113b651ffbfdd", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Breach chance on hit",     Abbr = "Bre", Raw = "e60458dfaa15275469527dab6ddf9b02", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Corrosion projectile",     Abbr = "Cor", Raw = "bf3cecfa0702aa04e95d109144f21ed1", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Chance to chain enemies",  Abbr = "Chn", Raw = "fc4cf93ada70dcf4c910cad5faa5c9a9", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Increase Rupture damage",  Abbr = "Rup", Raw = "6a8561321dfb64d4789ae84a0cda11d4", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Breach causes Rupture",    Abbr = "Rup", Raw = "3fd4cd1ef685c464bab96af82388c2ac", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Virus chance on hit",      Abbr = "Vir", Raw = "72a1c39fe91bdee4da863bee2afa6db8", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Virus causes EMP",         Abbr = "EMP", Raw = "5c15051e787622d43bae554502e4a052", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Max speed",                Abbr = "Spd", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
-            new EnumInfo { Title = "Max boost",                Abbr = "Bst", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
-            new EnumInfo { Title = "Turn rate",                Abbr = "Trn", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
-            new EnumInfo { Title = "Acceleration",             Abbr = "Acc", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
+            new EnumInfo { Title = "Reduced materia cost",      Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Corrosion chance on hit",   Abbr = "Cor", Raw = "bb680a7ce4769fa4396b560d36435371", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Additional projectiles",    Abbr = "Frg", Raw = "b4c71cf386f6f3a42aaf7fe311eb202c", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Additional shots per mag",  Abbr = "Mag", Raw = "09dd872497cec754bba28c7616b8810f", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "EMP chance on hit",         Abbr = "EMP", Raw = "c70b3f3ddb76d4141bc113b651ffbfdd", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Breach chance on hit",      Abbr = "Bre", Raw = "e60458dfaa15275469527dab6ddf9b02", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Corrosion projectile",      Abbr = "Cor", Raw = "bf3cecfa0702aa04e95d109144f21ed1", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Chance to chain enemies",   Abbr = "Chn", Raw = "fc4cf93ada70dcf4c910cad5faa5c9a9", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Increase Rupture damage",   Abbr = "Rup", Raw = "6a8561321dfb64d4789ae84a0cda11d4", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Breach causes Rupture",     Abbr = "Rup", Raw = "3fd4cd1ef685c464bab96af82388c2ac", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Virus chance on hit",       Abbr = "Vir", Raw = "72a1c39fe91bdee4da863bee2afa6db8", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Virus causes EMP",          Abbr = "EMP", Raw = "5c15051e787622d43bae554502e4a052", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Max speed",                 Abbr = "Spd", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
+            new EnumInfo { Title = "Max boost",                 Abbr = "Bst", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
+            new EnumInfo { Title = "Turn rate",                 Abbr = "Trn", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
+            new EnumInfo { Title = "Acceleration",              Abbr = "Acc", Raw = "2f006f1878bb9ed4992f73cf87ac953d", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Propulsion },
+            new EnumInfo { Title = "Faster shield recharge",    Abbr = "Rec", Raw = "8dacbec9a6bac2947ab3eaecb8a020f5", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
+            new EnumInfo { Title = "Lower shield break chance", Abbr = "Brk", Raw = "76dc2ea8251eafe4b9752f33a15f90df", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
+            new EnumInfo { Title = "Shorter shield downtime",   Abbr = "Dwn", Raw = "34f7c993f959fbe459777c90eab95189", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
+            new EnumInfo { Title = "Reactor capacity",          Abbr = "Cap", Raw = "987886742b6da2740b8f64922c59b0b1", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
         };
     }
 
@@ -548,5 +556,24 @@ namespace JSL
             new EnumInfo { Title = "Wrench (Melee)",         Raw = "a52219e07db611248800766fe8d53744" },
             new EnumInfo { Title = "Crowbar (Melee)",        Raw = "f077b42a85cfb7f4bb0d55729c4fc5c0" },
         };
+    }
+
+    public static class MajorItemType
+    {
+        public static string GetTitleFromRaw(string raw, MajorItemCategory.Enum category)
+        {
+            if (category == MajorItemCategory.Enum.PlayerWeapons)
+            {
+                PlayerWeaponType.Enum type = PlayerWeaponType.FromRaw(raw);
+                if (type != PlayerWeaponType.Enum.Unknown)
+                {
+                    return PlayerWeaponType.GetTitle(type);
+                }
+            }
+
+            // ...
+
+            return null;
+        }
     }
 }

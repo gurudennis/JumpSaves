@@ -102,16 +102,7 @@ namespace JSL
         {
             get
             {
-                if (Category == MajorItemCategory.Enum.PlayerWeapons)
-                {
-                    PlayerWeaponType.Enum type = PlayerWeaponType.FromRaw(Item.Blueprint.RawType);
-                    if (type != PlayerWeaponType.Enum.Unknown)
-                    {
-                        return PlayerWeaponType.GetTitle(type);
-                    }
-                }
-
-                return null; // unknown
+                return MajorItemType.GetTitleFromRaw(Item.Blueprint.RawType, Category);
             }
         }
 
