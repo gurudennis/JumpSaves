@@ -344,6 +344,14 @@ namespace JumpSaves
         private void toolStripButtonRemove_Click(object sender, EventArgs e)
         {
             IList selected = list.SelectedObjects;
+
+            string submsg = selected.Count == 1 ? "this item" : $"these {selected.Count} items";
+            string msg = $"Are you sure you want to permanently remove {submsg}?\n\nThis is irreversible.";
+            if (MessageBox.Show(Parent, msg, "Remove items?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            {
+                return;
+            }
+
             foreach (object obj in selected)
             {
                 Row r = (Row)obj;

@@ -296,6 +296,7 @@ namespace JumpSaves
             if (args.HasReopened)
             {
                 model_.AutoAcquireIntoLibrary(libraryMajorItemList.IsInterestedInItem);
+                libraryMajorItemList.Reload();
             }
         }
 

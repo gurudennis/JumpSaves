@@ -122,9 +122,10 @@ namespace JSL
             entry.FileName = MakeFileName(item.Blueprint.Name, hash);
             entry.Item = item;
 
-            WriteEntry(entry, serialized, onConflict);
-
-            entries_.Add(entry);
+            if (WriteEntry(entry, serialized, onConflict))
+            {
+                entries_.Add(entry);
+            }
         }
 
         private Entry ReadEntry(FileInfo fileInfo)
@@ -163,7 +164,7 @@ namespace JSL
             return entry;
         }
 
-        private void WriteEntry(Entry entry, byte[] serialized, ConflictBehavior onConflict)
+        private bool WriteEntry(Entry entry, byte[] serialized, ConflictBehavior onConflict)
         {
             string path = MakeFilePath(entry.FileName);
             if (string.IsNullOrEmpty(path))
@@ -180,7 +181,7 @@ namespace JSL
                 }
                 else if (onConflict == ConflictBehavior.Skip)
                 {
-                    return;
+                    return false;
                 }
                 else // if (onConflict == ConflictBehavior.Overwrite)
                 {
@@ -206,6 +207,8 @@ namespace JSL
                 file.Write(dataLengthBytes, 0, dataLengthBytes.Length);
                 file.Write(serialized, 0, serialized.Length);
             }
+
+            return true;
         }
 
         private void RemoveEntry(Entry entry)
