@@ -1,5 +1,6 @@
 ﻿using JSL;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
@@ -21,9 +22,6 @@ namespace JumpSaves
             Text = $"JumpSaves {Assembly.GetExecutingAssembly().GetName().Version} (beta)";
 
             toolStripComboBoxMode.SelectedIndex = 0;
-
-            editorMajorItemList.Model = model_;
-            libraryMajorItemList.Model = model_;
 
             editorMajorItemList.MaybeDirty += OnEditorMajorItemList_MaybeDirty;
             editorResourceView.MaybeDirty += OnEditorResourceView_MaybeDirty;
@@ -240,6 +238,30 @@ namespace JumpSaves
             MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        private void DoTransfer(MajorItemList from, IReadOnlyList<JSL.MajorItemEditor> items)
+        {
+            foreach (JSL.MajorItemEditor item in items)
+            {
+                if (from.IsLibraryEditor)
+                {
+                    model_.TransferFromLibrary(item, editorMajorItemList.Editor);
+                }
+                else
+                {
+                    model_.TransferToLibrary(item);
+                }
+            }
+
+            if (from.IsLibraryEditor)
+            {
+                editorMajorItemList.Reload();
+            }
+            else
+            {
+                libraryMajorItemList.Reload();
+            }
+        }
+
         private void OnPeriodicInfo(object sender, Model.PeriodicInfoArgs args)
         {
             OnStateChanged();
@@ -263,6 +285,7 @@ namespace JumpSaves
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
+            editorMajorItemList.TransferAction = DoTransfer;
             editorMajorItemList.SaveEditor = model_.SaveEditor;
             editorMajorItemList.AllowCustomization = IsCheaterMode;
             editorMajorItemList.CanEdit = CanEdit;
@@ -276,7 +299,7 @@ namespace JumpSaves
             {
                 libraryMajorItemList.LibraryEditor = model_.LibraryEditor;
             }
-            libraryMajorItemList.TransferDestination = () => editorMajorItemList.Editor;
+            libraryMajorItemList.TransferAction = DoTransfer;
             libraryMajorItemList.Enabled = libraryMajorItemList.LibraryEditor != null;
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
             libraryMajorItemList.CanEdit = true;

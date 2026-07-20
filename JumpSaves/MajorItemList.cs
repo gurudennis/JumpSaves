@@ -16,9 +16,7 @@ namespace JumpSaves
             InitializeComponent();
         }
 
-        public Model.Instance Model { get; set; }
-
-        public Func<JSL.MajorItemListEditor> TransferDestination { get; set; }
+        public Action<MajorItemList, IReadOnlyList<JSL.MajorItemEditor>> TransferAction { get; set; }
 
         public EventHandler<EventArgs> MaybeDirty;
 
@@ -67,6 +65,14 @@ namespace JumpSaves
                     editor_ = value;
                     ApplyEditor(editor_);
                 }
+            }
+        }
+
+        public bool IsLibraryEditor
+        {
+            get
+            {
+                return Editor == null || Editor.GetType() == typeof(JSL.LibraryMajorItemListEditor);
             }
         }
 
@@ -128,7 +134,12 @@ namespace JumpSaves
             return true;
         }
 
-        public class Row
+        public void Reload()
+        {
+            ApplyEditor(Editor);
+        }
+
+        private class Row
         {
             public Row(JSL.MajorItemEditor editor)
             {
@@ -216,6 +227,7 @@ namespace JumpSaves
             {
                 e.Item.Text = row.Name;
                 e.Item.ForeColor = GetRarityColor(row.Rarity, true);
+                e.Item.SelectedForeColor = Color.White;
             }
             else if (e.Column == olvColumnModule1)
             {
@@ -314,18 +326,14 @@ namespace JumpSaves
                 return;
             }
 
+            List<JSL.MajorItemEditor> items = new List<JSL.MajorItemEditor>();
             foreach (object obj in selected)
             {
                 Row r = (Row)obj;
-                if (IsLibraryEditor)
-                {
-                    Model.TransferFromLibrary(r.Editor, TransferDestination());
-                }
-                else
-                {
-                    Model.TransferToLibrary(r.Editor);
-                }
+                items.Add(r.Editor);
             }
+
+            TransferAction(this, items);
         }
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
@@ -340,6 +348,7 @@ namespace JumpSaves
             {
                 Row r = (Row)obj;
                 Editor.Remove(r.Editor);
+                Reload();
             }
         }
 
@@ -370,14 +379,6 @@ namespace JumpSaves
 
             JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
             e.Text = module?.TypeName ?? "Unknown";
-        }
-
-        private bool IsLibraryEditor
-        {
-            get
-            {
-                return Editor == null || Editor.GetType() == typeof(JSL.LibraryMajorItemListEditor);
-            }
         }
 
         private Color GetRarityColor(JSL.Rarity rarity, bool fore)
