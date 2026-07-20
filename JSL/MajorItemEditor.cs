@@ -102,7 +102,7 @@ namespace JSL
         {
             get
             {
-                return MajorItemType.GetTitleFromRaw(Item.Blueprint.RawType, Category);
+                return MajorItemType.GetTitle(MajorItemType.FromRaw(Item.Blueprint.RawType, Category));
             }
         }
 
