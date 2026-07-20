@@ -19,6 +19,8 @@ namespace JSL
             RootEditor = rootEditor;
         }
 
+        internal bool IsOrphaned { get; set; }
+
         protected IRootEditor RootEditor { get; private set; }
     }
 

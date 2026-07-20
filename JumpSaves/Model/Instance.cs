@@ -10,7 +10,7 @@ namespace JumpSaves.Model
     {
         public bool IsRunning { get; set; }
 
-        public DateTime? LastSaveTime { get; set; }
+        public bool HasReopened { get; set; }
     }
 
     public class Instance : IDisposable
@@ -44,12 +44,12 @@ namespace JumpSaves.Model
         {
             Close();
 
-            Editor = JSL.EditorFactory.OpenSave(path);
+            SaveEditor = JSL.EditorFactory.OpenSave(path);
         }
 
         public void Close()
         {
-            Editor = null;
+            SaveEditor = null;
         }
 
         public void Save()
@@ -59,14 +59,14 @@ namespace JumpSaves.Model
                 throw new Exception("Can't save because no save file or directory is open right now");
             }
 
-            Editor.Save();
+            SaveEditor.Save();
         }
 
         public bool IsOpen
         {
             get
             {
-                return Editor != null;
+                return SaveEditor != null;
             }
         }
 
@@ -74,7 +74,7 @@ namespace JumpSaves.Model
         {
             get
             {
-                return Editor?.IsDirty ?? false;
+                return SaveEditor?.IsDirty ?? false;
             }
         }
 
@@ -82,7 +82,7 @@ namespace JumpSaves.Model
         {
             get
             {
-                return Editor?.Path ?? String.Empty;
+                return SaveEditor?.Path ?? String.Empty;
             }
         }
 
@@ -119,13 +119,18 @@ namespace JumpSaves.Model
             }
         }
 
-        public JSL.SaveEditor Editor { get; private set; }
+        public JSL.SaveEditor SaveEditor { get; private set; }
 
-        public JSL.Library Library
+        public JSL.LibraryMajorItemListEditor LibraryEditor
         {
             get
             {
-                return manager_.Library;
+                if (libraryEditor_ == null && manager_.Library != null)
+                {
+                    libraryEditor_ = JSL.EditorFactory.OpenLibrary(manager_.Library);
+                }
+
+                return libraryEditor_;
             }
         }
 
@@ -135,7 +140,49 @@ namespace JumpSaves.Model
         {
             string selfPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             string cliPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(selfPath), "JumpSavesCLI.exe");
-            Process.Start(cliPath, $"-s {path ?? (Editor?.Path ?? DefaultSavePath)}");
+            Process.Start(cliPath, $"-s {path ?? (SaveEditor?.Path ?? DefaultSavePath)}");
+        }
+
+        public void TransferToLibrary(JSL.MajorItemEditor item)
+        {
+            LibraryEditor.Add(item);
+        }
+
+        public void TransferFromLibrary(JSL.MajorItemEditor item, JSL.MajorItemListEditor destination)
+        {
+            // ...
+        }
+
+        public void AutoAcquireIntoLibrary(Func<JSL.MajorItemEditor, bool> filter)
+        {
+            if (!IsOpen)
+            {
+                throw new Exception("Can't auto-acquire when no save is open");
+            }
+
+            {
+                JSL.MajorItemListEditor stored = SaveEditor.StoredMajorItems;
+                for (int i = 0; i < stored.Count; ++i)
+                {
+                    JSL.MajorItemEditor item = stored[i];
+                    if (filter(item))
+                    {
+                        TransferToLibrary(item);
+                    }
+                }
+            }
+
+            {
+                JSL.MajorItemListEditor recent = SaveEditor.RecentMajorItems;
+                for (int i = 0; i < recent.Count; ++i)
+                {
+                    JSL.MajorItemEditor item = recent[i];
+                    if (filter(item))
+                    {
+                        TransferToLibrary(item);
+                    }
+                }
+            }
         }
 
         private void OnGlobalPeriodicInfo(object sender, GlobalPeriodicInfoEventArgs args)
@@ -147,9 +194,35 @@ namespace JumpSaves.Model
                 PeriodicInfoEvent?.Invoke(this, new PeriodicInfoArgs
                 {
                     IsRunning = args.IsGameRunning,
-                    LastSaveTime = Editor?.LastEditTime
+                    HasReopened = ReopenIfNewerAndMonitoring()
                 });
             });
+        }
+
+        // Reopen the save if 1) we are monitoring the save dir, and 2) there is a newer version on disk
+        private bool ReopenIfNewerAndMonitoring()
+        {
+            if (!IsOpen || !IsMonitoring)
+            {
+                return false;
+            }
+
+            if (SaveEditor.OpenedTime < SaveEditor.LastEditTime)
+            {
+#if !DEBUG
+                try
+                {
+#endif
+                    JSL.SaveEditor editor = JSL.EditorFactory.OpenSave(Path);
+                    SaveEditor = editor;
+                    return true;
+#if !DEBUG
+                }
+                catch { } // do nothing - will try again on next change
+#endif
+            }
+
+            return false;
         }
 
         private void PostOnUIThread(Action action)
@@ -159,5 +232,6 @@ namespace JumpSaves.Model
 
         private readonly Manager manager_;
         private readonly SynchronizationContext syncContext_;
+        private JSL.LibraryMajorItemListEditor libraryEditor_;
     }
 }

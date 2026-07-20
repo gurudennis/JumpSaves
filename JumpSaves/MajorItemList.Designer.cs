@@ -46,6 +46,7 @@ namespace JumpSaves
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
@@ -89,7 +90,7 @@ namespace JumpSaves
             this.list.ShowGroups = false;
             this.list.ShowItemCountOnGroups = true;
             this.list.ShowSortIndicators = false;
-            this.list.Size = new System.Drawing.Size(581, 684);
+            this.list.Size = new System.Drawing.Size(659, 684);
             this.list.SpaceBetweenGroups = 10;
             this.list.TabIndex = 0;
             this.list.UseCellFormatEvents = true;
@@ -97,6 +98,7 @@ namespace JumpSaves
             this.list.View = System.Windows.Forms.View.Details;
             this.list.VirtualMode = true;
             this.list.BeforeCreatingGroups += new System.EventHandler<BrightIdeasSoftware.CreateGroupsEventArgs>(this.list_BeforeCreatingGroups);
+            this.list.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.list_CellClick);
             this.list.CellToolTipShowing += new System.EventHandler<BrightIdeasSoftware.ToolTipShowingEventArgs>(this.list_CellToolTipShowing);
             this.list.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.list_FormatCell);
             // 
@@ -203,6 +205,7 @@ namespace JumpSaves
             this.toolStripButtonAdd,
             this.toolStripButtonRemove,
             this.toolStripButtonEdit,
+            this.toolStripButtonBrowse,
             this.toolStripLabelFilter,
             this.toolStripComboBoxFilter,
             this.toolStripLabelTotal,
@@ -210,7 +213,7 @@ namespace JumpSaves
             this.toolStripComboBoxMonitor});
             this.toolStrip.Location = new System.Drawing.Point(1, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(580, 31);
+            this.toolStrip.Size = new System.Drawing.Size(658, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
             // 
@@ -222,6 +225,7 @@ namespace JumpSaves
             this.toolStripButtonTransfer.Name = "toolStripButtonTransfer";
             this.toolStripButtonTransfer.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonTransfer.Text = "Transfer a copy of selected items";
+            this.toolStripButtonTransfer.Click += new System.EventHandler(this.toolStripButtonTransfer_Click);
             // 
             // toolStripButtonAdd
             // 
@@ -231,6 +235,7 @@ namespace JumpSaves
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
             this.toolStripButtonAdd.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonAdd.Text = "Add...";
+            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
             // 
             // toolStripButtonRemove
             // 
@@ -240,6 +245,7 @@ namespace JumpSaves
             this.toolStripButtonRemove.Name = "toolStripButtonRemove";
             this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonRemove.Text = "Remove selected items";
+            this.toolStripButtonRemove.Click += new System.EventHandler(this.toolStripButtonRemove_Click);
             // 
             // toolStripButtonEdit
             // 
@@ -249,6 +255,17 @@ namespace JumpSaves
             this.toolStripButtonEdit.Name = "toolStripButtonEdit";
             this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonEdit.Text = "Edit selected item";
+            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
+            // 
+            // toolStripButtonBrowse
+            // 
+            this.toolStripButtonBrowse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonBrowse.Image = global::JumpSaves.Properties.Resources.Browse;
+            this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonBrowse.Text = "Browse library directory";
+            this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
             // 
             // toolStripLabelFilter
             // 
@@ -303,7 +320,7 @@ namespace JumpSaves
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.list);
             this.Name = "MajorItemList";
-            this.Size = new System.Drawing.Size(582, 717);
+            this.Size = new System.Drawing.Size(660, 717);
             this.Load += new System.EventHandler(this.OnLoad);
             this.EnabledChanged += new System.EventHandler(this.OnEnabledChanged);
             ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
@@ -335,5 +352,6 @@ namespace JumpSaves
         private OLVColumn olvColumnModule5;
         private System.Windows.Forms.ToolStripLabel toolStripLabelMonitor;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMonitor;
+        private System.Windows.Forms.ToolStripButton toolStripButtonBrowse;
     }
 }

@@ -1,6 +1,8 @@
 ﻿using BrightIdeasSoftware;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using static JumpSaves.MajorItemList;
@@ -13,6 +15,10 @@ namespace JumpSaves
         {
             InitializeComponent();
         }
+
+        public Model.Instance Model { get; set; }
+
+        public Func<JSL.MajorItemListEditor> TransferDestination { get; set; }
 
         public EventHandler<EventArgs> MaybeDirty;
 
@@ -268,6 +274,20 @@ namespace JumpSaves
             }
         }
 
+        private void list_CellClick(object sender, CellClickEventArgs e)
+        {
+            Row row = (Row)e.Model;
+
+            if (e.ModifierKeys.HasFlag(Keys.Alt)) // developer popup
+            {
+                if (e.Column == olvColumnName)
+                {
+                    MessageBox.Show(this, row.Editor.JSON, "Developer mode: object dump", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+        }
+
         private void list_BeforeCreatingGroups(object sender, CreateGroupsEventArgs e)
         {
             e.Parameters.SortItemsByPrimaryColumn = false;
@@ -282,6 +302,50 @@ namespace JumpSaves
         {
             Editor = null;
             OnStateChange();
+        }
+
+        private void toolStripButtonTransfer_Click(object sender, EventArgs e)
+        {
+            IList selected = list.SelectedObjects;
+            if (selected == null || selected.Count == 0)
+            {
+                string dest = IsLibraryEditor ? "save" : "library";
+                MessageBox.Show(Parent, $"Select one or more items to transfer to the {dest}, then press this button.", "No item selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            foreach (object obj in selected)
+            {
+                Row r = (Row)obj;
+                if (IsLibraryEditor)
+                {
+                    Model.TransferFromLibrary(r.Editor, TransferDestination());
+                }
+                else
+                {
+                    Model.TransferToLibrary(r.Editor);
+                }
+            }
+        }
+
+        private void toolStripButtonAdd_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Parent, "Not implemented yet. Stay tuned for updates!", "Not implemented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
+
+        private void toolStripButtonRemove_Click(object sender, EventArgs e)
+        {
+            IList selected = list.SelectedObjects;
+            foreach (object obj in selected)
+            {
+                Row r = (Row)obj;
+                Editor.Remove(r.Editor);
+            }
+        }
+
+        private void toolStripButtonEdit_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Parent, "Not implemented yet. Stay tuned for updates!", "Not implemented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void FormatModuleColumn(Row row, int moduleIndex, FormatCellEventArgs e)
@@ -373,6 +437,9 @@ namespace JumpSaves
             toolStripButtonRemove.Enabled &= CanEdit;
             toolStripButtonTransfer.Enabled &= CanTransfer;
 
+            // Browsing (library only)
+            toolStripButtonBrowse.Visible = IsLibraryEditor;
+
             // Tool strip filter
             toolStripLabelFilter.Enabled = Enabled;
             toolStripComboBoxFilter.Enabled = Enabled;
@@ -460,5 +527,14 @@ namespace JumpSaves
         private bool allowCustomization_;
         private bool canEdit_;
         private bool canTransfer_;
+
+        private void toolStripButtonBrowse_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = LibraryEditor.Path,
+                UseShellExecute = true
+            });
+        }
     }
 }

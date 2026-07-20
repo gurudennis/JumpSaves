@@ -338,6 +338,7 @@ namespace JSL
         public static StoredMajorItem FromRecent(RecentMajorItem recent)
         {
             StoredMajorItem stored = new StoredMajorItem();
+            stored.RawCategory = recent.RawCategory;
             stored.Blueprint = recent.Blueprint.Clone();
             return stored;
         }
@@ -435,7 +436,7 @@ namespace JSL
             item.SetPropertyStrict(Index_PlacementInCategory, (byte)0);
             item.SetPropertyStrict(Index_BlueprintID, blueprint.ID);
             item.SetPropertyStrict(Index_HasEverBeenStored, true);
-            return item;
+            return item.Root;
         }
 
         private const int Index_RawCategory = 0;
@@ -469,6 +470,7 @@ namespace JSL
         public static RecentMajorItem FromStored(StoredMajorItem stored)
         {
             RecentMajorItem recent = new RecentMajorItem();
+            recent.RawCategory = stored.RawCategory;
             recent.Blueprint = stored.Blueprint.Clone();
             return recent;
         }
@@ -528,13 +530,13 @@ namespace JSL
 
         protected static object New()
         {
-            StoredMajorItem item = new StoredMajorItem(new object[ExpectedElementCount], null);
+            RecentMajorItem item = new RecentMajorItem(new object[ExpectedElementCount], null);
             item.SetPropertyStrict(Index_RawCategory, string.Empty);
             item.SetPropertyStrict(Index_Blueprint, (new MajorItemBlueprint()).Root);
             item.SetPropertyStrict(Index_Timestamp, (ulong)DateTime.Now.Ticks);
             item.SetPropertyStrict(3, "efa565eb7189aa54fb0bcbc11e1b54f0"); // unknown identifier with a few distinct repeating values
             item.SetPropertyStrict(Index_HasEverBeenStored, false);
-            return item;
+            return item.Root;
         }
 
         private const int Index_RawCategory = 0;

@@ -22,6 +22,9 @@ namespace JumpSaves
 
             toolStripComboBoxMode.SelectedIndex = 0;
 
+            editorMajorItemList.Model = model_;
+            libraryMajorItemList.Model = model_;
+
             editorMajorItemList.MaybeDirty += OnEditorMajorItemList_MaybeDirty;
             editorResourceView.MaybeDirty += OnEditorResourceView_MaybeDirty;
 
@@ -220,7 +223,7 @@ namespace JumpSaves
 
         private void RunCLI()
         {
-            string path = model_.Editor?.Path ?? model_.DefaultSavePath;
+            string path = model_.SaveEditor?.Path ?? model_.DefaultSavePath;
 
             CloseFileDir();
 
@@ -240,6 +243,11 @@ namespace JumpSaves
         private void OnPeriodicInfo(object sender, Model.PeriodicInfoArgs args)
         {
             OnStateChanged();
+
+            if (args.HasReopened)
+            {
+                model_.AutoAcquireIntoLibrary(libraryMajorItemList.IsInterestedInItem);
+            }
         }
 
         private void OnStateChanged()
@@ -255,19 +263,20 @@ namespace JumpSaves
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
-            editorMajorItemList.SaveEditor = model_.Editor;
+            editorMajorItemList.SaveEditor = model_.SaveEditor;
             editorMajorItemList.AllowCustomization = IsCheaterMode;
             editorMajorItemList.CanEdit = CanEdit;
             editorMajorItemList.CanTransfer = model_.IsOpen;
-            editorResourceView.Editor = model_.Editor?.Resources;
+            editorResourceView.Editor = model_.SaveEditor?.Resources;
             editorResourceView.AllowCustomization = IsCheaterMode;
             editorResourceView.Enabled = CanEdit;
 
             // Library panel
-            if (model_.Library != null)
+            if (model_.LibraryEditor != null)
             {
-                libraryMajorItemList.LibraryEditor = JSL.EditorFactory.OpenLibrary(model_.Library);
+                libraryMajorItemList.LibraryEditor = model_.LibraryEditor;
             }
+            libraryMajorItemList.TransferDestination = () => editorMajorItemList.Editor;
             libraryMajorItemList.Enabled = libraryMajorItemList.LibraryEditor != null;
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
             libraryMajorItemList.CanEdit = true;
@@ -278,9 +287,10 @@ namespace JumpSaves
             {
                 gameWasRunning_ = true;
 
-                if (model_.IsDirty && !model_.IsMonitoring)
+                if (model_.IsGameSaveOpen && model_.IsDirty && !model_.IsMonitoring)
                 {
-                    string msg = "There are unsaved changes. The game will not be monitoring the save until these are discarded. Saving is not recommended at this point.";
+                    string msg = "There are unsaved changes. The game will not be monitoring the save until these are discarded.\n" +
+                                 "Saving is not recommended at this point, but you can close and re-open the file.";
                     MessageBox.Show(this, msg, "JumpSaves WARNING: Unsaved changes", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }

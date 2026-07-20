@@ -11,6 +11,7 @@ namespace JSL
             : base(rootEditor)
         {
             module_ = new Module();
+            IsOrphaned = true;
         }
 
         internal ModuleEditor(object module, object[] parent, IRootEditor rootEditor)
@@ -30,7 +31,10 @@ namespace JSL
                 if (module_.Rarity != value)
                 {
                     module_.Rarity = value;
-                    RootEditor.IsDirty = true;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
                 }
             }
         }
@@ -86,6 +90,7 @@ namespace JSL
         protected MajorItemEditor(IRootEditor rootEditor)
             : base(rootEditor)
         {
+            IsOrphaned = true;
         }
 
         protected MajorItemEditor(MajorItem item, IRootEditor rootEditor)
@@ -135,7 +140,10 @@ namespace JSL
                 if (Name != value) // note that we are comparing with the default name here if one is not explicitly assigned
                 {
                     Item.Blueprint.Name = value;
-                    RootEditor.IsDirty = true;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
                 }
             }
         }
@@ -157,7 +165,10 @@ namespace JSL
                 if (Item.RawCategory != raw)
                 {
                     Item.RawCategory = raw;
-                    RootEditor.IsDirty = true;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
                 }
             }
         }
@@ -178,7 +189,10 @@ namespace JSL
                 if (Item.RawCategory != value)
                 {
                     Item.RawCategory = value;
-                    RootEditor.IsDirty = true;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
                 }
             }
         }
@@ -196,7 +210,10 @@ namespace JSL
                 if (Item.Blueprint.Rarity != value)
                 {
                     Item.Blueprint.Rarity = value;
-                    RootEditor.IsDirty = true;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
                 }
             }
         }
@@ -212,7 +229,10 @@ namespace JSL
                 if (Item.Blueprint.Level != value)
                 {
                     Item.Blueprint.Level = value;
-                    RootEditor.IsDirty = true;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
                 }
             }
         }
@@ -400,6 +420,18 @@ namespace JSL
         public abstract void Add(MajorItemEditor item);
 
         public abstract void Remove(int index);
+
+        public void Remove(MajorItemEditor item)
+        {
+            for (int i = 0; i < Count; ++i)
+            {
+                if (this[i].Item.Root == item.Item.Root)
+                {
+                    Remove(i);
+                    return;
+                }
+            }
+        }
     }
 
     // List of Stored or Recent major items (they have a lot in common
@@ -522,6 +554,14 @@ namespace JSL
             library_ = library;
         }
 
+        public string Path
+        {
+            get
+            {
+                return library_.Path;
+            }
+        }
+
         public override int Count
         {
             get
@@ -545,14 +585,25 @@ namespace JSL
 
         public override void Add(MajorItemEditor item)
         {
-            if (item.GetType() != typeof(LibraryMajorItemEditor))
+            if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                throw new ArgumentException($"Expected to be adding {typeof(LibraryMajorItemEditor).FullName}, received {item.GetType().FullName}");
+                LibraryMajorItemEditor libraryItem = (LibraryMajorItemEditor)item;
+                library_.AddEntry((LibraryMajorItem)libraryItem.Item, Library.ConflictBehavior.Error);
             }
-
-            LibraryMajorItemEditor libraryItem = (LibraryMajorItemEditor)item;
-
-            library_.AddEntry((LibraryMajorItem)libraryItem.Item, Library.ConflictBehavior.Error);
+            else if (item.GetType() == typeof(StoredMajorItemEditor))
+            {
+                StoredMajorItemEditor storedItem = (StoredMajorItemEditor)item;
+                library_.AddEntry(JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)storedItem.Item), Library.ConflictBehavior.Error);
+            }
+            else if (item.GetType() == typeof(RecentMajorItemEditor))
+            {
+                RecentMajorItemEditor recentItem = (RecentMajorItemEditor)item;
+                library_.AddEntry(JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)recentItem.Item), Library.ConflictBehavior.Error);
+            }
+            else
+            {
+                throw new ArgumentException($"Item type {item.GetType().FullName} cannot be added to the library");
+            }
         }
 
         public override void Remove(int index)
