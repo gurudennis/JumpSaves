@@ -6,6 +6,13 @@ using System.Security.Cryptography;
 
 namespace JSL
 {
+    public enum ConflictBehavior
+    {
+        Error,
+        Skip,
+        Overwrite,
+    }
+
     public class Library
     {
         public Library(string path)
@@ -36,12 +43,6 @@ namespace JSL
             IReadOnlyList<string> prev = failedFiles_;
             failedFiles_ = new List<string>();
             return prev;
-        }
-
-        public enum ConflictBehavior
-        {
-            Error,
-            Overwrite,
         }
 
         public void AddEntry(LibraryMajorItem item, ConflictBehavior onConflict)
@@ -176,6 +177,10 @@ namespace JSL
                 if (onConflict == ConflictBehavior.Error)
                 {
                     throw new Exception($"Would overwrite an existing item at {previous.FileName}, skipping!");
+                }
+                else if (onConflict == ConflictBehavior.Skip)
+                {
+                    return;
                 }
                 else // if (onConflict == ConflictBehavior.Overwrite)
                 {

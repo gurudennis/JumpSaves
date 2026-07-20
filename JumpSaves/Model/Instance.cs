@@ -143,14 +143,14 @@ namespace JumpSaves.Model
             Process.Start(cliPath, $"-s {path ?? (SaveEditor?.Path ?? DefaultSavePath)}");
         }
 
-        public void TransferToLibrary(JSL.MajorItemEditor item)
+        public void TransferToLibrary(JSL.MajorItemEditor item, JSL.ConflictBehavior onConflict)
         {
-            LibraryEditor.Add(item);
+            LibraryEditor.Add(item, onConflict);
         }
 
         public void TransferFromLibrary(JSL.MajorItemEditor item, JSL.MajorItemListEditor destination)
         {
-            destination.Add(item);
+            destination.Add(item, JSL.ConflictBehavior.Error);
         }
 
         public void AutoAcquireIntoLibrary(Func<JSL.MajorItemEditor, bool> filter)
@@ -167,7 +167,7 @@ namespace JumpSaves.Model
                     JSL.MajorItemEditor item = stored[i];
                     if (filter(item))
                     {
-                        TransferToLibrary(item);
+                        TransferToLibrary(item, JSL.ConflictBehavior.Skip);
                     }
                 }
             }
@@ -179,7 +179,7 @@ namespace JumpSaves.Model
                     JSL.MajorItemEditor item = recent[i];
                     if (filter(item))
                     {
-                        TransferToLibrary(item);
+                        TransferToLibrary(item, JSL.ConflictBehavior.Skip);
                     }
                 }
             }

@@ -252,7 +252,7 @@ namespace JumpSaves
                     }
                     else
                     {
-                        model_.TransferToLibrary(item);
+                        model_.TransferToLibrary(item, ConflictBehavior.Error);
                     }
                 }
                 catch (Exception ex)
