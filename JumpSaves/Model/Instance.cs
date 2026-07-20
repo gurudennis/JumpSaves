@@ -150,7 +150,7 @@ namespace JumpSaves.Model
 
         public void TransferFromLibrary(JSL.MajorItemEditor item, JSL.MajorItemListEditor destination)
         {
-            // ...
+            destination.Add(item);
         }
 
         public void AutoAcquireIntoLibrary(Func<JSL.MajorItemEditor, bool> filter)

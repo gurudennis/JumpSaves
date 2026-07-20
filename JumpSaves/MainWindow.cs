@@ -195,6 +195,7 @@ namespace JumpSaves
         private void Save()
         {
             model_.Save();
+            OnStateChanged();
         }
 
         private void CloseFileDir()
@@ -240,17 +241,32 @@ namespace JumpSaves
 
         private void DoTransfer(MajorItemList from, IReadOnlyList<JSL.MajorItemEditor> items)
         {
+            List<string> failures = new List<string>();
             foreach (JSL.MajorItemEditor item in items)
             {
-                if (from.IsLibraryEditor)
+                try
                 {
-                    model_.TransferFromLibrary(item, editorMajorItemList.Editor);
+                    if (from.IsLibraryEditor)
+                    {
+                        model_.TransferFromLibrary(item, editorMajorItemList.Editor);
+                    }
+                    else
+                    {
+                        model_.TransferToLibrary(item);
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    model_.TransferToLibrary(item);
+                    string name = item.Name ?? "(unknown)";
+                    failures.Add($"{name}: {ex.Message}");
+
+#if DEBUG
+                    throw;
+#endif
                 }
             }
+
+            OnStateChanged();
 
             if (from.IsLibraryEditor)
             {
@@ -259,6 +275,17 @@ namespace JumpSaves
             else
             {
                 libraryMajorItemList.Reload();
+            }
+
+            if (failures.Count != 0)
+            {
+                string message = "Failed to transfer one or more items:\n\n";
+                foreach (string failure in failures)
+                {
+                    message += failure;
+                    message += "\n";
+                }
+                MessageBox.Show(this, message, "Failed to transfer", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

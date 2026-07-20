@@ -231,9 +231,25 @@ namespace JSL
                 }
             }
 
+            public int DefaultMinSlotCount
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+
+            public int DefaultMaxSlotCount
+            {
+                get
+                {
+                    return int.MaxValue; // no limit
+                }
+            }
+
             public int GetMaxMajorItemSlots(MajorItemCategory.Enum category)
             {
-                return int.MaxValue; // no limit
+                return DefaultMaxSlotCount;
             }
 
             public void SetMaxMajorItemSlots(MajorItemCategory.Enum category, int slots)

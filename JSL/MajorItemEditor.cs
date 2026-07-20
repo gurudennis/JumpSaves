@@ -432,46 +432,61 @@ namespace JSL
                 }
             }
         }
+
+        protected IReadOnlyList<MajorItemEditor> GetItemsInCategory(MajorItemCategory.Enum category)
+        {
+            string rawCategory = MajorItemCategory.GetRaw(category);
+            List<MajorItemEditor> items = new List<MajorItemEditor>();
+            for (int i = 0; i < Count; ++i)
+            {
+                MajorItemEditor item = this[i];
+                if (item.RawCategory == rawCategory)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
     }
 
     // List of Stored or Recent major items (they have a lot in common
     // because both ultimately come from a safe file).
     internal abstract class MajorSaveFileItemListEditor : MajorItemListEditor
     {
-        protected MajorSaveFileItemListEditor(SaveState state, object[] items, IRootEditor rootEditor)
+        protected MajorSaveFileItemListEditor(SaveState state, IRootEditor rootEditor)
             : base(rootEditor)
         {
             State = state;
-            items_ = items;
         }
 
-        public override int Count
+        protected abstract object[] Items { get; }
+
+        protected ArrayBasedObject ItemsArr
         {
             get
             {
-                return items_.Length;
-            }
-        }
-
-        protected object[] Items
-        {
-            get
-            {
-                return items_;
+                return new ArrayBasedObject(Items, State.Root);
             }
         }
 
         protected SaveState State { get; private set; }
-
-        private object[] items_;
     }
 
     // List of Stored major items
     internal class StoredMajorItemListEditor : MajorSaveFileItemListEditor
     {
         internal StoredMajorItemListEditor(SaveState state, IRootEditor rootEditor)
-            : base(state, state.StoredMajorItems, rootEditor)
+            : base(state, rootEditor)
         {
+        }
+
+        public override int Count
+        {
+            get
+            {
+                return Items.Length;
+            }
         }
 
         public override MajorItemEditor this[int index]
@@ -489,17 +504,95 @@ namespace JSL
 
         public override void Add(MajorItemEditor item)
         {
-            if (item.GetType() != typeof(StoredMajorItemEditor))
+            StoredMajorItem storedItem = null;
+            if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                throw new ArgumentException($"Expected to be adding {typeof(StoredMajorItemEditor).FullName}, received {item.GetType().FullName}");
+                storedItem = StoredMajorItem.FromLibrary((LibraryMajorItem)item.Item);
+            }
+            else if (item.GetType() == typeof(StoredMajorItemEditor))
+            {
+                storedItem = (StoredMajorItem)item.Item;
+            }
+            else if (item.GetType() == typeof(RecentMajorItemEditor))
+            {
+                storedItem = StoredMajorItem.FromRecent((RecentMajorItem)item.Item);
+            }
+            else
+            {
+                throw new ArgumentException($"Item type {item.GetType().FullName} cannot be added to stored items");
             }
 
-            throw new NotImplementedException("Adding major items is not implemented yet");
+            storedItem.PlacementInCategory = ObtainSpareSlot(item.Category);
+
+            ItemsArr.InsertProperty(Items.Length, storedItem.Root);
+
+            if (!IsOrphaned)
+            {
+                RootEditor.IsDirty = true;
+            }
         }
 
         public override void Remove(int index)
         {
-            throw new NotImplementedException("Removing major items is not implemented yet");
+            ItemsArr.RemoveProperty(index);
+
+            if (!IsOrphaned)
+            {
+                RootEditor.IsDirty = true;
+            }
+        }
+
+        protected override object[] Items
+        {
+            get
+            {
+                return State.StoredMajorItems;
+            }
+        }
+
+        private int ObtainSpareSlot(MajorItemCategory.Enum category)
+        {
+            IReadOnlyList<MajorItemEditor> items = GetItemsInCategory(category);
+
+            // Ensure that there are enough slots
+            int needMaxSlots = items.Count + 1;
+            int curMaxSlots = 0;
+            {
+                curMaxSlots = RootEditor.MajorItemSlotLimits.GetMaxMajorItemSlots(category);
+                if (needMaxSlots > curMaxSlots)
+                {
+                    if (needMaxSlots > RootEditor.MajorItemSlotLimits.DefaultMaxSlotCount)
+                    {
+                        throw new Exception($"Can't auto-expand stored slots in category \"{MajorItemCategory.GetTitle(category)}\" beyond {RootEditor.MajorItemSlotLimits.DefaultMaxSlotCount}.");
+                    }
+
+                    RootEditor.MajorItemSlotLimits.SetMaxMajorItemSlots(category, needMaxSlots);
+                    curMaxSlots = needMaxSlots;
+                }
+            }
+
+            // Find an empty slot
+            bool[] occupied = new bool[curMaxSlots];
+            foreach (MajorItemEditor item in items)
+            {
+                occupied[item.PlacementInCategory] = true;
+            }
+            int spareSlotIndex = -1;
+            for (int i = 0; i < occupied.Length; ++i)
+            {
+                if (!occupied[i])
+                {
+                    spareSlotIndex = i;
+                    break;
+                }
+            }
+            if (spareSlotIndex < 0)
+            {
+                throw new Exception($"Failed to find a spare slot in category \"{MajorItemCategory.GetTitle(category)}\" of {items.Count} items " +
+                                    $"with a current maximum of {RootEditor.MajorItemSlotLimits.GetMaxMajorItemSlots(category)}.");
+            }
+
+            return spareSlotIndex;
         }
     }
 
@@ -507,8 +600,16 @@ namespace JSL
     internal class RecentMajorItemListEditor : MajorSaveFileItemListEditor
     {
         internal RecentMajorItemListEditor(SaveState state, IRootEditor rootEditor)
-            : base(state, state.RecentMajorItems, rootEditor)
+            : base(state, rootEditor)
         {
+        }
+
+        public override int Count
+        {
+            get
+            {
+                return Items.Length;
+            }
         }
 
         public override MajorItemEditor this[int index]
@@ -526,17 +627,45 @@ namespace JSL
 
         public override void Add(MajorItemEditor item)
         {
-            if (item.GetType() != typeof(RecentMajorItemEditor))
+            if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                throw new ArgumentException($"Expected to be adding {typeof(RecentMajorItemEditor).FullName}, received {item.GetType().FullName}");
+                ItemsArr.InsertProperty(Items.Length, JSL.RecentMajorItem.FromLibrary((LibraryMajorItem)item.Item).Root);
+            }
+            else if (item.GetType() == typeof(StoredMajorItemEditor))
+            {
+                ItemsArr.InsertProperty(Items.Length, JSL.RecentMajorItem.FromStored((StoredMajorItem)item.Item).Root);
+            }
+            else if (item.GetType() == typeof(RecentMajorItemEditor))
+            {
+                ItemsArr.InsertProperty(Items.Length, item.Item.Root);
+            }
+            else
+            {
+                throw new ArgumentException($"Item type {item.GetType().FullName} cannot be added to recent items");
             }
 
-            throw new NotImplementedException("Adding major items is not implemented yet");
+            if (!IsOrphaned)
+            {
+                RootEditor.IsDirty = true;
+            }
         }
 
         public override void Remove(int index)
         {
-            throw new NotImplementedException("Removing major items is not implemented yet");
+            ItemsArr.RemoveProperty(index);
+
+            if (!IsOrphaned)
+            {
+                RootEditor.IsDirty = true;
+            }
+        }
+
+        protected override object[] Items
+        {
+            get
+            {
+                return State.RecentMajorItems;
+            }
         }
     }
 
@@ -587,18 +716,15 @@ namespace JSL
         {
             if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                LibraryMajorItemEditor libraryItem = (LibraryMajorItemEditor)item;
-                library_.AddEntry((LibraryMajorItem)libraryItem.Item, Library.ConflictBehavior.Error);
+                library_.AddEntry((LibraryMajorItem)item.Item, Library.ConflictBehavior.Error);
             }
             else if (item.GetType() == typeof(StoredMajorItemEditor))
             {
-                StoredMajorItemEditor storedItem = (StoredMajorItemEditor)item;
-                library_.AddEntry(JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)storedItem.Item), Library.ConflictBehavior.Error);
+                library_.AddEntry(JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)item.Item), Library.ConflictBehavior.Error);
             }
             else if (item.GetType() == typeof(RecentMajorItemEditor))
             {
-                RecentMajorItemEditor recentItem = (RecentMajorItemEditor)item;
-                library_.AddEntry(JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)recentItem.Item), Library.ConflictBehavior.Error);
+                library_.AddEntry(JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)item.Item), Library.ConflictBehavior.Error);
             }
             else
             {

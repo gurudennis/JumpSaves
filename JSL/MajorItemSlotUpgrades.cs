@@ -5,6 +5,10 @@ namespace JSL
 {
     public interface IMajorItemSlotLimits
     {
+        int DefaultMinSlotCount { get; }
+
+        int DefaultMaxSlotCount { get; }
+
         int GetMaxMajorItemSlots(MajorItemCategory.Enum category);
 
         void SetMaxMajorItemSlots(MajorItemCategory.Enum category, int slots);
@@ -41,7 +45,7 @@ namespace JSL
         }
 
         private const int Index_RawCategory = 0;
-        private const int Index_SlotCount = 0;
+        private const int Index_SlotCount = 1;
     }
 
     public class MajorItemSlotUpgrades : ArrayBasedObject, IMajorItemSlotLimits
@@ -62,6 +66,30 @@ namespace JSL
             }
         }
 
+        public int DefaultMinSlotCount
+        {
+            get
+            {
+                return 2;
+            }
+        }
+
+        public int DefaultMaxSlotCount
+        {
+            get
+            {
+                return 6;
+            }
+        }
+
+        public int PracticalMaxSlotCount
+        {
+            get
+            {
+                return 12;
+            }
+        }
+
         public int GetMaxMajorItemSlots(MajorItemCategory.Enum category)
         {
             string raw = MajorItemCategory.GetRaw(category);
@@ -76,9 +104,9 @@ namespace JSL
 
         public void SetMaxMajorItemSlots(MajorItemCategory.Enum category, int slots)
         {
-            if (slots < 2 || slots > 6)
+            if (slots < DefaultMinSlotCount || slots > PracticalMaxSlotCount)
             {
-                throw new Exception($"Can't have fewer than 2 or more than 6 slots per major item category.'");
+                throw new Exception($"Can't have fewer than {DefaultMinSlotCount} or more than {PracticalMaxSlotCount} slots per major item category.'");
             }
 
             string raw = MajorItemCategory.GetRaw(category);

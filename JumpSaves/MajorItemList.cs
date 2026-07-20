@@ -72,7 +72,7 @@ namespace JumpSaves
         {
             get
             {
-                return Editor == null || Editor.GetType() == typeof(JSL.LibraryMajorItemListEditor);
+                return Editor?.GetType() == typeof(JSL.LibraryMajorItemListEditor);
             }
         }
 
@@ -439,19 +439,19 @@ namespace JumpSaves
             toolStripButtonTransfer.Enabled &= CanTransfer;
 
             // Browsing (library only)
-            toolStripButtonBrowse.Visible = IsLibraryEditor;
+            toolStripButtonBrowse.Visible = IsLibraryEditor && Editor != null;
 
             // Tool strip filter
             toolStripLabelFilter.Enabled = Enabled;
             toolStripComboBoxFilter.Enabled = Enabled;
-            toolStripLabelFilter.Visible = !IsLibraryEditor;
-            toolStripComboBoxFilter.Visible = !IsLibraryEditor;
+            toolStripLabelFilter.Visible = !IsLibraryEditor && Editor != null;
+            toolStripComboBoxFilter.Visible = !IsLibraryEditor && Editor != null;
 
             // Tool strip monitor
             toolStripLabelMonitor.Enabled = Enabled;
             toolStripComboBoxMonitor.Enabled = Enabled;
-            toolStripLabelMonitor.Visible = IsLibraryEditor;
-            toolStripComboBoxMonitor.Visible = IsLibraryEditor;
+            toolStripLabelMonitor.Visible = IsLibraryEditor && Editor != null;
+            toolStripComboBoxMonitor.Visible = IsLibraryEditor && Editor != null;
         }
 
         private void EnsureEditorAvailable()
