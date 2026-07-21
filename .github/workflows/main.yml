@@ -16,6 +16,9 @@ jobs:
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v3 # Adds MSBuild.exe to the PATH
 
+    - name: Setup Visual Studio DevEnv
+      uses: seanmiddleditch/gha-setup-vsdevenv@v4 # Setup support
+
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2 # Ensures NuGet is available
 
@@ -30,3 +33,9 @@ jobs:
       with:
         name: binaries
         path: JumpSaves\bin\Release\
+
+    - name: Upload Setup Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: setup
+        path: Setup\Release\Setup.msi
