@@ -25,8 +25,14 @@ jobs:
     - name: Build Solution
       run: msbuild JumpSaves.slnx /p:Configuration=Release
 
-    - name: Upload Binary Artifact
+    - name: Upload Binaries
       uses: actions/upload-artifact@v4
       with:
-        name: production-binaries
+        name: binaries
         path: JumpSaves\bin\Release\
+
+    - name: Upload Setup Executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: setup
+        path: Setup\Release\Setup.msi
