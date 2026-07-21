@@ -779,6 +779,11 @@ namespace JSL
             library_.RemoveEntry(index);
         }
 
+        public void Reload()
+        {
+            library_.Reload();
+        }
+
         public IReadOnlyList<string> TakeFailedFiles()
         {
             return library_.TakeFailedFiles();

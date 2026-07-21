@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using System.Xml.Linq;
 
 namespace JumpSaves.Model
 {
@@ -118,7 +117,7 @@ namespace JumpSaves.Model
         {
             get
             {
-                return IsGameSaveOpen && IsGameRunning && !IsDirty;
+                return IsGameSaveOpen && IsGameRunning && !IsDirty && (IsMonitoringHook == null || IsMonitoringHook());
             }
         }
 
@@ -138,6 +137,8 @@ namespace JumpSaves.Model
         }
 
         public ActionLog ActionLog { get; private set; }
+
+        public Func<bool> IsMonitoringHook { get; set; }
 
         public event EventHandler<PeriodicInfoArgs> PeriodicInfoEvent;
 

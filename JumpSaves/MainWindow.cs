@@ -13,6 +13,7 @@ namespace JumpSaves
         {
             model_ = modelManager.CreateInstance(SynchronizationContext.Current);
             model_.PeriodicInfoEvent += OnPeriodicInfo;
+            model_.IsMonitoringHook = () => libraryMajorItemList.ShouldAutoAcquire;
 
             InitializeComponent();
         }
@@ -154,6 +155,7 @@ namespace JumpSaves
         private void onFormClosed(object sender, FormClosedEventArgs e)
         {
             model_.PeriodicInfoEvent -= OnPeriodicInfo;
+            model_.IsMonitoringHook = null;
             model_?.Dispose();
         }
 

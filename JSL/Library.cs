@@ -38,6 +38,13 @@ namespace JSL
             }
         }
 
+        public void Reload()
+        {
+            entries_.Clear();
+            failedFiles_.Clear();
+            Load();
+        }
+
         public IReadOnlyList<string> TakeFailedFiles()
         {
             IReadOnlyList<string> prev = failedFiles_;

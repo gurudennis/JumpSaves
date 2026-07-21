@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -150,11 +151,24 @@ namespace JumpSaves
             }
         }
 
+        public bool ShouldAutoAcquire
+        {
+            get
+            {
+                return toolStripComboBoxMonitor.SelectedIndex != 2;
+            }
+        }
+
         public bool IsInterestedInItem(JSL.MajorItemEditor item)
         {
             if (toolStripComboBoxMonitor.SelectedIndex == 0) // Superior only
             {
                 return item.Rarity == JSL.Rarity.Superior;
+            }
+            else if (toolStripComboBoxMonitor.SelectedIndex == 2) // None
+            {
+                Debug.Assert(false); // we shouldn't even be here since acquisition is disabled
+                return false;
             }
 
             return true;
@@ -280,6 +294,8 @@ namespace JumpSaves
 
         private void list_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
         {
+            e.ToolTipControl.ReshowDelay = 5000;
+
             Row row = (Row)e.Model;
 
             if (e.ModifierKeys.HasFlag(Keys.Alt)) // developer popup
@@ -395,6 +411,15 @@ namespace JumpSaves
             MessageBox.Show(Parent, "Not implemented yet. Stay tuned for updates!", "Not implemented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        private void toolStripButtonReload_Click(object sender, EventArgs e)
+        {
+            if (IsLibraryEditor)
+            {
+                LibraryEditor.Reload();
+                Reload();
+            }
+        }
+
         private void FormatModuleColumn(Row row, int moduleIndex, FormatCellEventArgs e)
         {
             if (moduleIndex >= row.Editor.ModuleCount)
@@ -475,9 +500,10 @@ namespace JumpSaves
             toolStripButtonEdit.Enabled &= AllowCustomization && CanEdit;
             toolStripButtonRemove.Enabled &= CanEdit;
             toolStripButtonTransfer.Enabled &= CanTransfer;
+            toolStripButtonReload.Visible = IsLibraryEditor;
 
             // Browsing (library only)
-            toolStripButtonBrowse.Visible = IsLibraryEditor && Editor != null;
+            toolStripButtonBrowse.Visible = Editor != null;
 
             // Tool strip filter
             toolStripLabelFilter.Enabled = Enabled;
@@ -569,9 +595,23 @@ namespace JumpSaves
 
         private void toolStripButtonBrowse_Click(object sender, EventArgs e)
         {
+            string path = null;
+            if (IsLibraryEditor)
+            {
+                path = LibraryEditor.Path;
+            }
+            else
+            {
+                path = SaveEditor.Path;
+                if (File.Exists(path))
+                {
+                    path = Path.GetDirectoryName(path);
+                }
+            }
+
             Process.Start(new ProcessStartInfo
             {
-                FileName = LibraryEditor.Path,
+                FileName = path,
                 UseShellExecute = true
             });
         }

@@ -127,6 +127,7 @@
     <None Include="Images\Transfer.png" />
     <None Include="Images\Riches.png" />
     <None Include="Images\Riches_tiny.png" />
+    <None Include="Images\Reload.png" />
     <Content Include="JumpSaves.ico" />
   </ItemGroup>
   <ItemGroup>
