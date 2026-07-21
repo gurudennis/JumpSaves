@@ -21,9 +21,17 @@ namespace JumpSaves
 
             model_ = new Model.Manager();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(model_));
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainWindow(model_));
+                model_.ActionLog.AddEntry(Model.ActionLog.Origin.Application, Model.ActionLog.Level.Info, "Application closing gracefully.");
+            }
+            catch (Exception ex)
+            {
+                model_.ActionLog.AddEntry(Model.ActionLog.Origin.Application, Model.ActionLog.Level.Info, $"Application closing with exception: {ex}");
+            }
 
             model_.Dispose();
         }

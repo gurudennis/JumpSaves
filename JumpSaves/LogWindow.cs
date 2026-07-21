@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -23,6 +25,15 @@ namespace JumpSaves
         private void LogWindow_FormClosed(object sender, FormClosedEventArgs e)
         {
             Log.Changed -= OnChanged;
+        }
+
+        private void toolStripButtonBrowse_Click(object sender, EventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = Log.LocationPath,
+                UseShellExecute = true
+            });
         }
 
         private void OnChanged(object sender, EventArgs e)

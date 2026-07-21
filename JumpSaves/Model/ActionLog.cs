@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace JumpSaves.Model
 {
-    public class ActionLog
+    public class ActionLog : IDisposable
     {
         public enum Level
         {
@@ -41,6 +45,19 @@ namespace JumpSaves.Model
 
         internal ActionLog()
         {
+            Open();
+        }
+
+        public void Dispose()
+        {
+            AddEntry(Origin.Application, Level.Info, "Closing log.");
+
+            if (file_ != null)
+            {
+                file_.Close();
+                file_.Dispose();
+                file_ = null;
+            }
         }
 
         public EventHandler<EventArgs> Changed;
@@ -59,7 +76,14 @@ namespace JumpSaves.Model
                 throw new ArgumentNullException("Log action text can't be null or empty");
             }
 
-            entries_.Add(new Entry(origin, level, text));
+            Entry entry = new Entry(origin, level, text);
+            entries_.Add(entry);
+
+            if (file_ != null)
+            {
+                byte[] b = Encoding.UTF8.GetBytes($"[{entry.Timestamp}] [{entry.Level}] [{entry.Origin}]: {entry.Text}\r\n");
+                file_.Write(b, 0, b.Length);
+            }
 
             Changed?.Invoke(this, null);
         }
@@ -72,6 +96,39 @@ namespace JumpSaves.Model
             }
         }
 
+        public string LocationPath
+        {
+            get
+            {
+                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "Logs");
+            }
+        }
+
+        private void Open()
+        {
+            // Create the directory
+            DirectoryInfo dir = new DirectoryInfo(LocationPath);
+            if (!dir.Exists)
+            {
+                Directory.CreateDirectory(LocationPath);
+            }
+
+            // Clean up old files if any
+            DateTime cutoff = DateTime.Now - TimeSpan.FromDays(7);
+            foreach (FileInfo file in dir.GetFiles("*_JumpSaves_Log.txt"))
+            {
+                if (file.CreationTime < cutoff)
+                {
+                    file.Delete();
+                }
+            }
+
+            // Open a new one
+            string path = Path.Combine(LocationPath, $"{DateTime.Now.ToString("yyyy-dd-M-HH-mm-ss")}_JumpSaves_Log.txt");
+            file_ = System.IO.File.Open(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+        }
+
         private List<Entry> entries_ = new List<Entry>();
+        private FileStream file_;
     }
 }

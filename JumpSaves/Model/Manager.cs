@@ -14,6 +14,8 @@ namespace JumpSaves.Model
     {
         public Manager()
         {
+            this.ActionLog = new ActionLog();
+
             thread_ = new Thread(() => { ThreadProc(); });
             thread_.Start();
         }
@@ -22,12 +24,16 @@ namespace JumpSaves.Model
         {
             stop_.Set();
             thread_.Join();
+
+            ActionLog.Dispose();
         }
 
         public Instance CreateInstance(SynchronizationContext syncContext)
         {
             return new Instance(syncContext, this, new OnlyManagerShouldCreateThis());
         }
+
+        public ActionLog ActionLog { get; private set; }
 
         public JSL.Library Library
         {

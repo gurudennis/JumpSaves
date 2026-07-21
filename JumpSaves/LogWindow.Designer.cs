@@ -34,7 +34,10 @@
             this.olvColumnLevel = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnOrigin = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnText = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // list
@@ -94,11 +97,33 @@
             this.olvColumnText.Text = "Message";
             this.olvColumnText.Width = 350;
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonBrowse});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1018, 31);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButtonBrowse
+            // 
+            this.toolStripButtonBrowse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonBrowse.Image = global::JumpSaves.Properties.Resources.Browse;
+            this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonBrowse.Text = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
+            // 
             // LogWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1018, 649);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.list);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -109,7 +134,10 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LogWindow_FormClosed);
             this.Load += new System.EventHandler(this.LogWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -120,5 +148,7 @@
         private BrightIdeasSoftware.OLVColumn olvColumnLevel;
         private BrightIdeasSoftware.OLVColumn olvColumnOrigin;
         private BrightIdeasSoftware.OLVColumn olvColumnText;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonBrowse;
     }
 }

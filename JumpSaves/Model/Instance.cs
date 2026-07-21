@@ -22,8 +22,6 @@ namespace JumpSaves.Model
             syncContext_ = syncContext;
             manager_ = manager;
 
-            this.ActionLog = new ActionLog();
-
             manager_.PeriodicInfoEvent += OnGlobalPeriodicInfo;
         }
 
@@ -144,7 +142,13 @@ namespace JumpSaves.Model
             }
         }
 
-        public ActionLog ActionLog { get; private set; }
+        public ActionLog ActionLog
+        {
+            get
+            {
+                return manager_.ActionLog;
+            }
+        }
 
         public Func<bool> IsMonitoringHook { get; set; }
 
