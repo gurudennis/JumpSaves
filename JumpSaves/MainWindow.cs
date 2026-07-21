@@ -121,6 +121,24 @@ namespace JumpSaves
             Save();
         }
 
+        private void toolStripButtonLog_Click(object sender, EventArgs e)
+        {
+            if (logWindow_ == null || logWindow_.IsDisposed)
+            {
+                logWindow_ = new LogWindow(model_.ActionLog);
+            }
+
+            if (logWindow_.Visible)
+            {
+                logWindow_.Focus();
+                logWindow_.BringToFront();
+            }
+            else
+            {
+                logWindow_.Show();
+            }
+        }
+
         private void toolStripComboBoxMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             OnStateChanged();
@@ -174,7 +192,7 @@ namespace JumpSaves
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    Common.Safe(this, "opening a save directory", () => model_.Open(dialog.SelectedPath));
+                    Common.Safe(this, "opening a save directory", () => model_.Open(dialog.SelectedPath), model_.ActionLog);
                     OnStateChanged();
                 }
             }
@@ -193,7 +211,7 @@ namespace JumpSaves
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    Common.Safe(this, "opening a save file", () => model_.Open(dialog.FileName));
+                    Common.Safe(this, "opening a save file", () => model_.Open(dialog.FileName), model_.ActionLog);
                     OnStateChanged();
                 }
             }
@@ -266,10 +284,6 @@ namespace JumpSaves
                 {
                     string name = item.Name ?? "(unknown)";
                     failures.Add($"{name}: {ex.Message}");
-
-#if DEBUG
-                    throw;
-#endif
                 }
             }
 
@@ -364,5 +378,6 @@ namespace JumpSaves
 
         private Model.Instance model_;
         private bool gameWasRunning_;
+        private LogWindow logWindow_;
     }
 }

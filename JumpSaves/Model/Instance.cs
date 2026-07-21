@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Xml.Linq;
+using static System.Windows.Forms.AxHost;
 
 namespace JumpSaves.Model
 {
@@ -47,11 +49,16 @@ namespace JumpSaves.Model
             Close();
 
             SaveEditor = JSL.EditorFactory.OpenSave(path);
+            ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Opened save \"{Path}\"");
         }
 
         public void Close()
         {
-            SaveEditor = null;
+            if (SaveEditor != null)
+            {
+                SaveEditor = null;
+                ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, "Closed save");
+            }
         }
 
         public void Save()
@@ -62,6 +69,7 @@ namespace JumpSaves.Model
             }
 
             SaveEditor.Save();
+            ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Saved \"{Path}\"");
         }
 
         public bool IsOpen
@@ -163,9 +171,9 @@ namespace JumpSaves.Model
                 destination.Add(item, JSL.ConflictBehavior.Error);
                 ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, $"Transferred item \"{name}\" to {destination.SelfDesignation}");
             }
-            catch
+            catch (Exception ex)
             {
-                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to transfer item \"{name}\" to {destination.SelfDesignation}");
+                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to transfer item \"{name}\" to {destination.SelfDesignation}: {ex.Message}");
                 throw;
             }
         }
@@ -216,9 +224,9 @@ namespace JumpSaves.Model
                 LibraryEditor.Add(item, onConflict);
                 ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, $"{mode}d item \"{name}\" to the Library");
             }
-            catch
+            catch (Exception ex)
             {
-                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to {mode} item \"{name}\" to the Library");
+                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to {mode} item \"{name}\" to the Library: {ex.Message}");
                 throw;
             }
         }
@@ -227,6 +235,12 @@ namespace JumpSaves.Model
         {
             PostOnUIThread(() =>
             {
+                if (IsGameRunning != args.IsGameRunning)
+                {
+                    string state = args.IsGameRunning ? "running" : "not running";
+                    ActionLog.AddEntry(ActionLog.Origin.Application, ActionLog.Level.Info, $"Jump Space game is now {state}");
+                }
+
                 IsGameRunning = args.IsGameRunning;
 
                 PeriodicInfoEvent?.Invoke(this, new PeriodicInfoArgs
@@ -247,17 +261,17 @@ namespace JumpSaves.Model
 
             if (SaveEditor.OpenedTime < SaveEditor.LastEditTime)
             {
-#if !DEBUG
                 try
                 {
-#endif
                     JSL.SaveEditor editor = JSL.EditorFactory.OpenSave(Path);
                     SaveEditor = editor;
+                    ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Detected a change and re-opened save \"{Path}\"");
                     return true;
-#if !DEBUG
                 }
-                catch { } // do nothing - will try again on next change
-#endif
+                catch (Exception ex)
+                {
+                    ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Warning, $"Detected a change but failed to re-open save \"{Path}\" (will retry): {ex.Message}");
+                }
             }
 
             return false;

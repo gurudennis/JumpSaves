@@ -5,7 +5,7 @@ namespace JumpSaves
 {
     internal class Common
     {
-        public static bool Safe(IWin32Window owner, string description, Action action)
+        public static bool Safe(IWin32Window owner, string description, Action action, Model.ActionLog log)
         {
             try
             {
@@ -14,7 +14,8 @@ namespace JumpSaves
             }
             catch (Exception ex)
             {
-                MessageBox.Show(owner, $"Error encountered while {description}.\n\n{ex.Message}", "JumpSaves error");
+                log.AddEntry(Model.ActionLog.Origin.Editor, Model.ActionLog.Level.Error, $"Error while {description}: {ex}");
+                MessageBox.Show(owner, $"Error encountered while {description}.\n\n{ex.Message}", "JumpSaves error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }

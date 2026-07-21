@@ -43,14 +43,25 @@ namespace JumpSaves.Model
         {
         }
 
+        public EventHandler<EventArgs> Changed;
+
         public void AddEntry(Origin origin, Level level, string text)
         {
+#if !DEBUG
+            if (level == Level.Debug)
+            {
+                return;
+            }
+#endif
+
             if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentNullException("Log action text can't be null or empty");
             }
 
             entries_.Add(new Entry(origin, level, text));
+
+            Changed?.Invoke(this, null);
         }
 
         public IReadOnlyCollection<Entry> Entries

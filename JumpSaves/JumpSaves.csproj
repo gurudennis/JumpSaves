@@ -53,6 +53,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
+    <Compile Include="LogWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LogWindow.Designer.cs">
+      <DependentUpon>LogWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +82,9 @@
     <Compile Include="ResourceView.Designer.cs">
       <DependentUpon>ResourceView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="LogWindow.resx">
+      <DependentUpon>LogWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -119,6 +128,7 @@
     <None Include="Images\Dirty.png" />
     <None Include="Images\Monitoring.png" />
     <None Include="Images\Browse.png" />
+    <None Include="Images\Log.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />

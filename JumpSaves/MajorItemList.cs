@@ -420,6 +420,29 @@ namespace JumpSaves
             }
         }
 
+        private void toolStripButtonBrowse_Click(object sender, EventArgs e)
+        {
+            string path = null;
+            if (IsLibraryEditor)
+            {
+                path = LibraryEditor.Path;
+            }
+            else
+            {
+                path = SaveEditor.Path;
+                if (File.Exists(path))
+                {
+                    path = Path.GetDirectoryName(path);
+                }
+            }
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = true
+            });
+        }
+
         private void FormatModuleColumn(Row row, int moduleIndex, FormatCellEventArgs e)
         {
             if (moduleIndex >= row.Editor.ModuleCount)
@@ -592,28 +615,5 @@ namespace JumpSaves
         private bool allowCustomization_;
         private bool canEdit_;
         private bool canTransfer_;
-
-        private void toolStripButtonBrowse_Click(object sender, EventArgs e)
-        {
-            string path = null;
-            if (IsLibraryEditor)
-            {
-                path = LibraryEditor.Path;
-            }
-            else
-            {
-                path = SaveEditor.Path;
-                if (File.Exists(path))
-                {
-                    path = Path.GetDirectoryName(path);
-                }
-            }
-
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = path,
-                UseShellExecute = true
-            });
-        }
     }
 }
