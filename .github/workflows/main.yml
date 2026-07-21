@@ -30,9 +30,3 @@ jobs:
       with:
         name: binaries
         path: JumpSaves\bin\Release\
-
-    - name: Upload Setup Executable
-      uses: actions/upload-artifact@v4
-      with:
-        name: setup
-        path: Setup\Release\Setup.msi
