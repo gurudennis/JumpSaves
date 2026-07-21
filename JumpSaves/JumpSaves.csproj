@@ -65,6 +65,7 @@
     <Compile Include="MajorItemList.Designer.cs">
       <DependentUpon>MajorItemList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\ActionLog.cs" />
     <Compile Include="Model\Instance.cs" />
     <Compile Include="Model\Manager.cs" />
     <Compile Include="Program.cs" />

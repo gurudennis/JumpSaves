@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace JumpSaves.Model
 {
@@ -19,6 +20,8 @@ namespace JumpSaves.Model
         {
             syncContext_ = syncContext;
             manager_ = manager;
+
+            this.ActionLog = new ActionLog();
 
             manager_.PeriodicInfoEvent += OnGlobalPeriodicInfo;
         }
@@ -134,6 +137,8 @@ namespace JumpSaves.Model
             }
         }
 
+        public ActionLog ActionLog { get; private set; }
+
         public event EventHandler<PeriodicInfoArgs> PeriodicInfoEvent;
 
         public void RunCLI(string path = null)
@@ -145,12 +150,23 @@ namespace JumpSaves.Model
 
         public void TransferToLibrary(JSL.MajorItemEditor item, JSL.ConflictBehavior onConflict)
         {
-            LibraryEditor.Add(item, onConflict);
+            TransferToLibrary(item, onConflict, false);
         }
 
         public void TransferFromLibrary(JSL.MajorItemEditor item, JSL.MajorItemListEditor destination)
         {
-            destination.Add(item, JSL.ConflictBehavior.Error);
+            string name = item.Name ?? "Unknown";
+
+            try
+            {
+                destination.Add(item, JSL.ConflictBehavior.Error);
+                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, $"Transferred item \"{name}\" to {destination.SelfDesignation}");
+            }
+            catch
+            {
+                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to transfer item \"{name}\" to {destination.SelfDesignation}");
+                throw;
+            }
         }
 
         public void AutoAcquireIntoLibrary(Func<JSL.MajorItemEditor, bool> filter)
@@ -160,6 +176,8 @@ namespace JumpSaves.Model
                 throw new Exception("Can't auto-acquire when no save is open");
             }
 
+            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, "Started Auto-acquiring items to the Library");
+
             {
                 JSL.MajorItemListEditor stored = SaveEditor.StoredMajorItems;
                 for (int i = 0; i < stored.Count; ++i)
@@ -167,7 +185,7 @@ namespace JumpSaves.Model
                     JSL.MajorItemEditor item = stored[i];
                     if (filter(item))
                     {
-                        TransferToLibrary(item, JSL.ConflictBehavior.Skip);
+                        TransferToLibrary(item, JSL.ConflictBehavior.Skip, true);
                     }
                 }
             }
@@ -179,9 +197,28 @@ namespace JumpSaves.Model
                     JSL.MajorItemEditor item = recent[i];
                     if (filter(item))
                     {
-                        TransferToLibrary(item, JSL.ConflictBehavior.Skip);
+                        TransferToLibrary(item, JSL.ConflictBehavior.Skip, true);
                     }
                 }
+            }
+
+            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, "Finished Auto-acquiring items to the Library");
+        }
+
+        private void TransferToLibrary(JSL.MajorItemEditor item, JSL.ConflictBehavior onConflict, bool isAutomated)
+        {
+            string name = item.Name ?? "Unknown";
+            string mode = isAutomated ? "Auto-acquire" : "Acquire";
+
+            try
+            {
+                LibraryEditor.Add(item, onConflict);
+                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, $"{mode}d item \"{name}\" to the Library");
+            }
+            catch
+            {
+                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to {mode} item \"{name}\" to the Library");
+                throw;
             }
         }
 

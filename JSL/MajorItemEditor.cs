@@ -98,6 +98,8 @@ namespace JSL
             Item = item;
         }
 
+        public abstract string SelfDesignation { get; }
+
         public string TypeName
         {
             get
@@ -331,6 +333,14 @@ namespace JSL
         {
         }
 
+        public override string SelfDesignation
+        {
+            get
+            {
+                return "Stored";
+            }
+        }
+
         public override long PlacementInCategory
         {
             get
@@ -352,6 +362,14 @@ namespace JSL
         internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
+        }
+
+        public override string SelfDesignation
+        {
+            get
+            {
+                return "Recent";
+            }
         }
 
         public override long PlacementInCategory
@@ -381,6 +399,14 @@ namespace JSL
             index_ = index;
         }
 
+        public override string SelfDesignation
+        {
+            get
+            {
+                return "Library";
+            }
+        }
+
         public override long PlacementInCategory
         {
             get
@@ -400,6 +426,8 @@ namespace JSL
             : base(rootEditor)
         {
         }
+
+        public abstract string SelfDesignation { get; }
 
         public abstract int Count { get; }
 
@@ -469,6 +497,14 @@ namespace JSL
         internal StoredMajorItemListEditor(SaveState state, IRootEditor rootEditor)
             : base(state, rootEditor)
         {
+        }
+
+        public override string SelfDesignation
+        {
+            get
+            {
+                return "Stored";
+            }
         }
 
         public override int Count
@@ -594,6 +630,14 @@ namespace JSL
         {
         }
 
+        public override string SelfDesignation
+        {
+            get
+            {
+                return "Recent";
+            }
+        }
+
         public override int Count
         {
             get
@@ -671,6 +715,14 @@ namespace JSL
             }
 
             library_ = library;
+        }
+
+        public override string SelfDesignation
+        {
+            get
+            {
+                return "Library";
+            }
         }
 
         public string Path

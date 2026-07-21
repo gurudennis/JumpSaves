@@ -23,7 +23,12 @@ namespace JumpSaves
 
             toolStripComboBoxMode.SelectedIndex = 0;
 
+            editorMajorItemList.TransferAction = DoTransfer;
+            editorMajorItemList.LogAction = DoListLog;
             editorMajorItemList.MaybeDirty += OnEditorMajorItemList_MaybeDirty;
+
+            libraryMajorItemList.TransferAction = DoTransfer;
+            libraryMajorItemList.LogAction = DoListLog;
             editorResourceView.MaybeDirty += OnEditorResourceView_MaybeDirty;
 
             OnStateChanged();
@@ -289,6 +294,12 @@ namespace JumpSaves
             }
         }
 
+        private void DoListLog(MajorItemList origin, Model.ActionLog.Level level, string text)
+        {
+            Model.ActionLog.Origin actionOrigin = origin == editorMajorItemList ? Model.ActionLog.Origin.Editor : Model.ActionLog.Origin.Library;
+            model_.ActionLog.AddEntry(actionOrigin, level, text);
+        }
+
         private void OnPeriodicInfo(object sender, Model.PeriodicInfoArgs args)
         {
             OnStateChanged();
@@ -313,7 +324,6 @@ namespace JumpSaves
 
             // Editor panel
             saveLabel.Text = string.IsNullOrEmpty(model_.Path) ? "(Open a save to display its contents here)" : model_.Path;
-            editorMajorItemList.TransferAction = DoTransfer;
             editorMajorItemList.SaveEditor = model_.SaveEditor;
             editorMajorItemList.AllowCustomization = IsCheaterMode;
             editorMajorItemList.CanEdit = CanEdit;
@@ -327,7 +337,6 @@ namespace JumpSaves
             {
                 libraryMajorItemList.LibraryEditor = model_.LibraryEditor;
             }
-            libraryMajorItemList.TransferAction = DoTransfer;
             libraryMajorItemList.Enabled = libraryMajorItemList.LibraryEditor != null;
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
             libraryMajorItemList.CanEdit = true;

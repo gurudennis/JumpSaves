@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
-using static JumpSaves.MajorItemList;
 
 namespace JumpSaves
 {
@@ -17,6 +16,8 @@ namespace JumpSaves
         }
 
         public Action<MajorItemList, IReadOnlyList<JSL.MajorItemEditor>> TransferAction { get; set; }
+
+        public Action<MajorItemList, Model.ActionLog.Level, string> LogAction { get; set; }
 
         public EventHandler<EventArgs> MaybeDirty;
 
@@ -124,6 +125,31 @@ namespace JumpSaves
             }
         }
 
+        public string SelfDesignation
+        {
+            get
+            {
+                if (Editor == null)
+                {
+                    return string.Empty;
+                }
+                else if (IsLibraryEditor)
+                {
+                    return "Library";
+                }
+                else if (Editor == storedEditor_)
+                {
+                    return "Stored";
+                }
+                else if (Editor == recentEditor_)
+                {
+                    return "Recent";
+                }
+
+                return string.Empty;
+            }
+        }
+
         public bool IsInterestedInItem(JSL.MajorItemEditor item)
         {
             if (toolStripComboBoxMonitor.SelectedIndex == 0) // Superior only
@@ -227,7 +253,8 @@ namespace JumpSaves
             {
                 e.Item.Text = row.Name;
                 e.Item.ForeColor = GetRarityColor(row.Rarity, true);
-                e.Item.SelectedForeColor = Color.White;
+                e.Item.SelectedForeColor = e.Item.ForeColor;
+                e.Item.SelectedBackColor = GetRarityColor(row.Rarity, false);
             }
             else if (e.Column == olvColumnModule1)
             {
@@ -355,9 +382,12 @@ namespace JumpSaves
             foreach (object obj in selected)
             {
                 Row r = (Row)obj;
+                string name = r.Editor.Name ?? "Unknown";
                 Editor.Remove(r.Editor);
-                Reload();
+                LogAction(this, Model.ActionLog.Level.Warning, $"Removed {SelfDesignation} item \"{name}\"");
             }
+
+            Reload();
         }
 
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
@@ -393,7 +423,7 @@ namespace JumpSaves
         {
             if (rarity == JSL.Rarity.Common)
             {
-                return fore ? Color.FromArgb(30, 112, 0) : Color.FromArgb(217, 242, 208);
+                return fore ? Color.FromArgb(30, 112, 0) : Color.FromArgb(207, 232, 198);
             }
             else if (rarity == JSL.Rarity.Uncommon)
             {
