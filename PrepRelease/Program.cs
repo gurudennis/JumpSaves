@@ -17,15 +17,15 @@ namespace PrepRelease
             }
 
             // Find the root of the project
-            string root = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)));
+            string root = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))));
             Console.WriteLine($"Detected project root to be \"{root}\"");
 
             // Update the version in AssemblyInfo.cs
-            ReplaceVersionInFiles(root, "AssemblyInfo.cs", "Version\\(\"\\d+?\\.\\d+?\\.\\d+?\\.\\d+?\"\\)", $"Version(\"{version.ToString()}\")");
+            ReplaceVersionInFiles(root, "AssemblyInfo.cs", "Version\\(\"[0-9]+?\\.[0-9]+?\\.[0-9]+?\\.[0-9]+?\"\\)", $"Version(\"{version.ToString()}\")");
 
             // Update the version in Setup.vdproj
-            ReplaceVersionInFiles(root, "Setup.vdproj", "Setup_\\d+?_\\d+?_\\d+?_\\d+?.msi", $"Setup_{version.ToString().Replace('.', '_')}.msi");
-            ReplaceVersionInFiles(root, "Setup.vdproj", "\"ProductVersion\" = \"8:\\d+?\\.\\d+?\\.\\d+?\"", $"\"ProductVersion\" = \"8:{version.ToString(3)}\"");
+            ReplaceVersionInFiles(root, "Setup.vdproj", "Setup_[0-9]+?_[0-9]+?_[0-9]+?_[0-9]+?.msi", $"Setup_{version.ToString().Replace('.', '_')}.msi");
+            ReplaceVersionInFiles(root, "Setup.vdproj", "\"ProductVersion\" = \"8:[0-9]+?\\.[0-9]+?\\.[0-9]+?\"", $"\"ProductVersion\" = \"8:{version.ToString(3)}\"");
 
             return 0;
         }
@@ -36,9 +36,9 @@ namespace PrepRelease
             foreach (string filePath in files)
             {
                 string content = File.ReadAllText(filePath);
-                Regex.Replace(content, regex, version.ToString());
+                content = Regex.Replace(content, regex, version);
                 File.WriteAllText(filePath, content);
-                Console.WriteLine($"Patched version to {version.ToString()} in \"{filePath}\"");
+                Console.WriteLine($"Patched version to {version} in \"{filePath}\"");
             }
         }
     }
