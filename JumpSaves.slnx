@@ -9,6 +9,7 @@
   <Project Path="JSL/JSL.csproj" Id="eed5b172-1e66-466c-8e86-bae5cf7f58b1" />
   <Project Path="JumpSaves/JumpSaves.csproj" Id="97289245-324a-4a13-ae1d-53110295ab3e" />
   <Project Path="JumpSavesCLI/JumpSavesCLI.csproj" Id="4c12c2b0-194d-4d0e-953c-4378b5e60d35" />
+  <Project Path="PrepRelease/PrepRelease.csproj" Id="25325010-f635-40a1-97bb-05b0354c1bda" />
   <Project Path="Setup/Setup.vdproj" Type="Installer">
     <Build Solution="Release|*" />
   </Project>
