@@ -31,6 +31,7 @@ namespace JumpSaves
             catch (Exception ex)
             {
                 model_.ActionLog.AddEntry(Model.ActionLog.Origin.Application, Model.ActionLog.Level.Info, $"Application closing with exception: {ex}");
+                throw;
             }
 
             model_.Dispose();

@@ -408,7 +408,15 @@ namespace JumpSaves
 
         private void toolStripButtonEdit_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Parent, "Not implemented yet. Stay tuned for updates!", "Not implemented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            Row row = list.SelectedObject as Row;
+            if (row == null)
+            {
+                MessageBox.Show(Parent, "Select an item and press this button to see its properties", "Item properties", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(), /*AllowCustomization*/false);
+            propsWindow.ShowDialog();
         }
 
         private void toolStripButtonReload_Click(object sender, EventArgs e)
@@ -441,6 +449,11 @@ namespace JumpSaves
                 FileName = path,
                 UseShellExecute = true
             });
+        }
+
+        private void list_DoubleClick(object sender, EventArgs e)
+        {
+            toolStripButtonEdit_Click(sender, e);
         }
 
         private void FormatModuleColumn(Row row, int moduleIndex, FormatCellEventArgs e)
@@ -520,7 +533,7 @@ namespace JumpSaves
                 item.Enabled = toolStrip.Enabled;
             }
             toolStripButtonAdd.Enabled &= AllowCustomization && CanEdit;
-            toolStripButtonEdit.Enabled &= AllowCustomization && CanEdit;
+            toolStripButtonEdit.Enabled &= CanEdit;
             toolStripButtonRemove.Enabled &= CanEdit;
             toolStripButtonTransfer.Enabled &= CanTransfer;
             toolStripButtonReload.Visible = IsLibraryEditor;

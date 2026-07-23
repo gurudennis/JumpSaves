@@ -102,6 +102,7 @@ namespace JumpSaves
             this.list.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.list_CellClick);
             this.list.CellToolTipShowing += new System.EventHandler<BrightIdeasSoftware.ToolTipShowingEventArgs>(this.list_CellToolTipShowing);
             this.list.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.list_FormatCell);
+            this.list.DoubleClick += new System.EventHandler(this.list_DoubleClick);
             // 
             // olvColumnName
             // 
@@ -256,7 +257,7 @@ namespace JumpSaves
             this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonEdit.Name = "toolStripButtonEdit";
             this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonEdit.Text = "Edit selected item";
+            this.toolStripButtonEdit.Text = "Properties of selected item";
             this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
             // 
             // toolStripButtonBrowse

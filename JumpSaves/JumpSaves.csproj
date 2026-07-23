@@ -71,6 +71,12 @@
     <Compile Include="MajorItemList.Designer.cs">
       <DependentUpon>MajorItemList.cs</DependentUpon>
     </Compile>
+    <Compile Include="MajorItemWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MajorItemWindow.Designer.cs">
+      <DependentUpon>MajorItemWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Model\ActionLog.cs" />
     <Compile Include="Model\Instance.cs" />
     <Compile Include="Model\Manager.cs" />
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MajorItemList.resx">
       <DependentUpon>MajorItemList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MajorItemWindow.resx">
+      <DependentUpon>MajorItemWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

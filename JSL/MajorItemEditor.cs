@@ -98,13 +98,71 @@ namespace JSL
             Item = item;
         }
 
+        public abstract MajorItemEditor Clone();
+
         public abstract string SelfDesignation { get; }
+
+        public string RawType
+        {
+            get
+            {
+                return Item.Blueprint.RawType;
+            }
+            set
+            {
+                if (Item.Blueprint.RawType != value)
+                {
+                    Item.Blueprint.RawType = value;
+
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
+                }
+            }
+        }
+
+        public MajorItemType.Enum Type
+        {
+            get
+            {
+                return MajorItemType.FromRaw(Item.Blueprint.RawType, Category);
+            }
+            set
+            {
+                RawType = MajorItemType.GetRaw(value);
+            }
+        }
 
         public string TypeName
         {
             get
             {
                 return MajorItemType.GetTitle(MajorItemType.FromRaw(Item.Blueprint.RawType, Category));
+            }
+        }
+
+        public string GivenName
+        {
+            get
+            {
+                return Item.Blueprint.Name;
+            }
+            set
+            {
+                if (value == string.Empty)
+                {
+                    value = null; // shouldn't assign an empty string
+                }
+
+                if (GivenName != value)
+                {
+                    Item.Blueprint.Name = value;
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
+                }
             }
         }
 
@@ -124,18 +182,9 @@ namespace JSL
             }
             set
             {
-                if (value == string.Empty)
-                {
-                    value = null; // shouldn't assign an empty string
-                }
-
                 if (Name != value) // note that we are comparing with the default name here if one is not explicitly assigned
                 {
-                    Item.Blueprint.Name = value;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    GivenName = value;
                 }
             }
         }
@@ -333,6 +382,13 @@ namespace JSL
         {
         }
 
+        public override MajorItemEditor Clone()
+        {
+            StoredMajorItemEditor e = new StoredMajorItemEditor(new StoredMajorItem(Item.Clone().Root, null), RootEditor);
+            e.IsOrphaned = true;
+            return e;
+        }
+
         public override string SelfDesignation
         {
             get
@@ -362,6 +418,13 @@ namespace JSL
         internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
             : base(item, rootEditor)
         {
+        }
+
+        public override MajorItemEditor Clone()
+        {
+            RecentMajorItemEditor e = new RecentMajorItemEditor(new RecentMajorItem(Item.Clone().Root, null), RootEditor);
+            e.IsOrphaned = true;
+            return e;
         }
 
         public override string SelfDesignation
@@ -397,6 +460,19 @@ namespace JSL
         {
             library_ = library;
             index_ = index;
+        }
+
+        internal LibraryMajorItemEditor(Library library, LibraryMajorItem item, IRootEditor rootEditor)
+            : base(item, rootEditor)
+        {
+            library_ = library;
+        }
+
+        public override MajorItemEditor Clone()
+        {
+            LibraryMajorItemEditor e = new LibraryMajorItemEditor(library_, new LibraryMajorItem(Item.Clone().Root), RootEditor);
+            e.IsOrphaned = true;
+            return e;
         }
 
         public override string SelfDesignation
