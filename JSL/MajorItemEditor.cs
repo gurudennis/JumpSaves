@@ -217,7 +217,7 @@ namespace JSL
             }
             set
             {
-                if (Category == MajorItemCategory.Enum.Unknown)
+                if (value == MajorItemCategory.Enum.Unknown && Category != MajorItemCategory.Enum.Unknown)
                 {
                     throw new ArgumentException("Can't set major item category to Unknown");
                 }

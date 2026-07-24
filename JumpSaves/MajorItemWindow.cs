@@ -35,7 +35,6 @@ namespace JumpSaves
             {
                 if (isDirty_ != value)
                 {
-                    Debug.Assert(canEdit_ || isDirty_ == false);
                     isDirty_ = true;
                 }
             }
@@ -100,14 +99,6 @@ namespace JumpSaves
 
         private void MajorItemWindow_Load(object sender, EventArgs e)
         {
-            // Buttons
-            if (!canEdit_)
-            {
-                buttonOK.Enabled = false;
-                buttonOK.Visible = false;
-                buttonCancel.Text = "Close";
-            }
-
             // Category
             comboBoxCategory.Enabled = canEdit_;
             for (int i = 1; i < (int)JSL.MajorItemCategory.Enum.__COUNT__; ++i)
@@ -120,8 +111,7 @@ namespace JumpSaves
             // Type
             comboBoxType.Enabled = canEdit_;
 
-            // Name
-            textBoxName.ReadOnly = !canEdit_;
+            // Name (can always be edited)
             textBoxName.Text = Editor.GivenName ?? string.Empty;
 
             // Rarity
@@ -132,6 +122,11 @@ namespace JumpSaves
             // Level
             numericUpDownLevel.Enabled = canEdit_;
             numericUpDownLevel.Value = Editor.Level;
+
+            // Tool strip
+            toolStripButtonAdd.Enabled = canEdit_;
+            toolStripButtonRemove.Enabled = canEdit_;
+            toolStripButtonEdit.Enabled = canEdit_;
 
             // Modules
             moduleList.Scrollable = false;
@@ -166,16 +161,12 @@ namespace JumpSaves
 
         private void buttonOK_Click(object sender, EventArgs e)
         {
-            if (!canEdit_)
-            {
-                buttonCancel_Click(sender, e);
-                return;
-            }
-
             if (IsDirty)
             {
                 ShouldSave = true;
             }
+
+            this.Close();
         }
 
         private void buttonCancel_Click(object sender, EventArgs e)
@@ -256,6 +247,21 @@ namespace JumpSaves
             TypeUpdated();
         }
 
+        private void toolStripButtonAdd_Click(object sender, EventArgs e)
+        {
+            Debug.Assert(!canEdit_);
+        }
+
+        private void toolStripButtonRemove_Click(object sender, EventArgs e)
+        {
+            Debug.Assert(!canEdit_);
+        }
+
+        private void toolStripButtonEdit_Click(object sender, EventArgs e)
+        {
+            Debug.Assert(!canEdit_);
+        }
+
         private void FormatPotencyColumn(ModuleRow row, int potencyIndex, FormatCellEventArgs e)
         {
             if (potencyIndex >= row.Editor.Potencies.Length)
@@ -284,7 +290,7 @@ namespace JumpSaves
             }
 
             comboBoxType.SelectedItem = comboBoxType.Items.Cast<TypeEntry>().FirstOrDefault((item) => item.Raw == Editor.RawType);
-            if (comboBoxType.SelectedItem == null)
+            if (comboBoxType.SelectedItem == null && comboBoxType.Items.Count != 0)
             {
                 comboBoxType.SelectedIndex = 0;
             }
@@ -293,6 +299,8 @@ namespace JumpSaves
             {
                 TypeUpdated();
             }
+
+            OnStateChange();
         }
 
         private void TypeUpdated()
@@ -307,6 +315,8 @@ namespace JumpSaves
 
                 ReloadModuleList();
             }
+
+            OnStateChange();
         }
 
         private void LevelUpdated()
@@ -317,6 +327,12 @@ namespace JumpSaves
         private void RarityUpdated()
         {
             this.BackColor = Style.GetRarityColor(Editor.Rarity, false);
+        }
+
+        void OnStateChange()
+        {
+            buttonOK.Enabled = comboBoxCategory.SelectedIndex != -1 &&
+                               comboBoxType.SelectedIndex != -1;
         }
 
         private void ReloadModuleList()

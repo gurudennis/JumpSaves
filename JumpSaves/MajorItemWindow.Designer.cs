@@ -49,14 +49,19 @@
             this.olvColumnRanking = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnKind = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.labelModules = new System.Windows.Forms.Label();
+            this.toolStripModules = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moduleList)).BeginInit();
+            this.toolStripModules.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(492, 427);
+            this.buttonOK.Location = new System.Drawing.Point(492, 456);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(131, 35);
             this.buttonOK.TabIndex = 0;
@@ -68,7 +73,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(644, 427);
+            this.buttonCancel.Location = new System.Drawing.Point(644, 456);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(131, 35);
             this.buttonCancel.TabIndex = 0;
@@ -108,8 +113,8 @@
             this.comboBoxRarity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRarity.FormattingEnabled = true;
             this.comboBoxRarity.Items.AddRange(new object[] {
-            "Common (Blue)",
-            "Uncommon (Green)",
+            "Common (Green)",
+            "Uncommon (Blue)",
             "Rare (Purple)",
             "Superior (Orange)"});
             this.comboBoxRarity.Location = new System.Drawing.Point(459, 62);
@@ -209,11 +214,11 @@
             this.moduleList.HasCollapsibleGroups = false;
             this.moduleList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.moduleList.HideSelection = false;
-            this.moduleList.Location = new System.Drawing.Point(21, 147);
+            this.moduleList.Location = new System.Drawing.Point(21, 177);
             this.moduleList.Name = "moduleList";
             this.moduleList.ShowGroups = false;
             this.moduleList.ShowSortIndicators = false;
-            this.moduleList.Size = new System.Drawing.Size(754, 263);
+            this.moduleList.Size = new System.Drawing.Size(754, 261);
             this.moduleList.SpaceBetweenGroups = 10;
             this.moduleList.TabIndex = 5;
             this.moduleList.UseCellFormatEvents = true;
@@ -237,7 +242,7 @@
             this.olvColumnPotency1.AspectName = "Potency1";
             this.olvColumnPotency1.MaximumWidth = 90;
             this.olvColumnPotency1.MinimumWidth = 90;
-            this.olvColumnPotency1.Text = "Potency rolls";
+            this.olvColumnPotency1.Text = "Potency roll";
             this.olvColumnPotency1.Width = 90;
             // 
             // olvColumnPotency2
@@ -284,13 +289,60 @@
             this.labelModules.Text = "Modules:";
             this.labelModules.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
+            // toolStripModules
+            // 
+            this.toolStripModules.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toolStripModules.AutoSize = false;
+            this.toolStripModules.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStripModules.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStripModules.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonAdd,
+            this.toolStripButtonRemove,
+            this.toolStripButtonEdit});
+            this.toolStripModules.Location = new System.Drawing.Point(21, 146);
+            this.toolStripModules.Name = "toolStripModules";
+            this.toolStripModules.Size = new System.Drawing.Size(754, 31);
+            this.toolStripModules.TabIndex = 6;
+            // 
+            // toolStripButtonAdd
+            // 
+            this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAdd.Image = global::JumpSaves.Properties.Resources.Add;
+            this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAdd.Name = "toolStripButtonAdd";
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonAdd.Text = "Add module";
+            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
+            // 
+            // toolStripButtonRemove
+            // 
+            this.toolStripButtonRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemove.Image = global::JumpSaves.Properties.Resources.Remove;
+            this.toolStripButtonRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemove.Name = "toolStripButtonRemove";
+            this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonRemove.Text = "Remove selected module";
+            this.toolStripButtonRemove.Click += new System.EventHandler(this.toolStripButtonRemove_Click);
+            // 
+            // toolStripButtonEdit
+            // 
+            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEdit.Image = global::JumpSaves.Properties.Resources.Edit;
+            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
+            this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonEdit.Text = "Edit selected module";
+            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
+            // 
             // MajorItemWindow
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(794, 476);
+            this.ClientSize = new System.Drawing.Size(794, 505);
+            this.Controls.Add(this.toolStripModules);
             this.Controls.Add(this.moduleList);
             this.Controls.Add(this.numericUpDownLevel);
             this.Controls.Add(this.comboBoxType);
@@ -317,6 +369,8 @@
             this.Load += new System.EventHandler(this.MajorItemWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.moduleList)).EndInit();
+            this.toolStripModules.ResumeLayout(false);
+            this.toolStripModules.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -344,5 +398,9 @@
         private System.Windows.Forms.Label labelModules;
         private BrightIdeasSoftware.OLVColumn olvColumnRanking;
         private BrightIdeasSoftware.OLVColumn olvColumnKind;
+        private System.Windows.Forms.ToolStrip toolStripModules;
+        private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRemove;
+        private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
     }
 }

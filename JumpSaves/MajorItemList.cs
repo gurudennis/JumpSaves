@@ -1,4 +1,5 @@
 ﻿using BrightIdeasSoftware;
+using JumpSaves.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace JumpSaves
 {
@@ -381,7 +383,22 @@ namespace JumpSaves
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Parent, "Not implemented yet. Stay tuned for updates!", "Not implemented", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MajorItemWindow propsWindow = new MajorItemWindow(Editor.New(), AllowCustomization);
+            propsWindow.ShowDialog();
+            if (propsWindow.ShouldSave)
+            {
+                try
+                {
+                    Editor.Add(propsWindow.Editor, JSL.ConflictBehavior.Error);
+                }
+                catch (Exception ex1)
+                {
+                    string name = propsWindow.Editor.Name ?? "Unknown";
+                    LogAndShowError($"Failed to add {SelfDesignation} item \"{name}\". Error: {ex1.Message}", "Failed to add item");
+                }
+
+                Reload();
+            }
         }
 
         private void toolStripButtonRemove_Click(object sender, EventArgs e)
@@ -415,8 +432,37 @@ namespace JumpSaves
                 return;
             }
 
-            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(), /*AllowCustomization*/false);
+            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(), AllowCustomization);
             propsWindow.ShowDialog();
+            if (propsWindow.ShouldSave)
+            {
+                Editor.Remove(row.Editor);
+                try
+                {
+                    Editor.Add(propsWindow.Editor, JSL.ConflictBehavior.Error);
+                }
+                catch (Exception ex1)
+                {
+                    try
+                    {
+                        // Attempt to re-add the previous item whatever it takes
+                        Editor.Add(row.Editor, JSL.ConflictBehavior.Overwrite);
+
+                        // Report the original failure
+                        string name = propsWindow.Editor.Name ?? "Unknown";
+                        LogAndShowError($"Failed to edit {SelfDesignation} item \"{name}\". The item is returned to its previous state. Error: {ex1.Message}", "Failed to edit item");
+                    }
+                    catch (Exception ex2)
+                    {
+                        // Report the critical failure
+                        string name = row.Editor.Name ?? "Unknown";
+                        LogAndShowError($"Failed to edit {SelfDesignation} item \"{name}\". Unfortunately, the item is lost. " +
+                                        $"Please report this to the developer of JumpSaves. Error: {ex2.Message}", "Critical failure");
+                    }
+                }
+
+                Reload();
+            }
         }
 
         private void toolStripButtonReload_Click(object sender, EventArgs e)
@@ -478,6 +524,12 @@ namespace JumpSaves
 
             JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
             e.Text = module?.TypeName ?? "Unknown";
+        }
+
+        private void LogAndShowError(string text, string caption)
+        {
+            LogAction(this, ActionLog.Level.Error, text);
+            MessageBox.Show(Parent, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void OnLoad(object sender, EventArgs e)
