@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -26,6 +27,9 @@ namespace PrepRelease
             // Update the version in Setup.vdproj
             ReplaceVersionInFiles(root, "Setup.vdproj", "Setup_[0-9]+?_[0-9]+?_[0-9]+?_[0-9]+?.msi", $"Setup_{version.ToString().Replace('.', '_')}.msi");
             ReplaceVersionInFiles(root, "Setup.vdproj", "\"ProductVersion\" = \"8:[0-9]+?\\.[0-9]+?\\.[0-9]+?\"", $"\"ProductVersion\" = \"8:{version.ToString(3)}\"");
+
+            // Update the product code in Setup.vdproj
+            ReplaceVersionInFiles(root, "Setup.vdproj", "\"ProductCode\" = \"8:{.*?}\"", $"\"ProductCode\" = \"8:{Guid.NewGuid().ToString("B").ToUpper()}\"");
 
             return 0;
         }
