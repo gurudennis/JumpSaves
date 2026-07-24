@@ -139,6 +139,7 @@
     <None Include="Images\Monitoring.png" />
     <None Include="Images\Browse.png" />
     <None Include="Images\Log.png" />
+    <None Include="Images\Clone.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />

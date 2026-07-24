@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace JumpSaves
 {
@@ -381,6 +380,32 @@ namespace JumpSaves
             TransferAction(this, items);
         }
 
+        private void toolStripButtonClone_Click(object sender, EventArgs e)
+        {
+            IList selected = list.SelectedObjects;
+            if (selected.Count != 1)
+            {
+                MessageBox.Show(Parent, "Select one item and press this button to clone it.", "Select one item", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            Row r = (Row)selected[0];
+            string name = r.Editor.Name ?? "Unknown";
+
+            try
+            {
+                JSL.MajorItemEditor clone = r.Editor.Clone(JSL.CloneIdentity.New);
+                Editor.Add(clone, JSL.ConflictBehavior.Error);
+                LogAction(this, Model.ActionLog.Level.Info, $"Duplicated {SelfDesignation} item \"{name}\"");
+            }
+            catch (Exception ex)
+            {
+                LogAndShowError($"Failed to duplicate {SelfDesignation} item \"{name}\": {ex.Message}", "Failed to duplicate");
+            }
+
+            Reload();
+        }
+
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
             MajorItemWindow propsWindow = new MajorItemWindow(Editor.New(), AllowCustomization);
@@ -432,7 +457,7 @@ namespace JumpSaves
                 return;
             }
 
-            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(), AllowCustomization);
+            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(JSL.CloneIdentity.Same), AllowCustomization);
             propsWindow.ShowDialog();
             if (propsWindow.ShouldSave)
             {
@@ -563,6 +588,7 @@ namespace JumpSaves
                 item.Enabled = toolStrip.Enabled;
             }
             toolStripButtonAdd.Enabled &= AllowCustomization && CanEdit;
+            toolStripButtonClone.Enabled &= AllowCustomization && CanEdit;
             toolStripButtonEdit.Enabled &= CanEdit;
             toolStripButtonRemove.Enabled &= CanEdit;
             toolStripButtonTransfer.Enabled &= CanTransfer;

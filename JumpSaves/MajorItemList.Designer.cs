@@ -42,17 +42,18 @@ namespace JumpSaves
             this.olvColumnModule4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnModule5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonReload = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelMonitor = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxMonitor = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonClone = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonReload = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -205,6 +206,7 @@ namespace JumpSaves
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonTransfer,
             this.toolStripButtonAdd,
+            this.toolStripButtonClone,
             this.toolStripButtonRemove,
             this.toolStripButtonEdit,
             this.toolStripButtonBrowse,
@@ -219,66 +221,6 @@ namespace JumpSaves
             this.toolStrip.Size = new System.Drawing.Size(723, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
-            // 
-            // toolStripButtonTransfer
-            // 
-            this.toolStripButtonTransfer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonTransfer.Image = global::JumpSaves.Properties.Resources.Transfer;
-            this.toolStripButtonTransfer.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonTransfer.Name = "toolStripButtonTransfer";
-            this.toolStripButtonTransfer.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonTransfer.Text = "Transfer a copy of selected items";
-            this.toolStripButtonTransfer.Click += new System.EventHandler(this.toolStripButtonTransfer_Click);
-            // 
-            // toolStripButtonAdd
-            // 
-            this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAdd.Image = global::JumpSaves.Properties.Resources.Add;
-            this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonAdd.Name = "toolStripButtonAdd";
-            this.toolStripButtonAdd.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonAdd.Text = "Add...";
-            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
-            // 
-            // toolStripButtonRemove
-            // 
-            this.toolStripButtonRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRemove.Image = global::JumpSaves.Properties.Resources.Remove;
-            this.toolStripButtonRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRemove.Name = "toolStripButtonRemove";
-            this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonRemove.Text = "Remove selected items";
-            this.toolStripButtonRemove.Click += new System.EventHandler(this.toolStripButtonRemove_Click);
-            // 
-            // toolStripButtonEdit
-            // 
-            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEdit.Image = global::JumpSaves.Properties.Resources.Edit;
-            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
-            this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonEdit.Text = "Properties of selected item";
-            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
-            // 
-            // toolStripButtonBrowse
-            // 
-            this.toolStripButtonBrowse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonBrowse.Image = global::JumpSaves.Properties.Resources.Browse;
-            this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
-            this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonBrowse.Text = "Browse library directory";
-            this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
-            // 
-            // toolStripButtonReload
-            // 
-            this.toolStripButtonReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonReload.Image = global::JumpSaves.Properties.Resources.Reload;
-            this.toolStripButtonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonReload.Name = "toolStripButtonReload";
-            this.toolStripButtonReload.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonReload.Text = "Reload from disk";
-            this.toolStripButtonReload.Click += new System.EventHandler(this.toolStripButtonReload_Click);
             // 
             // toolStripLabelFilter
             // 
@@ -327,6 +269,76 @@ namespace JumpSaves
             this.toolStripComboBoxMonitor.Size = new System.Drawing.Size(100, 31);
             this.toolStripComboBoxMonitor.ToolTipText = "Filter";
             // 
+            // toolStripButtonTransfer
+            // 
+            this.toolStripButtonTransfer.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonTransfer.Image = global::JumpSaves.Properties.Resources.Transfer;
+            this.toolStripButtonTransfer.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonTransfer.Name = "toolStripButtonTransfer";
+            this.toolStripButtonTransfer.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonTransfer.Text = "Transfer a copy of selected items";
+            this.toolStripButtonTransfer.Click += new System.EventHandler(this.toolStripButtonTransfer_Click);
+            // 
+            // toolStripButtonAdd
+            // 
+            this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonAdd.Image = global::JumpSaves.Properties.Resources.Add;
+            this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonAdd.Name = "toolStripButtonAdd";
+            this.toolStripButtonAdd.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonAdd.Text = "Add...";
+            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
+            // 
+            // toolStripButtonClone
+            // 
+            this.toolStripButtonClone.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonClone.Image = global::JumpSaves.Properties.Resources.Clone;
+            this.toolStripButtonClone.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonClone.Name = "toolStripButtonClone";
+            this.toolStripButtonClone.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonClone.Text = "Clone selected items";
+            this.toolStripButtonClone.Click += new System.EventHandler(this.toolStripButtonClone_Click);
+            // 
+            // toolStripButtonRemove
+            // 
+            this.toolStripButtonRemove.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRemove.Image = global::JumpSaves.Properties.Resources.Remove;
+            this.toolStripButtonRemove.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemove.Name = "toolStripButtonRemove";
+            this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonRemove.Text = "Remove selected items";
+            this.toolStripButtonRemove.Click += new System.EventHandler(this.toolStripButtonRemove_Click);
+            // 
+            // toolStripButtonEdit
+            // 
+            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonEdit.Image = global::JumpSaves.Properties.Resources.Edit;
+            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
+            this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonEdit.Text = "Properties of selected item";
+            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
+            // 
+            // toolStripButtonBrowse
+            // 
+            this.toolStripButtonBrowse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonBrowse.Image = global::JumpSaves.Properties.Resources.Browse;
+            this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonBrowse.Text = "Browse library directory";
+            this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
+            // 
+            // toolStripButtonReload
+            // 
+            this.toolStripButtonReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonReload.Image = global::JumpSaves.Properties.Resources.Reload;
+            this.toolStripButtonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonReload.Name = "toolStripButtonReload";
+            this.toolStripButtonReload.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonReload.Text = "Reload from disk";
+            this.toolStripButtonReload.Click += new System.EventHandler(this.toolStripButtonReload_Click);
+            // 
             // MajorItemList
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -368,5 +380,6 @@ namespace JumpSaves
         private System.Windows.Forms.ToolStripComboBox toolStripComboBoxMonitor;
         private System.Windows.Forms.ToolStripButton toolStripButtonBrowse;
         private System.Windows.Forms.ToolStripButton toolStripButtonReload;
+        private System.Windows.Forms.ToolStripButton toolStripButtonClone;
     }
 }

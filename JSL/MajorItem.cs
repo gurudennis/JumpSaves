@@ -257,6 +257,11 @@ namespace JSL
             }
         }
 
+        public void SetNewIdentity()
+        {
+            SetPropertyStrict(Index_ID, Guid.NewGuid().ToString("D"));
+        }
+
         public void ResetActivePips()
         {
             object[] modules = Modules;
@@ -289,7 +294,7 @@ namespace JSL
             blueprint.SetPropertyStrict(10, false); // unknown constant
             blueprint.SetPropertyStrict(Index_RawOrigin, "4c508dd3046b4cb4b8bd5a0e24877f12");
             blueprint.SetPropertyStrict(Index_Name, null);
-            blueprint.SetPropertyStrict(Index_ID, Guid.NewGuid().ToString("D"));
+            blueprint.SetNewIdentity(); // ID
             blueprint.SetPropertyStrict(Index_OwningPlayerID, string.Empty); // same for all modules in a given save, must be copied from SaveMetadata.PlayerID
             blueprint.SetPropertyStrict(Index_OriginLobbyID, "Tv2HrDk8AJM5rEKi");
             return blueprint.Root;

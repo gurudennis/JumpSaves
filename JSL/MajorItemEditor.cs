@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace JSL
 {
+    public enum CloneIdentity
+    {
+        Same,
+        New
+    }
+
     // Any module of a major item
     public class ModuleEditor : Editor
     {
@@ -118,7 +124,7 @@ namespace JSL
             Item = item;
         }
 
-        public abstract MajorItemEditor Clone();
+        public abstract MajorItemEditor Clone(CloneIdentity identity);
 
         public abstract string SelfDesignation { get; }
 
@@ -407,9 +413,14 @@ namespace JSL
         {
         }
 
-        public override MajorItemEditor Clone()
+        public override MajorItemEditor Clone(CloneIdentity identity)
         {
             StoredMajorItemEditor e = new StoredMajorItemEditor(new StoredMajorItem(Item.Clone().Root, null), RootEditor);
+            if (identity == CloneIdentity.New)
+            {
+                e.Item.Blueprint.SetNewIdentity();
+                ((StoredMajorItem)e.Item).BlueprintID = e.Item.Blueprint.ID;
+            }
             e.IsOrphaned = true;
             return e;
         }
@@ -445,9 +456,13 @@ namespace JSL
         {
         }
 
-        public override MajorItemEditor Clone()
+        public override MajorItemEditor Clone(CloneIdentity identity)
         {
             RecentMajorItemEditor e = new RecentMajorItemEditor(new RecentMajorItem(Item.Clone().Root, null), RootEditor);
+            if (identity == CloneIdentity.New)
+            {
+                e.Item.Blueprint.SetNewIdentity();
+            }
             e.IsOrphaned = true;
             return e;
         }
@@ -493,9 +508,13 @@ namespace JSL
             library_ = library;
         }
 
-        public override MajorItemEditor Clone()
+        public override MajorItemEditor Clone(CloneIdentity identity)
         {
             LibraryMajorItemEditor e = new LibraryMajorItemEditor(library_, new LibraryMajorItem(Item.Clone().Root), RootEditor);
+            if (identity == CloneIdentity.New)
+            {
+                e.Item.Blueprint.SetNewIdentity();
+            }
             e.IsOrphaned = true;
             return e;
         }
