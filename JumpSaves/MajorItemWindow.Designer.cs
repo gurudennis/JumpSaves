@@ -42,7 +42,13 @@
             this.labelType = new System.Windows.Forms.Label();
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.moduleList = new BrightIdeasSoftware.FastObjectListView();
-            this.groupBoxSelection = new System.Windows.Forms.GroupBox();
+            this.olvColumnEffect = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPotency1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPotency2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnPotency3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnRanking = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnKind = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.labelModules = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moduleList)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +56,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(492, 589);
+            this.buttonOK.Location = new System.Drawing.Point(492, 382);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(131, 35);
             this.buttonOK.TabIndex = 0;
@@ -62,7 +68,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(644, 589);
+            this.buttonCancel.Location = new System.Drawing.Point(644, 382);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(131, 35);
             this.buttonCancel.TabIndex = 0;
@@ -183,30 +189,100 @@
             // 
             // moduleList
             // 
-            this.moduleList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.moduleList.AllColumns.Add(this.olvColumnEffect);
+            this.moduleList.AllColumns.Add(this.olvColumnPotency1);
+            this.moduleList.AllColumns.Add(this.olvColumnPotency2);
+            this.moduleList.AllColumns.Add(this.olvColumnPotency3);
+            this.moduleList.AllColumns.Add(this.olvColumnRanking);
+            this.moduleList.AllColumns.Add(this.olvColumnKind);
+            this.moduleList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.moduleList.BackColor = System.Drawing.Color.WhiteSmoke;
             this.moduleList.CellEditUseWholeCell = false;
+            this.moduleList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.olvColumnEffect,
+            this.olvColumnPotency1,
+            this.olvColumnPotency2,
+            this.olvColumnPotency3});
+            this.moduleList.Cursor = System.Windows.Forms.Cursors.Default;
+            this.moduleList.HasCollapsibleGroups = false;
+            this.moduleList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.moduleList.HideSelection = false;
             this.moduleList.Location = new System.Drawing.Point(21, 147);
             this.moduleList.Name = "moduleList";
             this.moduleList.ShowGroups = false;
-            this.moduleList.Size = new System.Drawing.Size(754, 205);
+            this.moduleList.ShowSortIndicators = false;
+            this.moduleList.Size = new System.Drawing.Size(754, 218);
+            this.moduleList.SpaceBetweenGroups = 10;
             this.moduleList.TabIndex = 5;
+            this.moduleList.UseCellFormatEvents = true;
             this.moduleList.UseCompatibleStateImageBehavior = false;
             this.moduleList.View = System.Windows.Forms.View.Details;
             this.moduleList.VirtualMode = true;
+            this.moduleList.BeforeCreatingGroups += new System.EventHandler<BrightIdeasSoftware.CreateGroupsEventArgs>(this.moduleList_BeforeCreatingGroups);
+            this.moduleList.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.moduleList_FormatCell);
             // 
-            // groupBoxSelection
+            // olvColumnEffect
             // 
-            this.groupBoxSelection.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxSelection.Location = new System.Drawing.Point(21, 372);
-            this.groupBoxSelection.Name = "groupBoxSelection";
-            this.groupBoxSelection.Size = new System.Drawing.Size(754, 198);
-            this.groupBoxSelection.TabIndex = 6;
-            this.groupBoxSelection.TabStop = false;
-            this.groupBoxSelection.Text = "Properties of the selected module";
+            this.olvColumnEffect.AspectName = "Effect";
+            this.olvColumnEffect.FillsFreeSpace = true;
+            this.olvColumnEffect.IsEditable = false;
+            this.olvColumnEffect.Sortable = false;
+            this.olvColumnEffect.Text = "Effect";
+            this.olvColumnEffect.Width = 140;
+            // 
+            // olvColumnPotency1
+            // 
+            this.olvColumnPotency1.AspectName = "Potency1";
+            this.olvColumnPotency1.MaximumWidth = 90;
+            this.olvColumnPotency1.MinimumWidth = 90;
+            this.olvColumnPotency1.Text = "Potency rolls";
+            this.olvColumnPotency1.Width = 90;
+            // 
+            // olvColumnPotency2
+            // 
+            this.olvColumnPotency2.AspectName = "Potency2";
+            this.olvColumnPotency2.MaximumWidth = 90;
+            this.olvColumnPotency2.MinimumWidth = 90;
+            this.olvColumnPotency2.Text = "";
+            this.olvColumnPotency2.Width = 90;
+            // 
+            // olvColumnPotency3
+            // 
+            this.olvColumnPotency3.AspectName = "Potency3";
+            this.olvColumnPotency3.MaximumWidth = 90;
+            this.olvColumnPotency3.MinimumWidth = 90;
+            this.olvColumnPotency3.Text = "";
+            this.olvColumnPotency3.Width = 90;
+            // 
+            // olvColumnRanking
+            // 
+            this.olvColumnRanking.AspectName = "Ranking";
+            this.olvColumnRanking.IsVisible = false;
+            this.olvColumnRanking.MaximumWidth = 0;
+            this.olvColumnRanking.MinimumWidth = 0;
+            this.olvColumnRanking.Text = "";
+            this.olvColumnRanking.Width = 0;
+            // 
+            // olvColumnKind
+            // 
+            this.olvColumnKind.AspectName = "Kind";
+            this.olvColumnKind.IsVisible = false;
+            this.olvColumnKind.MaximumWidth = 0;
+            this.olvColumnKind.MinimumWidth = 0;
+            this.olvColumnKind.Text = "";
+            this.olvColumnKind.Width = 0;
+            // 
+            // labelModules
+            // 
+            this.labelModules.AutoSize = true;
+            this.labelModules.Location = new System.Drawing.Point(18, 110);
+            this.labelModules.Name = "labelModules";
+            this.labelModules.Size = new System.Drawing.Size(62, 16);
+            this.labelModules.TabIndex = 1;
+            this.labelModules.Text = "Modules:";
+            this.labelModules.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // MajorItemWindow
             // 
@@ -214,8 +290,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(794, 638);
-            this.Controls.Add(this.groupBoxSelection);
+            this.ClientSize = new System.Drawing.Size(794, 431);
             this.Controls.Add(this.moduleList);
             this.Controls.Add(this.numericUpDownLevel);
             this.Controls.Add(this.comboBoxType);
@@ -226,6 +301,7 @@
             this.Controls.Add(this.labelType);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelCategory);
+            this.Controls.Add(this.labelModules);
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
@@ -261,6 +337,12 @@
         private System.Windows.Forms.Label labelType;
         private System.Windows.Forms.ComboBox comboBoxType;
         private BrightIdeasSoftware.FastObjectListView moduleList;
-        private System.Windows.Forms.GroupBox groupBoxSelection;
+        private BrightIdeasSoftware.OLVColumn olvColumnEffect;
+        private BrightIdeasSoftware.OLVColumn olvColumnPotency1;
+        private BrightIdeasSoftware.OLVColumn olvColumnPotency2;
+        private BrightIdeasSoftware.OLVColumn olvColumnPotency3;
+        private System.Windows.Forms.Label labelModules;
+        private BrightIdeasSoftware.OLVColumn olvColumnRanking;
+        private BrightIdeasSoftware.OLVColumn olvColumnKind;
     }
 }

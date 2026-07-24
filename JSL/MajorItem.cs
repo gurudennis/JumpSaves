@@ -66,7 +66,7 @@ namespace JSL
                 double[] res = new double[arr.Length];
                 for (int i = 0; i < arr.Length; ++i)
                 {
-                    res[i] = (double)arr[i];
+                    res[i] = (float)arr[i];
                 }
                 return res;
             }
@@ -75,7 +75,7 @@ namespace JSL
                 object[] res = new object[value.Length];
                 for (int i = 0; i < value.Length; ++i)
                 {
-                    res[i] = value[i];
+                    res[i] = (float)value[i];
                 }
                 SetSubArrayStrict(Index_Potencies, res);
             }

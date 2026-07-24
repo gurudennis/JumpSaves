@@ -88,6 +88,7 @@
     <Compile Include="ResourceView.Designer.cs">
       <DependentUpon>ResourceView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Style.cs" />
     <EmbeddedResource Include="LogWindow.resx">
       <DependentUpon>LogWindow.cs</DependentUpon>
     </EmbeddedResource>

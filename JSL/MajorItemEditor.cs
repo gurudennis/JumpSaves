@@ -77,6 +77,26 @@ namespace JSL
             }
         }
 
+        public double[] Potencies
+        {
+            get
+            {
+                return module_.Potencies;
+            }
+            set
+            {
+                if (module_.Potencies != value)
+                {
+                    module_.Potencies = value;
+
+                    if (!IsOrphaned)
+                    {
+                        RootEditor.IsDirty = true;
+                    }
+                }
+            }
+        }
+
         private Module module_;
         private ModuleKind? kind_ = null;
         private string typeName_;
@@ -309,6 +329,11 @@ namespace JSL
         public ModuleEditor NewModule()
         {
             return new ModuleEditor(RootEditor);
+        }
+
+        public void ResetActivePips()
+        {
+            Item.Blueprint.ResetActivePips();
         }
 
         public string JSON
