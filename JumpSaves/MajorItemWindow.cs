@@ -74,6 +74,30 @@ namespace JumpSaves
             public JSL.ModuleEditor Editor { get; set; }
         }
 
+        private class GroupComparer : IComparer<OLVGroup>
+        {
+            public int Compare(OLVGroup x, OLVGroup y)
+            {
+                JSL.ModuleKind xe = (JSL.ModuleKind)x.Key;
+                JSL.ModuleKind ye = (JSL.ModuleKind)y.Key;
+
+                if (xe == JSL.ModuleKind.Unknown && ye == JSL.ModuleKind.Unknown)
+                {
+                    return 0;
+                }
+                else if (xe == JSL.ModuleKind.Unknown)
+                {
+                    return 1;
+                }
+                else if (ye == JSL.ModuleKind.Unknown)
+                {
+                    return -1;
+                }
+
+                return ((int)xe).CompareTo((int)ye);
+            }
+        }
+
         private void MajorItemWindow_Load(object sender, EventArgs e)
         {
             // Buttons
@@ -191,7 +215,7 @@ namespace JumpSaves
             e.Parameters.PrimarySortOrder = SortOrder.Ascending;
             e.Parameters.SecondarySort = olvColumnEffect;
             e.Parameters.SecondarySortOrder = SortOrder.Ascending;
-            //e.Parameters.GroupComparer = new GroupComparer();
+            e.Parameters.GroupComparer = new GroupComparer();
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e)
@@ -303,7 +327,7 @@ namespace JumpSaves
             {
                 ModuleRow row = new ModuleRow();
                 row.Editor = Editor.GetModule(i);
-                row.Effect = row.Editor.TypeName;
+                row.Effect = row.Editor.TypeName ?? "Unknown";
                 row.Kind = row.Editor.Kind;
                 row.Ranking = i;
                 row.Potency1 = row.Editor.Potencies.Length >= 1 ? (double?)row.Editor.Potencies[0] : null;

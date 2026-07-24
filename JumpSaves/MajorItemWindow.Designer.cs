@@ -56,7 +56,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(492, 382);
+            this.buttonOK.Location = new System.Drawing.Point(492, 427);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(131, 35);
             this.buttonOK.TabIndex = 0;
@@ -68,7 +68,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(644, 382);
+            this.buttonCancel.Location = new System.Drawing.Point(644, 427);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(131, 35);
             this.buttonCancel.TabIndex = 0;
@@ -213,7 +213,7 @@
             this.moduleList.Name = "moduleList";
             this.moduleList.ShowGroups = false;
             this.moduleList.ShowSortIndicators = false;
-            this.moduleList.Size = new System.Drawing.Size(754, 218);
+            this.moduleList.Size = new System.Drawing.Size(754, 263);
             this.moduleList.SpaceBetweenGroups = 10;
             this.moduleList.TabIndex = 5;
             this.moduleList.UseCellFormatEvents = true;
@@ -290,7 +290,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(794, 431);
+            this.ClientSize = new System.Drawing.Size(794, 476);
             this.Controls.Add(this.moduleList);
             this.Controls.Add(this.numericUpDownLevel);
             this.Controls.Add(this.comboBoxType);
