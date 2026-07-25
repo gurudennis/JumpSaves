@@ -102,11 +102,19 @@ namespace JSL
             }
         }
 
-        public int MaxPotencyCount
+        public int MaxTheoreticalPotencyCount
         {
             get
             {
                 return 3;
+            }
+        }
+
+        public int? MaxPotencyCount
+        {
+            get
+            {
+                return ModuleType.GetMaxPotencyCountFromRaw(RawType);
             }
         }
 
@@ -120,9 +128,9 @@ namespace JSL
 
         public void SetPotency(int index, double? value)
         {
-            if (index > MaxPotencyCount)
+            if (index >= MaxTheoreticalPotencyCount)
             {
-                throw new ArgumentOutOfRangeException($"A module can't have more than {MaxPotencyCount} potencies.");
+                throw new ArgumentOutOfRangeException($"A module can't have more than {MaxTheoreticalPotencyCount} potencies.");
             }
             else if (index > Potencies.Length)
             {
@@ -178,6 +186,32 @@ namespace JSL
                 potencies[index] = (double)value;
                 module_.Potencies = potencies;
             }
+
+            SetDirtyIfNecessary();
+        }
+
+        public void SetExpectedPotencyCount()
+        {
+            int? maxPotencyCount = MaxPotencyCount;
+            if (maxPotencyCount == null || maxPotencyCount == Potencies.Length)
+            {
+                return;
+            }
+
+            List<double> potencies = new List<double>();
+            for (int i = 0; i < maxPotencyCount; ++i)
+            {
+                if (i < Potencies.Length)
+                {
+                    potencies.Add(Potencies[i]);
+                }
+                else
+                {
+                    potencies.Add(0.01);
+                }
+            }
+
+            module_.Potencies = potencies.ToArray();
 
             SetDirtyIfNecessary();
         }

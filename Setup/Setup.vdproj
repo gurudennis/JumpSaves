@@ -1398,7 +1398,7 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:JumpSaves"
-        "ProductCode" = "8:{FFC8C4D4-83EF-4256-9521-74C5A9C0FA67}"
+        "ProductCode" = "8:{CBC63B54-0CA0-4C8B-9164-C2CD89B361D2}"
         "PackageCode" = "8:{3E28C615-38F8-4025-9EAF-2DD824267242}"
         "UpgradeCode" = "8:{F3C90592-3F16-4285-A930-9CCEA8EC2C95}"
         "AspNetVersion" = "8:2.0.50727.0"

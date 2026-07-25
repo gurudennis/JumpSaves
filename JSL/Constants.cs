@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO.Ports;
 
 namespace JSL
 {
@@ -11,6 +12,50 @@ namespace JSL
         Uncommon = 1, // blue
         Rare = 2,     // purple
         Superior = 3, // orange
+    }
+
+    public static class RarityStrings
+    {
+        public static string GetTitle(Rarity rarity, bool longTitle)
+        {
+            if (rarity == Rarity.Unknown)
+            {
+                return null;
+            }
+
+            Debug.Assert(All.Length == (int)Rarity.Superior + 1);
+            EnumInfo e = All[(int)rarity];
+            return longTitle ? e.LongTitle : e.ShortTitle;
+        }
+
+        public static Rarity FromTitle(string title)
+        {
+            Debug.Assert(All.Length == (int)Rarity.Superior + 1);
+            for (int i = 0; i < All.Length; ++i)
+            {
+                if (title == All[i].ShortTitle || title == All[i].LongTitle)
+                {
+                    return (Rarity)i;
+                }
+            }
+
+            return Rarity.Unknown;
+        }
+
+        private struct EnumInfo
+        {
+            public string ShortTitle { get; set; }
+
+            public string LongTitle { get; set; }
+        }
+
+        private static EnumInfo[] All = new EnumInfo[]
+        {
+            new EnumInfo { ShortTitle = "Common",   LongTitle = "Common (Green)"    },
+            new EnumInfo { ShortTitle = "Uncommon", LongTitle = "Uncommon (Blue)"   },
+            new EnumInfo { ShortTitle = "Rare",     LongTitle = "Rare (Purple)"     },
+            new EnumInfo { ShortTitle = "Superior", LongTitle = "Superior (Orange)" },
+        };
     }
 
     // Representation of the overall purpose of an item
@@ -502,6 +547,23 @@ namespace JSL
             }
 
             return ModuleKind.Unknown;
+        }
+
+        public static int? GetMaxPotencyCountFromRaw(string raw)
+        {
+            ShipModuleType.Enum shipEnum = ShipModuleType.FromRaw(raw);
+            if (shipEnum != ShipModuleType.Enum.Unknown)
+            {
+                return ShipModuleType.GetPotencyCount(shipEnum);
+            }
+
+            PlayerWeaponModuleType.Enum playerEnum = PlayerWeaponModuleType.FromRaw(raw);
+            if (playerEnum != PlayerWeaponModuleType.Enum.Unknown)
+            {
+                return PlayerWeaponModuleType.GetPotencyCount(playerEnum);
+            }
+
+            return null;
         }
 
         public static IReadOnlyList<string> GetTitles(MajorItemType.Enum type, ModuleKind kind = ModuleKind.Unknown)

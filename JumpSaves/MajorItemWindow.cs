@@ -193,7 +193,7 @@ namespace JumpSaves
             }
             else if (e.Column == olvColumnRarity)
             {
-                e.SubItem.Text = row.Rarity.ToString();
+                e.SubItem.Text = JSL.RarityStrings.GetTitle(row.Rarity, false);
                 e.SubItem.ForeColor = Style.GetRarityColor(row.Editor.Rarity, true);
             }
             else if (e.Column == olvColumnPotency1)
@@ -243,6 +243,20 @@ namespace JumpSaves
                 e.Control = combo;
                 return;
             }
+            else if (e.Column == olvColumnRarity)
+            {
+                ComboBox combo = new ComboBox();
+                combo.Bounds = e.CellBounds;
+                combo.DropDownStyle = ComboBoxStyle.DropDownList;
+                combo.FlatStyle = FlatStyle.Flat;
+                for (int i = 0; i <= (int)Editor.Rarity; ++i)
+                {
+                    combo.Items.Add(JSL.RarityStrings.GetTitle((JSL.Rarity)i, false));
+                }
+                combo.SelectedItem = JSL.RarityStrings.GetTitle(row.Rarity, false);
+                e.Control = combo;
+                return;
+            }
 
             int index = PotencyIndexFromColumn(e.Column);
             if (index >= 0)
@@ -276,20 +290,25 @@ namespace JumpSaves
             if (e.Column == olvColumnEffect)
             {
                 row.Editor.RawType = JSL.ModuleType.GetRawFromTitle(Editor.Type, ((ComboBox)e.Control).Text);
+                row.Editor.SetExpectedPotencyCount();
                 e.Control.Visible = false;
                 IsDirty = true;
                 return;
             }
             else if (e.Column == olvColumnRarity)
             {
-                JSL.Rarity rarity = (JSL.Rarity)e.NewValue;
-                if (rarity == JSL.Rarity.Unknown || rarity > Editor.Rarity)
+                JSL.Rarity rarity = JSL.RarityStrings.FromTitle(((ComboBox)e.Control).Text);
+                if (rarity == JSL.Rarity.Unknown)
                 {
                     e.Cancel = true;
+                    e.Control.Visible = false;
                     return;
                 }
 
                 row.Editor.Rarity = rarity;
+                e.Control.Visible = false;
+                IsDirty = true;
+                return;
             }
 
             int index = PotencyIndexFromColumn(e.Column);
@@ -457,6 +476,15 @@ namespace JumpSaves
         private void RarityUpdated()
         {
             this.BackColor = Style.GetRarityColor(Editor.Rarity, false);
+
+            for (int i = 0; i < Editor.ModuleCount; ++i)
+            {
+                JSL.ModuleEditor module = Editor.GetModule(i);
+                if (module.Rarity > Editor.Rarity)
+                {
+                    module.Rarity = Editor.Rarity;
+                }
+            }
         }
 
         void OnStateChange()
