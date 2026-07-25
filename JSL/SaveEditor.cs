@@ -21,6 +21,14 @@ namespace JSL
 
         internal bool IsOrphaned { get; set; }
 
+        internal void SetDirtyIfNecessary()
+        {
+            if (!IsOrphaned)
+            {
+                RootEditor.IsDirty = true;
+            }
+        }
+
         protected IRootEditor RootEditor { get; private set; }
     }
 

@@ -43,6 +43,7 @@
             this.comboBoxType = new System.Windows.Forms.ComboBox();
             this.moduleList = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnEffect = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnRarity = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPotency1 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPotency2 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnPotency3 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -52,7 +53,6 @@
             this.toolStripModules = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moduleList)).BeginInit();
             this.toolStripModules.SuspendLayout();
@@ -195,6 +195,7 @@
             // moduleList
             // 
             this.moduleList.AllColumns.Add(this.olvColumnEffect);
+            this.moduleList.AllColumns.Add(this.olvColumnRarity);
             this.moduleList.AllColumns.Add(this.olvColumnPotency1);
             this.moduleList.AllColumns.Add(this.olvColumnPotency2);
             this.moduleList.AllColumns.Add(this.olvColumnPotency3);
@@ -204,9 +205,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.moduleList.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.moduleList.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.DoubleClick;
             this.moduleList.CellEditUseWholeCell = false;
             this.moduleList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnEffect,
+            this.olvColumnRarity,
             this.olvColumnPotency1,
             this.olvColumnPotency2,
             this.olvColumnPotency3});
@@ -226,16 +229,26 @@
             this.moduleList.View = System.Windows.Forms.View.Details;
             this.moduleList.VirtualMode = true;
             this.moduleList.BeforeCreatingGroups += new System.EventHandler<BrightIdeasSoftware.CreateGroupsEventArgs>(this.moduleList_BeforeCreatingGroups);
+            this.moduleList.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.moduleList_CellEditFinished);
+            this.moduleList.CellEditFinishing += new BrightIdeasSoftware.CellEditEventHandler(this.moduleList_CellEditFinishing);
+            this.moduleList.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.moduleList_CellEditStarting);
             this.moduleList.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.moduleList_FormatCell);
             // 
             // olvColumnEffect
             // 
             this.olvColumnEffect.AspectName = "Effect";
             this.olvColumnEffect.FillsFreeSpace = true;
-            this.olvColumnEffect.IsEditable = false;
             this.olvColumnEffect.Sortable = false;
             this.olvColumnEffect.Text = "Effect";
             this.olvColumnEffect.Width = 140;
+            // 
+            // olvColumnRarity
+            // 
+            this.olvColumnRarity.AspectName = "Rarity";
+            this.olvColumnRarity.MaximumWidth = 70;
+            this.olvColumnRarity.MinimumWidth = 70;
+            this.olvColumnRarity.Text = "Rarity";
+            this.olvColumnRarity.Width = 70;
             // 
             // olvColumnPotency1
             // 
@@ -264,6 +277,7 @@
             // olvColumnRanking
             // 
             this.olvColumnRanking.AspectName = "Ranking";
+            this.olvColumnRanking.IsEditable = false;
             this.olvColumnRanking.IsVisible = false;
             this.olvColumnRanking.MaximumWidth = 0;
             this.olvColumnRanking.MinimumWidth = 0;
@@ -273,6 +287,7 @@
             // olvColumnKind
             // 
             this.olvColumnKind.AspectName = "Kind";
+            this.olvColumnKind.IsEditable = false;
             this.olvColumnKind.IsVisible = false;
             this.olvColumnKind.MaximumWidth = 0;
             this.olvColumnKind.MinimumWidth = 0;
@@ -298,8 +313,7 @@
             this.toolStripModules.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStripModules.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAdd,
-            this.toolStripButtonRemove,
-            this.toolStripButtonEdit});
+            this.toolStripButtonRemove});
             this.toolStripModules.Location = new System.Drawing.Point(21, 146);
             this.toolStripModules.Name = "toolStripModules";
             this.toolStripModules.Size = new System.Drawing.Size(754, 31);
@@ -324,16 +338,6 @@
             this.toolStripButtonRemove.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonRemove.Text = "Remove selected module";
             this.toolStripButtonRemove.Click += new System.EventHandler(this.toolStripButtonRemove_Click);
-            // 
-            // toolStripButtonEdit
-            // 
-            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEdit.Image = global::JumpSaves.Properties.Resources.Edit;
-            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
-            this.toolStripButtonEdit.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonEdit.Text = "Edit selected module";
-            this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
             // 
             // MajorItemWindow
             // 
@@ -401,6 +405,6 @@
         private System.Windows.Forms.ToolStrip toolStripModules;
         private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
         private System.Windows.Forms.ToolStripButton toolStripButtonRemove;
-        private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
+        private BrightIdeasSoftware.OLVColumn olvColumnRarity;
     }
 }

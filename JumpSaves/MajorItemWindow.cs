@@ -1,5 +1,6 @@
 ﻿using BrightIdeasSoftware;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -61,6 +62,8 @@ namespace JumpSaves
             public string Effect { get; set; }
 
             public JSL.ModuleKind Kind { get; set; }
+
+            public JSL.Rarity Rarity { get; set; }
 
             public int Ranking { get; set; }
 
@@ -126,12 +129,15 @@ namespace JumpSaves
             // Tool strip
             toolStripButtonAdd.Enabled = canEdit_;
             toolStripButtonRemove.Enabled = canEdit_;
-            toolStripButtonEdit.Enabled = canEdit_;
 
             // Modules
             moduleList.Scrollable = false;
             moduleList.ShowGroups = true;
             moduleList.AlwaysGroupByColumn = olvColumnKind;
+            olvColumnEffect.IsEditable = canEdit_;
+            olvColumnPotency1.IsEditable = canEdit_;
+            olvColumnPotency2.IsEditable = canEdit_;
+            olvColumnPotency3.IsEditable = canEdit_;
             ReloadModuleList();
 
             // Only now start handling all the change events
@@ -185,6 +191,11 @@ namespace JumpSaves
                 e.Item.SelectedForeColor = e.Item.ForeColor;
                 e.Item.SelectedBackColor = Style.GetRarityColor(row.Editor.Rarity, false);
             }
+            else if (e.Column == olvColumnRarity)
+            {
+                e.SubItem.Text = row.Rarity.ToString();
+                e.SubItem.ForeColor = Style.GetRarityColor(row.Editor.Rarity, true);
+            }
             else if (e.Column == olvColumnPotency1)
             {
                 FormatPotencyColumn(row, 0, e);
@@ -207,6 +218,100 @@ namespace JumpSaves
             e.Parameters.SecondarySort = olvColumnEffect;
             e.Parameters.SecondarySortOrder = SortOrder.Ascending;
             e.Parameters.GroupComparer = new GroupComparer();
+        }
+
+        private void moduleList_CellEditStarting(object sender, CellEditEventArgs e)
+        {
+            if (e.Cancel)
+            {
+                return;
+            }
+
+            ModuleRow row = (ModuleRow)e.RowObject;
+
+            if (e.Column == olvColumnEffect)
+            {
+                ComboBox combo = new ComboBox();
+                combo.Bounds = e.CellBounds;
+                combo.DropDownStyle = ComboBoxStyle.DropDownList;
+                combo.FlatStyle = FlatStyle.Flat;
+                foreach (string title in JSL.ModuleType.GetTitles(Editor.Type, row.Kind))
+                {
+                    combo.Items.Add(title);
+                }
+                combo.SelectedItem = row.Effect;
+                e.Control = combo;
+                return;
+            }
+
+            int index = PotencyIndexFromColumn(e.Column);
+            if (index >= 0)
+            {
+                if (index > row.Editor.Potencies.Length)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                NumericUpDown updown = new NumericUpDown();
+                updown.Bounds = e.CellBounds;
+                updown.DecimalPlaces = 2;
+                updown.Minimum = 0.00M;
+                updown.Maximum = 99.99M;
+                double? potencyNormalized = index >= row.Editor.Potencies.Length ? (double?)null : row.Editor.Potencies[index];
+                updown.Value = (decimal)(PotencyPercentFromNormalized(potencyNormalized) ?? 0.0);
+                e.Control = updown;
+                return;
+            }
+        }
+
+        private void moduleList_CellEditFinishing(object sender, CellEditEventArgs e)
+        {
+            if (e.Cancel)
+            {
+                return;
+            }
+
+            ModuleRow row = (ModuleRow)e.RowObject;
+            if (e.Column == olvColumnEffect)
+            {
+                row.Editor.RawType = JSL.ModuleType.GetRawFromTitle(Editor.Type, ((ComboBox)e.Control).Text);
+                e.Control.Visible = false;
+                IsDirty = true;
+                return;
+            }
+            else if (e.Column == olvColumnRarity)
+            {
+                JSL.Rarity rarity = (JSL.Rarity)e.NewValue;
+                if (rarity == JSL.Rarity.Unknown || rarity > Editor.Rarity)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                row.Editor.Rarity = rarity;
+            }
+
+            int index = PotencyIndexFromColumn(e.Column);
+            if (index >= 0)
+            {
+                double? value = PotencyNormalizedFromPercent((double)((NumericUpDown)e.Control).Value);
+                try
+                {
+                    Editor.GetModule(row.Ranking).SetPotency(index, value);
+                    IsDirty = true;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, $"Failed to set value of potency #{index + 1} on module \"{row.Effect}\" to {value}: {ex.Message}");
+                }
+                return;
+            }
+        }
+
+        private void moduleList_CellEditFinished(object sender, CellEditEventArgs e)
+        {
+            ReloadModuleList();
         }
 
         private void textBoxName_TextChanged(object sender, EventArgs e)
@@ -249,17 +354,40 @@ namespace JumpSaves
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            Debug.Assert(!canEdit_);
+            Debug.Assert(canEdit_);
+
+            if (Editor.ModuleCount >= Editor.MaxModuleCount)
+            {
+                MessageBox.Show(this, $"Can't add more than {Editor.MaxModuleCount} modules to this item", "Too many modules", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            IsDirty = true;
+            Editor.AddModule(Editor.NewModule());
+
+            ReloadModuleList();
         }
 
         private void toolStripButtonRemove_Click(object sender, EventArgs e)
         {
-            Debug.Assert(!canEdit_);
-        }
+            Debug.Assert(canEdit_);
 
-        private void toolStripButtonEdit_Click(object sender, EventArgs e)
-        {
-            Debug.Assert(!canEdit_);
+            IList selected = moduleList.SelectedObjects;
+            if (selected.Count == 0)
+            {
+                MessageBox.Show(this, "Select one or more modules and press this button to remove them", "No modules selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            IsDirty = true;
+
+            foreach (object obj in selected)
+            {
+                ModuleRow r = (ModuleRow)obj;
+                Editor.RemoveModule(r.Ranking);
+            }
+
+            ReloadModuleList();
         }
 
         private void FormatPotencyColumn(ModuleRow row, int potencyIndex, FormatCellEventArgs e)
@@ -276,6 +404,8 @@ namespace JumpSaves
 
         private void CategoryUpdated(bool cascade = true)
         {
+            comboBoxType.Items.Clear();
+
             for (int i = 1; i < (int)JSL.MajorItemType.Enum.__COUNT__; ++i)
             {
                 JSL.MajorItemType.Enum e = (JSL.MajorItemType.Enum)i;
@@ -345,14 +475,53 @@ namespace JumpSaves
                 row.Editor = Editor.GetModule(i);
                 row.Effect = row.Editor.TypeName ?? "Unknown";
                 row.Kind = row.Editor.Kind;
+                row.Rarity = row.Editor.Rarity;
                 row.Ranking = i;
-                row.Potency1 = row.Editor.Potencies.Length >= 1 ? (double?)row.Editor.Potencies[0] : null;
-                row.Potency2 = row.Editor.Potencies.Length >= 2 ? (double?)row.Editor.Potencies[1] : null;
-                row.Potency3 = row.Editor.Potencies.Length >= 3 ? (double?)row.Editor.Potencies[2] : null;
+                row.Potency1 = PotencyPercentFromNormalized(row.Editor.Potencies.Length >= 1 ? (double?)row.Editor.Potencies[0] : null);
+                row.Potency2 = PotencyPercentFromNormalized(row.Editor.Potencies.Length >= 2 ? (double?)row.Editor.Potencies[1] : null);
+                row.Potency3 = PotencyPercentFromNormalized(row.Editor.Potencies.Length >= 3 ? (double?)row.Editor.Potencies[2] : null);
                 moduleRows_.Add(row);
             }
 
             moduleList.SetObjects(moduleRows_);
+        }
+
+        private double? PotencyPercentFromNormalized(double? potency)
+        {
+            if (potency == null)
+            {
+                return null;
+            }
+
+            return Math.Max((double)potency * 100.0, 0.01);
+        }
+
+        private double? PotencyNormalizedFromPercent(double? potency)
+        {
+            if (potency == null || potency == 0.0)
+            {
+                return null;
+            }
+
+            return potency / 100.0;
+        }
+
+        private int PotencyIndexFromColumn(OLVColumn column)
+        {
+            if (column == olvColumnPotency1)
+            {
+                return 0;
+            }
+            if (column == olvColumnPotency2)
+            {
+                return 1;
+            }
+            if (column == olvColumnPotency3)
+            {
+                return 2;
+            }
+
+            return -1;
         }
 
         private JSL.MajorItemEditor editor_;

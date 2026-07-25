@@ -36,10 +36,7 @@ namespace JSL
                 if (module_.Rarity != value)
                 {
                     module_.Rarity = value;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -54,6 +51,28 @@ namespace JSL
                 }
 
                 return kind_ ?? ModuleKind.Unknown;
+            }
+        }
+
+        public string RawType
+        {
+            get
+            {
+                return module_.RawType;
+            }
+            set
+            {
+                if (module_.RawType != value)
+                {
+                    module_.RawType = value;
+
+                    // Reset the cache
+                    kind_ = null;
+                    typeName_ = null;
+                    typeAbbreviation_ = null;
+
+                    SetDirtyIfNecessary();
+                }
             }
         }
 
@@ -83,23 +102,91 @@ namespace JSL
             }
         }
 
+        public int MaxPotencyCount
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
         public double[] Potencies
         {
             get
             {
                 return module_.Potencies;
             }
-            set
-            {
-                if (module_.Potencies != value)
-                {
-                    module_.Potencies = value;
+        }
 
-                    if (!IsOrphaned)
+        public void SetPotency(int index, double? value)
+        {
+            if (index > MaxPotencyCount)
+            {
+                throw new ArgumentOutOfRangeException($"A module can't have more than {MaxPotencyCount} potencies.");
+            }
+            else if (index > Potencies.Length)
+            {
+                throw new ArgumentOutOfRangeException($"Can't add potency #{index + 1} to a module with only {Potencies.Length} potencies so far.");
+            }
+
+            if (value != null && (value <= 0.0 || value >= 1.0))
+            {
+                throw new ArgumentOutOfRangeException("Potency value out of acceptable range");
+            }
+
+            if (index < Potencies.Length)
+            {
+                if (value == null)
+                {
+                    // Remove an existing element
+                    List<double> potencies = new List<double>();
+                    for (int i = 0; i < Potencies.Length; ++i)
                     {
-                        RootEditor.IsDirty = true;
+                        if (i != index)
+                        {
+                            potencies.Add(Potencies[i]);
+                        }
                     }
+                    module_.Potencies = potencies.ToArray();
                 }
+                else
+                {
+                    // Set an existing element
+                    double[] potencies = new double[Potencies.Length];
+                    for (int i = 0; i < Potencies.Length; ++i)
+                    {
+                        potencies[i] = Potencies[i];
+                    }
+                    potencies[index] = (double)value;
+                    module_.Potencies = potencies;
+                }
+            }
+            else if (index == Potencies.Length)
+            {
+                // Remove a nonexistent element?
+                if (value == null)
+                {
+                    return; // nothing to do here
+                }
+
+                // Add a new element
+                double[] potencies = new double[index + 1];
+                for (int i = 0; i < Potencies.Length; ++i)
+                {
+                    potencies[i] = Potencies[i];
+                }
+                potencies[index] = (double)value;
+                module_.Potencies = potencies;
+            }
+
+            SetDirtyIfNecessary();
+        }
+
+        internal Module Module
+        {
+            get
+            {
+                return module_;
             }
         }
 
@@ -140,10 +227,7 @@ namespace JSL
                 {
                     Item.Blueprint.RawType = value;
 
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -184,10 +268,7 @@ namespace JSL
                 if (GivenName != value)
                 {
                     Item.Blueprint.Name = value;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -232,10 +313,7 @@ namespace JSL
                 if (Item.RawCategory != raw)
                 {
                     Item.RawCategory = raw;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -256,10 +334,7 @@ namespace JSL
                 if (Item.RawCategory != value)
                 {
                     Item.RawCategory = value;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -277,10 +352,7 @@ namespace JSL
                 if (Item.Blueprint.Rarity != value)
                 {
                     Item.Blueprint.Rarity = value;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -296,10 +368,7 @@ namespace JSL
                 if (Item.Blueprint.Level != value)
                 {
                     Item.Blueprint.Level = value;
-                    if (!IsOrphaned)
-                    {
-                        RootEditor.IsDirty = true;
-                    }
+                    SetDirtyIfNecessary();
                 }
             }
         }
@@ -309,6 +378,14 @@ namespace JSL
             get
             {
                 return Modules.Length;
+            }
+        }
+
+        public int MaxModuleCount
+        {
+            get
+            {
+                return Item.Blueprint.MaxModules;
             }
         }
 
@@ -324,12 +401,26 @@ namespace JSL
 
         public void AddModule(ModuleEditor module)
         {
-            throw new NotImplementedException("Adding modules is not yet implemented");
+            if (Item.Blueprint.Modules.Length >= Item.Blueprint.MaxModules)
+            {
+                throw new InvalidOperationException($"Adding this module would exceed the maximum of {Item.Blueprint.MaxModules} modules for this item.");
+            }
+
+            ArrayBasedObject moduleList = new ArrayBasedObject(Item.Blueprint.Modules, Item.Blueprint.Root);
+            moduleList.InsertProperty(Item.Blueprint.Modules.Length, module.Module.Root);
+            modules_ = null; // clear the module cache
+
+            SetDirtyIfNecessary();
         }
 
         public void RemoveModule(int index)
         {
-            throw new NotImplementedException("Removing modules is not yet implemented");
+            ModuleEditor module = Modules[index];
+            ArrayBasedObject moduleList = new ArrayBasedObject(Item.Blueprint.Modules, Item.Blueprint.Root);
+            moduleList.RemovePropertyStrict(Array.IndexOf(moduleList.Root, module.Module.Root));
+            modules_ = null; // clear the module cache
+
+            SetDirtyIfNecessary();
         }
 
         public ModuleEditor NewModule()
@@ -362,6 +453,7 @@ namespace JSL
                     for (int i = 0; i < modules_.Length; ++i)
                     {
                         modules_[i] = new ModuleEditor(Item.Blueprint.Modules[i], Item.Blueprint.Modules, RootEditor);
+                        modules_[i].IsOrphaned = IsOrphaned;
                     }
 
                     // Sort such that ModuleKind.Feature comes first,
@@ -406,6 +498,7 @@ namespace JSL
             : base(rootEditor)
         {
             Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateStored();
+            IsOrphaned = true;
         }
 
         internal StoredMajorItemEditor(MajorItem item, IRootEditor rootEditor)
@@ -449,6 +542,7 @@ namespace JSL
             : base(rootEditor)
         {
             Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateRecent();
+            IsOrphaned = true;
         }
 
         internal RecentMajorItemEditor(MajorItem item, IRootEditor rootEditor)
@@ -493,6 +587,7 @@ namespace JSL
         {
             library_ = library;
             Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateLibrary();
+            IsOrphaned = true;
         }
 
         internal LibraryMajorItemEditor(Library library, int index, IRootEditor rootEditor)
@@ -672,20 +767,14 @@ namespace JSL
 
             ItemsArr.InsertProperty(Items.Length, storedItem.Root);
 
-            if (!IsOrphaned)
-            {
-                RootEditor.IsDirty = true;
-            }
+            SetDirtyIfNecessary();
         }
 
         public override void Remove(int index)
         {
             ItemsArr.RemoveProperty(index);
 
-            if (!IsOrphaned)
-            {
-                RootEditor.IsDirty = true;
-            }
+            SetDirtyIfNecessary();
         }
 
         protected override object[] Items
@@ -798,20 +887,14 @@ namespace JSL
                 throw new ArgumentException($"Item type {item.GetType().FullName} cannot be added to recent items");
             }
 
-            if (!IsOrphaned)
-            {
-                RootEditor.IsDirty = true;
-            }
+            SetDirtyIfNecessary();
         }
 
         public override void Remove(int index)
         {
             ItemsArr.RemoveProperty(index);
 
-            if (!IsOrphaned)
-            {
-                RootEditor.IsDirty = true;
-            }
+            SetDirtyIfNecessary();
         }
 
         protected override object[] Items

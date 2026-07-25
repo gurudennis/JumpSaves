@@ -161,6 +161,14 @@ namespace JSL
             }
         }
 
+        public int MaxModules
+        {
+            get
+            {
+                return 5;
+            }
+        }
+
         public object[] Modules
         {
             get
@@ -197,15 +205,15 @@ namespace JSL
             }
         }
 
-        public string RawOrigin
+        public string ItemSchool
         {
             get
             {
-                return GetPropertyStrict<string>(Index_RawOrigin);
+                return GetPropertyStrict<string>(Index_ItemSchool);
             }
             set
             {
-                SetPropertyStrict(Index_RawOrigin, value);
+                SetPropertyStrict(Index_ItemSchool, value);
             }
         }
 
@@ -292,7 +300,7 @@ namespace JSL
             blueprint.SetPropertyStrict(Index_SaveVersion, (byte)0); // same for all modules in a given save, must be copied from SaveMetadata.SaveVersion
             blueprint.SetPropertyStrict(Index_CraftedBy, null);
             blueprint.SetPropertyStrict(10, false); // unknown constant
-            blueprint.SetPropertyStrict(Index_RawOrigin, "4c508dd3046b4cb4b8bd5a0e24877f12");
+            blueprint.SetPropertyStrict(Index_ItemSchool, "4c508dd3046b4cb4b8bd5a0e24877f12"); // irrlevant once the item is spawned
             blueprint.SetPropertyStrict(Index_Name, null);
             blueprint.SetNewIdentity(); // ID
             blueprint.SetPropertyStrict(Index_OwningPlayerID, string.Empty); // same for all modules in a given save, must be copied from SaveMetadata.PlayerID
@@ -307,7 +315,7 @@ namespace JSL
         private const int Index_Furniture = 4;
         private const int Index_SaveVersion = 8;
         private const int Index_CraftedBy = 9;
-        private const int Index_RawOrigin = 11;
+        private const int Index_ItemSchool = 11;
         private const int Index_Name = 12;
         private const int Index_ID = 13;
         private const int Index_OwningPlayerID = 14;

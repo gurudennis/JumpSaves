@@ -95,7 +95,7 @@ namespace JSL
 
         public static Enum FromRaw(string raw)
         {
-            return byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
+            return raw != null && byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
         }
 
         public static bool IsWithShip(Enum e)
@@ -233,7 +233,7 @@ namespace JSL
 
         public static Enum FromRaw(string raw)
         {
-            return byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
+            return raw != null && byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
         }
 
         private struct EnumInfo
@@ -393,7 +393,7 @@ namespace JSL
 
         public static Enum FromRaw(string raw)
         {
-            return byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
+            return raw != null && byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
         }
 
         private struct EnumInfo
@@ -502,6 +502,65 @@ namespace JSL
             }
 
             return ModuleKind.Unknown;
+        }
+
+        public static IReadOnlyList<string> GetTitles(MajorItemType.Enum type, ModuleKind kind = ModuleKind.Unknown)
+        {
+            List<string> titles = new List<string>();
+
+            MajorItemCategory.Enum category = MajorItemType.GetCategory(type);
+            MajorItemPurpose purpose = MajorItemType.GetPurpose(type);
+            if (MajorItemCategory.IsWithPlayerWeapon(category))
+            {
+                for (int i = 1; i < (int)PlayerWeaponModuleType.Enum.__COUNT__; ++i)
+                {
+                    if (kind != ModuleKind.Unknown && kind != PlayerWeaponModuleType.GetKind((PlayerWeaponModuleType.Enum)i))
+                    {
+                        continue;
+                    }
+
+                    if (purpose != PlayerWeaponModuleType.GetPurpose((PlayerWeaponModuleType.Enum)i))
+                    {
+                        continue;
+                    }
+
+                    titles.Add(PlayerWeaponModuleType.GetTitle((PlayerWeaponModuleType.Enum)i));
+                }
+            }
+            else if (MajorItemCategory.IsWithShip(category))
+            {
+                for (int i = 1; i < (int)ShipModuleType.Enum.__COUNT__; ++i)
+                {
+                    if (kind != ModuleKind.Unknown && kind != ShipModuleType.GetKind((ShipModuleType.Enum)i))
+                    {
+                        continue;
+                    }
+
+                    if (purpose != ShipModuleType.GetPurpose((ShipModuleType.Enum)i))
+                    {
+                        continue;
+                    }
+
+                    titles.Add(ShipModuleType.GetTitle((ShipModuleType.Enum)i));
+                }
+            }
+
+            return titles;
+        }
+
+        public static string GetRawFromTitle(MajorItemType.Enum type, string title)
+        {
+            MajorItemCategory.Enum category = MajorItemType.GetCategory(type);
+            if (MajorItemCategory.IsWithPlayerWeapon(category))
+            {
+                return PlayerWeaponModuleType.GetRaw(PlayerWeaponModuleType.FromTitle(title));
+            }
+            else if (MajorItemCategory.IsWithShip(category))
+            {
+                return ShipModuleType.GetRaw(ShipModuleType.FromTitle(title));
+            }
+
+            return null;
         }
     }
 
@@ -620,7 +679,7 @@ namespace JSL
 
         public static Enum FromRaw(string raw, MajorItemCategory.Enum category = MajorItemCategory.Enum.Unknown)
         {
-            if (byRaw_.TryGetValue(raw, out Enum e))
+            if (raw != null && byRaw_.TryGetValue(raw, out Enum e))
             {
                 if (category == MajorItemCategory.Enum.Unknown || GetCategory(e) == category)
                 {
