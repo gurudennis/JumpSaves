@@ -135,6 +135,7 @@ namespace JumpSaves
             moduleList.ShowGroups = true;
             moduleList.AlwaysGroupByColumn = olvColumnKind;
             olvColumnEffect.IsEditable = canEdit_;
+            olvColumnRarity.IsEditable = canEdit_;
             olvColumnPotency1.IsEditable = canEdit_;
             olvColumnPotency2.IsEditable = canEdit_;
             olvColumnPotency3.IsEditable = canEdit_;
