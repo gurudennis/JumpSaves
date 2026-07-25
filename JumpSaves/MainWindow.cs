@@ -1,5 +1,4 @@
-﻿using JSL;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -262,6 +261,12 @@ namespace JumpSaves
             string credits = $"JumpSaves, a Jump Space save file editor.\nVersion {Assembly.GetExecutingAssembly().GetName().Version} (beta)" +
                               "\n\nProgramming: gurudennis (gurudenis <at> gmail.com)\nBeta testing: Snakeyes";
             MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+//#if DEBUG
+//            model_.LibraryEditor.VerifyConstants();
+//            model_.SaveEditor.StoredMajorItems.VerifyConstants();
+//            model_.SaveEditor.RecentMajorItems.VerifyConstants();
+//#endif
         }
 
         private void DoTransfer(MajorItemList from, IReadOnlyList<JSL.MajorItemEditor> items)
@@ -277,7 +282,7 @@ namespace JumpSaves
                     }
                     else
                     {
-                        model_.TransferToLibrary(item, ConflictBehavior.Error);
+                        model_.TransferToLibrary(item, JSL.ConflictBehavior.Error);
                     }
                 }
                 catch (Exception ex)

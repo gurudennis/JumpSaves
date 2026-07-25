@@ -102,7 +102,7 @@ namespace JSL
             }
         }
 
-        public int MaxTheoreticalPotencyCount
+        public static int MaxTheoreticalPotencyCount
         {
             get
             {
@@ -110,7 +110,7 @@ namespace JSL
             }
         }
 
-        public int? MaxPotencyCount
+        public int? ExpectedPotencyCount
         {
             get
             {
@@ -192,14 +192,14 @@ namespace JSL
 
         public void SetExpectedPotencyCount()
         {
-            int? maxPotencyCount = MaxPotencyCount;
-            if (maxPotencyCount == null || maxPotencyCount == Potencies.Length)
+            int? expectedPotencyCount = ExpectedPotencyCount;
+            if (expectedPotencyCount == null || expectedPotencyCount == Potencies.Length)
             {
                 return;
             }
 
             List<double> potencies = new List<double>();
-            for (int i = 0; i < maxPotencyCount; ++i)
+            for (int i = 0; i < expectedPotencyCount; ++i)
             {
                 if (i < Potencies.Length)
                 {
@@ -699,6 +699,27 @@ namespace JSL
                 }
             }
         }
+
+#if DEBUG
+        public void VerifyConstants()
+        {
+            string report = string.Empty;
+            for (int i = 0; i < Count; ++i)
+            {
+                MajorItemEditor item = this[i];
+                for (int q = 0; q < item.ModuleCount; ++q)
+                {
+                    ModuleEditor module = item.GetModule(q);
+                    if (module.ExpectedPotencyCount != null && module.Potencies.Length != module.ExpectedPotencyCount)
+                    {
+                        report += $"Item \"{item.TypeName ?? "Unknown"}\" module \"{module.TypeName ?? "Unknown"}\" expected {module.ExpectedPotencyCount} potencies, found {module.Potencies.Length}.\n";
+                    }
+                }
+            }
+
+            throw new Exception(report);
+        }
+#endif
 
         protected IReadOnlyList<MajorItemEditor> GetItemsInCategory(MajorItemCategory.Enum category)
         {
