@@ -13,7 +13,7 @@ namespace JumpSaves.Model
     {
         public bool IsRunning { get; set; }
 
-        public bool HasReopened { get; set; }
+        public bool HasAutoReopened { get; set; }
     }
 
     public class Instance : IDisposable
@@ -66,6 +66,14 @@ namespace JumpSaves.Model
             {
                 throw new Exception("Can't save because no save file or directory is open right now");
             }
+
+            if (BackupStore == null)
+            {
+                throw new Exception("Not ready to save because the backup store hasn't been fully initialized yet");
+            }
+
+            BackupStore.Add(Path, "Before saving");
+            ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Created a new backup of save \"{Path}\" prior to overwriting it.");
 
             SaveEditor.Save();
             ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Saved \"{Path}\"");
@@ -280,7 +288,7 @@ namespace JumpSaves.Model
                 PeriodicInfoEvent?.Invoke(this, new PeriodicInfoArgs
                 {
                     IsRunning = args.IsGameRunning,
-                    HasReopened = ReopenIfNewerAndMonitoring()
+                    HasAutoReopened = ReopenIfNewerAndMonitoring()
                 });
             });
         }

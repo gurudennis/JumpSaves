@@ -382,6 +382,7 @@ namespace JSL
             C_LastShotDamagePercent,
             C_RandomStatusEffectOnHit,
             C_AdditionalShotButLessDamage,
+            C_EMPToRestoreHealth,
             __COUNT__
         }
 
@@ -477,7 +478,7 @@ namespace JSL
             new EnumInfo { Title = "Last shot does more damage",      Abbr = "Dmg", Raw = "490125f0fc44ef04090900b7eaaafeec", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Magazine size",                   Abbr = "Mag", Raw = "989e818fc6f5c4a47ac1dbd682f96e94", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Final shot frag",                 Abbr = "Frg", Raw = "61121570f54f3904b9bef6f39801d39c", PotencyCount = 3, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Sear chance on hit nearby",       Abbr = "Sea", Raw = "55561444a0d58ff4a980836c77f1905c", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Sear chance on hit nearby",       Abbr = "Sea", Raw = "55561444a0d58ff4a980836c77f1905c", PotencyCount = 3, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Sear after damage",               Abbr = "Sea", Raw = "dfb61796e77bac246b8cb6786ef49297", PotencyCount = 3, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Kills increase melee",            Abbr = "Mel", Raw = "3c3ea2f8998b5474d91965dea056b2ac", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Fire rate",                       Abbr = "RoF", Raw = "767a4ec9ef9c7cf40be160743b4e6cf3", PotencyCount = 1, Kind = ModuleKind.Custom  },
@@ -491,6 +492,7 @@ namespace JSL
             new EnumInfo { Title = "Last shot does % more damage",    Abbr = "Dmg", Raw = "e8b4433b1b4cf5648b5a7c236fdf4507", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Random status effect on hit",     Abbr = "Ran", Raw = "f004308cf75411f4897f0286397ca2c2", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Additional shot but less damage", Abbr = "Add", Raw = "a51a20461ffa1bc489e60f410939e291", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "EMP to restore health",           Abbr = "Hel", Raw = "704bdac3db82ade45ad1690916d7ad1b", PotencyCount = 2, Kind = ModuleKind.Custom  },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();

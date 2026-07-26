@@ -159,6 +159,7 @@
     <None Include="Images\Riches.png" />
     <None Include="Images\Riches_tiny.png" />
     <None Include="Images\Reload.png" />
+    <None Include="Images\Restore.png" />
     <Content Include="JumpSaves.ico" />
   </ItemGroup>
   <ItemGroup>

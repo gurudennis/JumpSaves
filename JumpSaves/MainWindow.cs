@@ -124,7 +124,7 @@ namespace JumpSaves
         {
             if (backupsWindow_ == null || backupsWindow_.IsDisposed)
             {
-                backupsWindow_ = new BackupsWindow(model_);
+                backupsWindow_ = new BackupsWindow(model_, OnStateChanged);
             }
 
             if (backupsWindow_.Visible)
@@ -280,11 +280,15 @@ namespace JumpSaves
                               "\n\nProgramming: gurudennis (gurudenis <at> gmail.com)\nBeta testing: Snakeyes";
             MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-//#if DEBUG
-//            model_.LibraryEditor.VerifyConstants();
-//            model_.SaveEditor.StoredMajorItems.VerifyConstants();
-//            model_.SaveEditor.RecentMajorItems.VerifyConstants();
-//#endif
+#if DEBUG
+            string res = model_.SaveEditor.StoredMajorItems.VerifyConstants();
+            res += model_.SaveEditor.RecentMajorItems.VerifyConstants();
+            res += model_.LibraryEditor.VerifyConstants();
+            if (!string.IsNullOrEmpty(res))
+            {
+                MessageBox.Show("Validation failures:\n" + res, "Validation failures", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+#endif
         }
 
         private void DoTransfer(MajorItemList from, IReadOnlyList<JSL.MajorItemEditor> items)
@@ -345,7 +349,7 @@ namespace JumpSaves
         {
             OnStateChanged();
 
-            if (args.HasReopened)
+            if (args.HasAutoReopened)
             {
                 model_.AutoAcquireIntoLibrary(libraryMajorItemList.IsInterestedInItem);
                 libraryMajorItemList.Reload();

@@ -15,11 +15,11 @@ namespace JSL
             Load();
         }
 
-        internal Backup(BackupStore store, string path, string originalPath)
+        internal Backup(BackupStore store, string path, string originalPath, string name)
         {
             store_ = store;
             Path = path;
-            Save(originalPath);
+            Save(originalPath, name);
         }
 
         public static string MakeDirName(string name = null)
@@ -43,6 +43,8 @@ namespace JSL
                 if (value != metadata_.Name)
                 {
                     metadata_.Name = value;
+                    File.WriteAllText(MetadataFilePath, JsonSerializer.Serialize(metadata_));
+
                     string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path), MakeDirName(metadata_.Name));
                     try
                     {
@@ -150,9 +152,10 @@ namespace JSL
             }
         }
 
-        private void Save(string originalPath)
+        private void Save(string originalPath, string name)
         {
             metadata_ = new Metadata();
+            metadata_.Name = name;
             metadata_.Timestamp = DateTime.Now;
             metadata_.OriginalPath = originalPath;
 
@@ -177,9 +180,10 @@ namespace JSL
 
     public class BackupStore
     {
-        public BackupStore(string path)
+        public BackupStore(string path, int maxBackups)
         {
             Path = path;
+            MaxBackups = maxBackups;
             Load();
         }
 
@@ -195,6 +199,8 @@ namespace JSL
             }
         }
 
+        public int MaxBackups { get; private set; }
+
         public void Reload()
         {
             backups_.Clear();
@@ -202,10 +208,11 @@ namespace JSL
             Load();
         }
 
-        public Backup Add(string originalPath)
+        public Backup Add(string originalPath, string name = null)
         {
-            Backup backup = new Backup(this, System.IO.Path.Combine(Path, Backup.MakeDirName()), originalPath);
-            backups_.Add(backup);
+            Backup backup = new Backup(this, System.IO.Path.Combine(Path, Backup.MakeDirName()), originalPath, name);
+            backups_.Insert(0, backup);
+            Prune();
             Changed?.Invoke(this, EventArgs.Empty);
             return backup;
         }
@@ -248,10 +255,33 @@ namespace JSL
                         failedPaths_.Add(backupDir.FullName);
                     }
                 }
+
+                backups_.Sort((l, r) => l.Timestamp.CompareTo(r.Timestamp) * -1);
+
+                Prune();
             }
             catch
             {
                 failedPaths_.Add(Path);
+            }
+        }
+
+        private void Prune()
+        {
+            if (MaxBackups <= 0)
+            {
+                return;
+            }
+
+            int toRemove = backups_.Count - MaxBackups;
+            if (toRemove <= 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < toRemove; ++i)
+            {
+                Remove(backups_.Count - 1);
             }
         }
 

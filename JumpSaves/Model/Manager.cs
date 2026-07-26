@@ -56,7 +56,7 @@ namespace JumpSaves.Model
                 return;
             }
 
-            BackupStore = new JSL.BackupStore(DefaultBackupStorePath);
+            BackupStore = new JSL.BackupStore(DefaultBackupStorePath, 100);
             EmitPeriodicInfoEvent();
 
             do

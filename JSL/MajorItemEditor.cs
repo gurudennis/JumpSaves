@@ -701,7 +701,7 @@ namespace JSL
         }
 
 #if DEBUG
-        public void VerifyConstants()
+        public string VerifyConstants()
         {
             string report = string.Empty;
             for (int i = 0; i < Count; ++i)
@@ -712,12 +712,18 @@ namespace JSL
                     ModuleEditor module = item.GetModule(q);
                     if (module.ExpectedPotencyCount != null && module.Potencies.Length != module.ExpectedPotencyCount)
                     {
-                        report += $"Item \"{item.TypeName ?? "Unknown"}\" module \"{module.TypeName ?? "Unknown"}\" expected {module.ExpectedPotencyCount} potencies, found {module.Potencies.Length}.\n";
+                        // Known exceptions:
+                        if (module.RawType == ShipModuleType.GetRaw(ShipModuleType.Enum.C_ChanceToChainEnemies) && module.Potencies.Length == 2)
+                        {
+                            continue; // Some "Chance to chain" modules have 3 potencies while others have two
+                        }
+
+                        report += $"{SelfDesignation} item \"{item.TypeName ?? "Unknown"}\" module \"{module.TypeName ?? "Unknown"}\" expected {module.ExpectedPotencyCount} potencies, found {module.Potencies.Length}.\n";
                     }
                 }
             }
 
-            throw new Exception(report);
+            return report;
         }
 #endif
 
