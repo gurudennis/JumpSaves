@@ -5,6 +5,7 @@
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="LICENSE.txt" />
+    <File Path="README.md" />
   </Folder>
   <Project Path="JSL/JSL.csproj" Id="eed5b172-1e66-466c-8e86-bae5cf7f58b1" />
   <Project Path="JumpSaves/JumpSaves.csproj" Id="97289245-324a-4a13-ae1d-53110295ab3e" />

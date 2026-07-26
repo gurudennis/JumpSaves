@@ -628,7 +628,6 @@ namespace JSL
             : base(library.Entries[index].Item, rootEditor)
         {
             library_ = library;
-            index_ = index;
         }
 
         internal LibraryMajorItemEditor(Library library, LibraryMajorItem item, IRootEditor rootEditor)
@@ -664,7 +663,6 @@ namespace JSL
             }
         }
 
-        private int index_ = -1;
         private Library library_;
     }
 
