@@ -90,6 +90,20 @@ namespace JSL
             }
         }
 
+        public void Save(string file)
+        {
+            foreach (string name in FileNames)
+            {
+                string destinationPath = System.IO.Path.Combine(Path, name);
+                if (File.Exists(destinationPath))
+                {
+                    File.Delete(destinationPath);
+                }
+
+                File.Copy(file, destinationPath);
+            }
+        }
+
         public string Path { get; private set; }
 
         public static readonly List<string> FileNames = new List<string> { "persistent_user_data.bin", "persistent_user_data.bin.bak1", "persistent_user_data.bin.bak2" };

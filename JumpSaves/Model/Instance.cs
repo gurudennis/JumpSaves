@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Xml.Linq;
@@ -136,6 +137,14 @@ namespace JumpSaves.Model
                 if (libraryEditor_ == null && manager_.Library != null)
                 {
                     libraryEditor_ = JSL.EditorFactory.OpenLibrary(manager_.Library);
+                    IReadOnlyList<string> failedFiles = libraryEditor_.TakeFailedFiles();
+                    if (failedFiles != null && failedFiles.Count > 0)
+                    {
+                        foreach (string file in failedFiles)
+                        {
+                            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to open library file \"{file}\"");
+                        }
+                    }
                 }
 
                 return libraryEditor_;

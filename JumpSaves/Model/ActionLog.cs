@@ -124,7 +124,7 @@ namespace JumpSaves.Model
             }
 
             // Open a new one
-            string path = Path.Combine(LocationPath, $"{DateTime.Now.ToString("yyyy-dd-M-HH-mm-ss")}_JumpSaves_Log.txt");
+            string path = Path.Combine(LocationPath, $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}_JumpSaves_Log.txt");
             file_ = System.IO.File.Open(path, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
         }
 
