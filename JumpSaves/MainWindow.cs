@@ -120,6 +120,24 @@ namespace JumpSaves
             Save();
         }
 
+        private void toolStripButtonBackups_Click(object sender, EventArgs e)
+        {
+            if (backupsWindow_ == null || backupsWindow_.IsDisposed)
+            {
+                backupsWindow_ = new BackupsWindow(model_);
+            }
+
+            if (backupsWindow_.Visible)
+            {
+                backupsWindow_.Focus();
+                backupsWindow_.BringToFront();
+            }
+            else
+            {
+                backupsWindow_.Show();
+            }
+        }
+
         private void toolStripButtonLog_Click(object sender, EventArgs e)
         {
             if (logWindow_ == null || logWindow_.IsDisposed)
@@ -289,6 +307,8 @@ namespace JumpSaves
                 {
                     string name = item.Name ?? "(unknown)";
                     failures.Add($"{name}: {ex.Message}");
+                    MajorItemList to = from == editorMajorItemList ? libraryMajorItemList : editorMajorItemList;
+                    DoListLog(to, Model.ActionLog.Level.Error, $"Failed to transfer item \"{name}\" from {from.SelfDesignation} to {to.SelfDesignation}: {ex.Message}");
                 }
             }
 
@@ -339,6 +359,7 @@ namespace JumpSaves
             toolStripSaveButton.Visible = model_.IsOpen && !model_.IsMonitoring;
             closeToolStripMenuItem.Visible = model_.IsOpen;
             saveToolStripMenuItem.Visible = model_.IsOpen;
+            toolStripButtonBackups.Visible = model_.BackupStore != null;
             toolStripLabelDirty.Visible = model_.IsDirty;
             toolStripGameRunningLabel.Visible = model_.IsGameRunning && !model_.IsMonitoring;
             toolStripLabelMonitoring.Visible = model_.IsMonitoring;
@@ -384,5 +405,6 @@ namespace JumpSaves
         private Model.Instance model_;
         private bool gameWasRunning_;
         private LogWindow logWindow_;
+        private BackupsWindow backupsWindow_;
     }
 }

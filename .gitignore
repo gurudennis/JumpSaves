@@ -60,3 +60,6 @@ TestResult.xml
 nunit-*.xml
 /packages
 /.vs
+
+# VS
+*.csproj.dtbcache.json

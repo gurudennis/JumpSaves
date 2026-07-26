@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack.Formatters;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -7,16 +8,72 @@ namespace JSL
 {
     public class Backup
     {
-        internal Backup(string path)
+        internal Backup(BackupStore store, string path)
         {
+            store_ = store;
             Path = path;
             Load();
         }
 
-        internal Backup(string path, string originalPath)
+        internal Backup(BackupStore store, string path, string originalPath)
         {
+            store_ = store;
             Path = path;
             Save(originalPath);
+        }
+
+        public static string MakeDirName(string name = null)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                name = "Backup";
+            }
+
+            return $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")} {name}";
+        }
+
+        public string Name
+        {
+            get
+            {
+                return metadata_.Name ?? string.Empty;
+            }
+            set
+            {
+                if (value != metadata_.Name)
+                {
+                    metadata_.Name = value;
+                    string newPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Path), MakeDirName(metadata_.Name));
+                    try
+                    {
+                        if (Path != newPath)
+                        {
+                            Directory.Move(Path, newPath);
+                            Path = newPath;
+                        }
+                    }
+                    catch { }
+
+                    store_.Changed?.Invoke(store_, EventArgs.Empty);
+                }
+            }
+        }
+
+        public string Title
+        {
+            get
+            {
+                return string.IsNullOrEmpty(Name) ? "(unnamed)" : Name;
+            }
+            set
+            {
+                if (value == "(unnamed)")
+                {
+                    value = null;
+                }
+
+                Name = value;
+            }
         }
 
         public string Path { get; private set; }
@@ -25,7 +82,7 @@ namespace JSL
         {
             get
             {
-                return metadata_?.OriginalPath;
+                return metadata_.OriginalPath;
             }
         }
 
@@ -33,7 +90,7 @@ namespace JSL
         {
             get
             {
-                return metadata_?.Timestamp ?? DateTime.MinValue;
+                return metadata_.Timestamp;
             }
         }
 
@@ -61,6 +118,8 @@ namespace JSL
 
         private class Metadata
         {
+            public string Name { get; set; }
+
             public string OriginalPath { get; set; }
 
             public DateTime Timestamp { get; set; }
@@ -93,6 +152,10 @@ namespace JSL
 
         private void Save(string originalPath)
         {
+            metadata_ = new Metadata();
+            metadata_.Timestamp = DateTime.Now;
+            metadata_.OriginalPath = originalPath;
+
             Directory.CreateDirectory(Path);
 
             string originalFilePath = originalPath;
@@ -108,6 +171,7 @@ namespace JSL
 
         private static readonly string MetadataFileName = "metadata.json";
         private static readonly string SaveFileName = "save.bin";
+        private readonly BackupStore store_;
         private Metadata metadata_;
     }
 
@@ -123,7 +187,7 @@ namespace JSL
 
         public EventHandler<EventArgs> Changed;
 
-        public IReadOnlyCollection<Backup> Backups
+        public IReadOnlyList<Backup> Backups
         {
             get
             {
@@ -140,8 +204,7 @@ namespace JSL
 
         public Backup Add(string originalPath)
         {
-            string fileName = $"{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}_Backup";
-            Backup backup = new Backup(System.IO.Path.Combine(Path, fileName), originalPath);
+            Backup backup = new Backup(this, System.IO.Path.Combine(Path, Backup.MakeDirName()), originalPath);
             backups_.Add(backup);
             Changed?.Invoke(this, EventArgs.Empty);
             return backup;
@@ -160,15 +223,17 @@ namespace JSL
             Remove(backups_.IndexOf(backup));
         }
 
-        public IReadOnlyCollection<string> TakeFailedPaths()
+        public IReadOnlyList<string> TakeFailedPaths()
         {
-            IReadOnlyCollection<string> paths = failedPaths_;
+            IReadOnlyList<string> paths = failedPaths_;
             failedPaths_ = new List<string>();
             return paths;
         }
 
         private void Load()
         {
+            Directory.CreateDirectory(Path);
+
             try
             {
                 DirectoryInfo dir = new DirectoryInfo(Path);
@@ -176,7 +241,7 @@ namespace JSL
                 {
                     try
                     {
-                        backups_.Add(new Backup(backupDir.FullName));
+                        backups_.Add(new Backup(this, backupDir.FullName));
                     }
                     catch
                     {
@@ -188,8 +253,6 @@ namespace JSL
             {
                 failedPaths_.Add(Path);
             }
-
-            Changed?.Invoke(this, EventArgs.Empty);
         }
 
         private List<Backup> backups_ = new List<Backup>();

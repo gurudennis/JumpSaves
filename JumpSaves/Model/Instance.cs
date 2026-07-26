@@ -151,6 +151,27 @@ namespace JumpSaves.Model
             }
         }
 
+        public JSL.BackupStore BackupStore
+        {
+            get
+            {
+                if (backupStore_ == null && manager_.BackupStore != null)
+                {
+                    backupStore_ = manager_.BackupStore;
+                    IReadOnlyList<string> failedPaths = backupStore_.TakeFailedPaths();
+                    if (failedPaths != null && failedPaths.Count > 0)
+                    {
+                        foreach (string path in failedPaths)
+                        {
+                            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to verify backup path \"{path}\"");
+                        }
+                    }
+                }
+
+                return backupStore_;
+            }
+        }
+
         public ActionLog ActionLog
         {
             get
@@ -298,5 +319,6 @@ namespace JumpSaves.Model
         private readonly Manager manager_;
         private readonly SynchronizationContext syncContext_;
         private JSL.LibraryMajorItemListEditor libraryEditor_;
+        private JSL.BackupStore backupStore_;
     }
 }

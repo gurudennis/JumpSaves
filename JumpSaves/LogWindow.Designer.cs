@@ -57,10 +57,10 @@
             this.olvColumnText});
             this.list.Cursor = System.Windows.Forms.Cursors.Default;
             this.list.HideSelection = false;
-            this.list.Location = new System.Drawing.Point(1, 36);
+            this.list.Location = new System.Drawing.Point(1, 39);
             this.list.Name = "list";
             this.list.ShowGroups = false;
-            this.list.Size = new System.Drawing.Size(1016, 613);
+            this.list.Size = new System.Drawing.Size(1016, 609);
             this.list.TabIndex = 0;
             this.list.UseCompatibleStateImageBehavior = false;
             this.list.View = System.Windows.Forms.View.Details;

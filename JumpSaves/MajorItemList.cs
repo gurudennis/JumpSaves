@@ -429,20 +429,39 @@ namespace JumpSaves
         private void toolStripButtonRemove_Click(object sender, EventArgs e)
         {
             IList selected = list.SelectedObjects;
+            if (selected.Count == 0)
+            {
+                MessageBox.Show("Select one or more items and press this button to remove them", "No items selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
             string submsg = selected.Count == 1 ? "this item" : $"these {selected.Count} items";
             string msg = $"Are you sure you want to permanently remove {submsg}?\n\nThis is irreversible.";
-            if (MessageBox.Show(Parent, msg, "Remove items?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            if (MessageBox.Show(Parent, msg, $"Remove {submsg}?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
             {
                 return;
             }
 
+            bool failed = false;
             foreach (object obj in selected)
             {
                 Row r = (Row)obj;
                 string name = r.Editor.Name ?? "Unknown";
-                Editor.Remove(r.Editor);
-                LogAction(this, Model.ActionLog.Level.Warning, $"Removed {SelfDesignation} item \"{name}\"");
+                try
+                {
+                    Editor.Remove(r.Editor);
+                    LogAction(this, Model.ActionLog.Level.Warning, $"Removed {SelfDesignation} item \"{name}\"");
+                }
+                catch (Exception ex)
+                {
+                    LogAction(this, Model.ActionLog.Level.Error, $"Failed to remove {SelfDesignation} item \"{name}\": {ex.Message}");
+                    failed = true;
+                }
+
+                if (failed)
+                {
+                    MessageBox.Show("Failed to remove one or more of the selected items. See log for more info.", "Failed to delete item(s)", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             Reload();

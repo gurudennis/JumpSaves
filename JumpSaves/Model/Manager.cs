@@ -1,5 +1,4 @@
-﻿using JSL;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Threading;
 
@@ -40,22 +39,41 @@ namespace JumpSaves.Model
             get; private set;
         }
 
+        public JSL.BackupStore BackupStore
+        {
+            get; private set;
+        }
+
         public event EventHandler<GlobalPeriodicInfoEventArgs> PeriodicInfoEvent;
 
         private void ThreadProc()
         {
-            Library = new Library(DefaultLibraryPath);
+            Library = new JSL.Library(DefaultLibraryPath);
+            EmitPeriodicInfoEvent();
+
+            if (stop_.WaitOne(0))
+            {
+                return;
+            }
+
+            BackupStore = new JSL.BackupStore(DefaultBackupStorePath);
+            EmitPeriodicInfoEvent();
 
             do
             {
-                GlobalPeriodicInfoEventArgs args = new GlobalPeriodicInfoEventArgs();
-
-                Process[] processes = Process.GetProcessesByName("Jump Space");
-                args.IsGameRunning = (processes != null && processes.Length > 0);
-
-                PeriodicInfoEvent?.Invoke(this, args);
+                EmitPeriodicInfoEvent();
             }
             while (!stop_.WaitOne(2000));
+        }
+
+        private void EmitPeriodicInfoEvent()
+        {
+            GlobalPeriodicInfoEventArgs args = new GlobalPeriodicInfoEventArgs();
+
+            Process[] processes = Process.GetProcessesByName("Jump Space");
+            args.IsGameRunning = (processes != null && processes.Length > 0);
+
+            PeriodicInfoEvent?.Invoke(this, args);
         }
 
         private string DefaultLibraryPath
@@ -63,6 +81,14 @@ namespace JumpSaves.Model
             get
             {
                 return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "Library");
+            }
+        }
+
+        private string DefaultBackupStorePath
+        {
+            get
+            {
+                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "Backups");
             }
         }
 

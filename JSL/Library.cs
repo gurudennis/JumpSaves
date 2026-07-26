@@ -238,17 +238,6 @@ namespace JSL
             failedFiles_.Add(path);
         }
 
-        private string MakeSafeName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                return name;
-            }
-
-            char[] invalidChars = System.IO.Path.GetInvalidFileNameChars();
-            return new string(name.Select(c => invalidChars.Contains(c) ? '_' : c).ToArray());
-        }
-
         private string MakeFileName(string name, string hash)
         {
             if (string.IsNullOrEmpty(hash))
@@ -256,7 +245,7 @@ namespace JSL
                 throw new ArgumentNullException("Invalid hash");
             }
 
-            string nameSuffix = name == null ? String.Empty : $" {MakeSafeName(name)}";
+            string nameSuffix = name == null ? String.Empty : $" {Utils.MakeSafeName(name)}";
             return $"{hash}{nameSuffix}.jsi";
         }
 

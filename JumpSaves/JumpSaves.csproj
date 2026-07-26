@@ -52,6 +52,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BackupsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BackupsWindow.Designer.cs">
+      <DependentUpon>BackupsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common.cs" />
     <Compile Include="LogWindow.cs">
       <SubType>Form</SubType>
@@ -89,6 +95,9 @@
       <DependentUpon>ResourceView.cs</DependentUpon>
     </Compile>
     <Compile Include="Style.cs" />
+    <EmbeddedResource Include="BackupsWindow.resx">
+      <DependentUpon>BackupsWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LogWindow.resx">
       <DependentUpon>LogWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -140,6 +149,7 @@
     <None Include="Images\Browse.png" />
     <None Include="Images\Log.png" />
     <None Include="Images\Clone.png" />
+    <None Include="Images\Backup.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />
