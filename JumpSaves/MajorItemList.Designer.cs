@@ -42,11 +42,6 @@ namespace JumpSaves
             this.olvColumnModule4 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnModule5 = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripLabelMonitor = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripComboBoxMonitor = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButtonTransfer = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonClone = new System.Windows.Forms.ToolStripButton();
@@ -54,6 +49,13 @@ namespace JumpSaves
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonReload = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonImport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabelMonitor = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBoxMonitor = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -209,8 +211,10 @@ namespace JumpSaves
             this.toolStripButtonClone,
             this.toolStripButtonRemove,
             this.toolStripButtonEdit,
-            this.toolStripButtonBrowse,
+            this.toolStripButtonExport,
+            this.toolStripButtonImport,
             this.toolStripButtonReload,
+            this.toolStripButtonBrowse,
             this.toolStripLabelFilter,
             this.toolStripComboBoxFilter,
             this.toolStripLabelTotal,
@@ -221,53 +225,6 @@ namespace JumpSaves
             this.toolStrip.Size = new System.Drawing.Size(723, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
-            // 
-            // toolStripLabelFilter
-            // 
-            this.toolStripLabelFilter.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
-            this.toolStripLabelFilter.Name = "toolStripLabelFilter";
-            this.toolStripLabelFilter.Size = new System.Drawing.Size(48, 28);
-            this.toolStripLabelFilter.Text = "Show:";
-            // 
-            // toolStripComboBoxFilter
-            // 
-            this.toolStripComboBoxFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBoxFilter.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBoxFilter.Items.AddRange(new object[] {
-            "Stored",
-            "Recent"});
-            this.toolStripComboBoxFilter.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
-            this.toolStripComboBoxFilter.Name = "toolStripComboBoxFilter";
-            this.toolStripComboBoxFilter.Size = new System.Drawing.Size(100, 31);
-            this.toolStripComboBoxFilter.ToolTipText = "Filter";
-            this.toolStripComboBoxFilter.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxFilter_SelectedIndexChanged);
-            // 
-            // toolStripLabelTotal
-            // 
-            this.toolStripLabelTotal.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripLabelTotal.Name = "toolStripLabelTotal";
-            this.toolStripLabelTotal.Size = new System.Drawing.Size(57, 28);
-            this.toolStripLabelTotal.Text = "Total: 0";
-            // 
-            // toolStripLabelMonitor
-            // 
-            this.toolStripLabelMonitor.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
-            this.toolStripLabelMonitor.Name = "toolStripLabelMonitor";
-            this.toolStripLabelMonitor.Size = new System.Drawing.Size(97, 28);
-            this.toolStripLabelMonitor.Text = "Auto acquire:";
-            // 
-            // toolStripComboBoxMonitor
-            // 
-            this.toolStripComboBoxMonitor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBoxMonitor.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBoxMonitor.Items.AddRange(new object[] {
-            "Superior",
-            "All",
-            "OFF"});
-            this.toolStripComboBoxMonitor.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
-            this.toolStripComboBoxMonitor.Name = "toolStripComboBoxMonitor";
-            this.toolStripComboBoxMonitor.Size = new System.Drawing.Size(100, 31);
-            this.toolStripComboBoxMonitor.ToolTipText = "Filter";
             // 
             // toolStripButtonTransfer
             // 
@@ -339,6 +296,73 @@ namespace JumpSaves
             this.toolStripButtonReload.Text = "Reload from disk";
             this.toolStripButtonReload.Click += new System.EventHandler(this.toolStripButtonReload_Click);
             // 
+            // toolStripButtonExport
+            // 
+            this.toolStripButtonExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonExport.Image = global::JumpSaves.Properties.Resources.Export;
+            this.toolStripButtonExport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonExport.Name = "toolStripButtonExport";
+            this.toolStripButtonExport.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonExport.Text = "Export selected items to a file";
+            this.toolStripButtonExport.Click += new System.EventHandler(this.toolStripButtonExport_Click);
+            // 
+            // toolStripButtonImport
+            // 
+            this.toolStripButtonImport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonImport.Image = global::JumpSaves.Properties.Resources.Import;
+            this.toolStripButtonImport.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonImport.Name = "toolStripButtonImport";
+            this.toolStripButtonImport.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonImport.Text = "Import items from a file";
+            this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
+            // 
+            // toolStripLabelFilter
+            // 
+            this.toolStripLabelFilter.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.toolStripLabelFilter.Name = "toolStripLabelFilter";
+            this.toolStripLabelFilter.Size = new System.Drawing.Size(48, 28);
+            this.toolStripLabelFilter.Text = "Show:";
+            // 
+            // toolStripComboBoxFilter
+            // 
+            this.toolStripComboBoxFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxFilter.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxFilter.Items.AddRange(new object[] {
+            "Stored",
+            "Recent"});
+            this.toolStripComboBoxFilter.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+            this.toolStripComboBoxFilter.Name = "toolStripComboBoxFilter";
+            this.toolStripComboBoxFilter.Size = new System.Drawing.Size(100, 31);
+            this.toolStripComboBoxFilter.ToolTipText = "Filter";
+            this.toolStripComboBoxFilter.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxFilter_SelectedIndexChanged);
+            // 
+            // toolStripLabelTotal
+            // 
+            this.toolStripLabelTotal.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabelTotal.Name = "toolStripLabelTotal";
+            this.toolStripLabelTotal.Size = new System.Drawing.Size(57, 28);
+            this.toolStripLabelTotal.Text = "Total: 0";
+            // 
+            // toolStripLabelMonitor
+            // 
+            this.toolStripLabelMonitor.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.toolStripLabelMonitor.Name = "toolStripLabelMonitor";
+            this.toolStripLabelMonitor.Size = new System.Drawing.Size(97, 28);
+            this.toolStripLabelMonitor.Text = "Auto acquire:";
+            // 
+            // toolStripComboBoxMonitor
+            // 
+            this.toolStripComboBoxMonitor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxMonitor.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxMonitor.Items.AddRange(new object[] {
+            "Superior",
+            "All",
+            "OFF"});
+            this.toolStripComboBoxMonitor.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
+            this.toolStripComboBoxMonitor.Name = "toolStripComboBoxMonitor";
+            this.toolStripComboBoxMonitor.Size = new System.Drawing.Size(100, 28);
+            this.toolStripComboBoxMonitor.ToolTipText = "Filter";
+            // 
             // MajorItemList
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -381,5 +405,7 @@ namespace JumpSaves
         private System.Windows.Forms.ToolStripButton toolStripButtonBrowse;
         private System.Windows.Forms.ToolStripButton toolStripButtonReload;
         private System.Windows.Forms.ToolStripButton toolStripButtonClone;
+        private System.Windows.Forms.ToolStripButton toolStripButtonExport;
+        private System.Windows.Forms.ToolStripButton toolStripButtonImport;
     }
 }

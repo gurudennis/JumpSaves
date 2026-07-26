@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -18,6 +19,16 @@ namespace JumpSaves
                 MessageBox.Show(owner, $"Error encountered while {description}.\n\n{ex.Message}", "JumpSaves error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+        }
+        
+        public static void OpenFolderAndSelect(string path)
+        {
+            if (!System.IO.File.Exists(path) && !System.IO.Directory.Exists(path))
+            {
+                throw new Exception($"File or directory {path} doesn't exist");
+            }
+
+            Process.Start("explorer.exe", $"/select,\"{path}\"");
         }
     }
 }

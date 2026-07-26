@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
+using static System.Net.WebRequestMethods;
 
 namespace JSL
 {
@@ -89,12 +91,42 @@ namespace JSL
             }
 
             string path = MakeFilePath(entries_[index].FileName);
-            if (File.Exists(path)) // the alternative is odd but permissible
+            if (System.IO.File.Exists(path)) // the alternative is odd but permissible
             {
-                File.Delete(path);
+                System.IO.File.Delete(path);
             }
 
             entries_.RemoveAt(index);
+        }
+
+        public void Export(IReadOnlyCollection<Entry> entries, string path)
+        {
+            if (entries.Count == 0)
+            {
+                throw new Exception("No items to export");
+            }
+
+            using (ZipArchive archive = ZipFile.Open(path, ZipArchiveMode.Create))
+            {
+                foreach (Entry entry in entries)
+                {
+                    archive.CreateEntryFromFile(System.IO.Path.Combine(Path, entry.FileName), entry.FileName);
+                }
+            }
+        }
+
+        public void Import(string path)
+        {
+            using (ZipArchive archive = ZipFile.Open(path, ZipArchiveMode.Read))
+            {
+                foreach (ZipArchiveEntry file in archive.Entries)
+                {
+                    using (Stream stream = file.Open())
+                    {
+                        entries_.Add(ReadEntry(stream, file.Length, file.Name));
+                    }
+                }
+            }
         }
 
         private void Load()
@@ -137,36 +169,41 @@ namespace JSL
 
         private Entry ReadEntry(FileInfo fileInfo)
         {
-            Entry entry = new Entry();
-            entry.FileName = fileInfo.Name;
-
-            using (FileStream file = File.Open(fileInfo.FullName, FileMode.Open, FileAccess.Read))
+            using (FileStream file = System.IO.File.Open(fileInfo.FullName, FileMode.Open, FileAccess.Read))
             {
-                if (file.Length <= HeaderSize)
-                {
-                    throw new Exception($"Library file too small to be valid at {file.Length} bytes");
-                }
-
-                byte[] header = new byte[HeaderSize];
-                file.Read(header, 0, header.Length);
-
-                uint version = BitConverter.ToUInt32(header, 0);
-                if (version > Version)
-                {
-                    throw new Exception($"Library file versioned as {version} but this software can only interpret versions up to {Version}");
-                }
-
-                uint dataLength = BitConverter.ToUInt32(header, VersionSize);
-                if (dataLength != file.Length - HeaderSize)
-                {
-                    throw new Exception($"Corrupted library file claims to contain {dataLength} bytes of data, actually contains {file.Length - HeaderSize} bytes of data.");
-                }
-
-                byte[] data = new byte[dataLength];
-                file.Read(data, 0, data.Length);
-
-                entry.Item = new LibraryMajorItem(data);
+                return ReadEntry(file, file.Length, fileInfo.Name);
             }
+        }
+
+        private Entry ReadEntry(Stream stream, long size, string fileName)
+        {
+            Entry entry = new Entry();
+            entry.FileName = fileName;
+
+            if (size <= HeaderSize)
+            {
+                throw new Exception($"Library file too small to be valid at {size} bytes");
+            }
+
+            byte[] header = new byte[HeaderSize];
+            stream.Read(header, 0, header.Length);
+
+            uint version = BitConverter.ToUInt32(header, 0);
+            if (version > Version)
+            {
+                throw new Exception($"Library file versioned as {version} but this software can only interpret versions up to {Version}");
+            }
+
+            uint dataLength = BitConverter.ToUInt32(header, VersionSize);
+            if (dataLength != size - HeaderSize)
+            {
+                throw new Exception($"Corrupted library file claims to contain {dataLength} bytes of data, actually contains {size - HeaderSize} bytes of data.");
+            }
+
+            byte[] data = new byte[dataLength];
+            stream.Read(data, 0, data.Length);
+
+            entry.Item = new LibraryMajorItem(data);
 
             return entry;
         }
@@ -208,7 +245,7 @@ namespace JSL
                 throw new Exception($"Expected new data length object to be {DataLengthSize} bytes, came out as {dataLengthBytes.Length}");
             }
 
-            using (FileStream file = File.Open(path, FileMode.Create, FileAccess.Write))
+            using (FileStream file = System.IO.File.Open(path, FileMode.Create, FileAccess.Write))
             {
                 file.Write(versionBytes, 0, versionBytes.Length);
                 file.Write(dataLengthBytes, 0, dataLengthBytes.Length);

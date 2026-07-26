@@ -150,6 +150,8 @@
     <None Include="Images\Log.png" />
     <None Include="Images\Clone.png" />
     <None Include="Images\Backup.png" />
+    <None Include="Images\Export.png" />
+    <None Include="Images\Import.png" />
     <Content Include="Images\OpenDirectory.png" />
     <None Include="Images\OpenFile.png" />
     <None Include="Images\Running.png" />

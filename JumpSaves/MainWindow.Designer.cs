@@ -31,22 +31,17 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openDefaultDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabelMode = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripComboBoxMode = new System.Windows.Forms.ToolStripComboBox();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
-            this.editorPanel = new System.Windows.Forms.Panel();
-            this.editTabControl = new System.Windows.Forms.TabControl();
-            this.editTabPage1 = new System.Windows.Forms.TabPage();
-            this.editorResourceView = new JumpSaves.ResourceView();
-            this.editorMajorItemList = new JumpSaves.MajorItemList();
-            this.saveLabel = new System.Windows.Forms.Label();
-            this.libraryPanel = new System.Windows.Forms.Panel();
-            this.libraryMajorItemList = new JumpSaves.MajorItemList();
-            this.label2 = new System.Windows.Forms.Label();
             this.toolStripOpenDefaultDirectoryButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripOpenDirectoryButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripOpenFileButton = new System.Windows.Forms.ToolStripButton();
@@ -56,16 +51,21 @@
             this.toolStripButtonBackups = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonLog = new System.Windows.Forms.ToolStripButton();
             this.toolStripAboutButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabelMode = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripComboBoxMode = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelDirty = new System.Windows.Forms.ToolStripLabel();
             this.toolStripGameRunningLabel = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelMonitoring = new System.Windows.Forms.ToolStripLabel();
-            this.openDefaultDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runCLIToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.editorPanel = new System.Windows.Forms.Panel();
+            this.editTabControl = new System.Windows.Forms.TabControl();
+            this.editTabPage1 = new System.Windows.Forms.TabPage();
+            this.saveLabel = new System.Windows.Forms.Label();
+            this.libraryPanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.editorResourceView = new JumpSaves.ResourceView();
+            this.editorMajorItemList = new JumpSaves.MajorItemList();
+            this.libraryMajorItemList = new JumpSaves.MajorItemList();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -87,7 +87,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1637, 30);
+            this.menuStrip.Size = new System.Drawing.Size(1688, 30);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "Menu";
             // 
@@ -104,6 +104,46 @@
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
             this.fileToolStripMenuItem.Text = "File";
             // 
+            // openDefaultDirectoryToolStripMenuItem
+            // 
+            this.openDefaultDirectoryToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenDefaultDirectory;
+            this.openDefaultDirectoryToolStripMenuItem.Name = "openDefaultDirectoryToolStripMenuItem";
+            this.openDefaultDirectoryToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.openDefaultDirectoryToolStripMenuItem.Text = "Open default directory";
+            this.openDefaultDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openDefaultDirectoryToolStripMenuItem_Click);
+            // 
+            // openDirectoryToolStripMenuItem
+            // 
+            this.openDirectoryToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenDirectory;
+            this.openDirectoryToolStripMenuItem.Name = "openDirectoryToolStripMenuItem";
+            this.openDirectoryToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.openDirectoryToolStripMenuItem.Text = "Open directory...";
+            this.openDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openDirectoryToolStripMenuItem_Click);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenFile;
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.openFileToolStripMenuItem.Text = "Open file...";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.Save;
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // closeToolStripMenuItem
+            // 
+            this.closeToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.Close;
+            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
+            this.closeToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
+            this.closeToolStripMenuItem.Text = "Close";
+            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
@@ -119,6 +159,14 @@
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 26);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
+            // runCLIToolStripMenuItem
+            // 
+            this.runCLIToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.RunCLI;
+            this.runCLIToolStripMenuItem.Name = "runCLIToolStripMenuItem";
+            this.runCLIToolStripMenuItem.Size = new System.Drawing.Size(141, 26);
+            this.runCLIToolStripMenuItem.Text = "Run CLI";
+            this.runCLIToolStripMenuItem.Click += new System.EventHandler(this.runCLIToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -126,6 +174,14 @@
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
             this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.About;
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 26);
+            this.aboutToolStripMenuItem.Text = "About...";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // toolStrip
             // 
@@ -147,165 +203,9 @@
             this.toolStripLabelMonitoring});
             this.toolStrip.Location = new System.Drawing.Point(0, 30);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(1637, 31);
+            this.toolStrip.Size = new System.Drawing.Size(1688, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
-            // 
-            // toolStripLabelMode
-            // 
-            this.toolStripLabelMode.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
-            this.toolStripLabelMode.Name = "toolStripLabelMode";
-            this.toolStripLabelMode.Size = new System.Drawing.Size(51, 28);
-            this.toolStripLabelMode.Text = "Mode:";
-            // 
-            // toolStripComboBoxMode
-            // 
-            this.toolStripComboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBoxMode.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.toolStripComboBoxMode.Items.AddRange(new object[] {
-            "Transfer only",
-            "Cheater"});
-            this.toolStripComboBoxMode.Name = "toolStripComboBoxMode";
-            this.toolStripComboBoxMode.Size = new System.Drawing.Size(121, 31);
-            this.toolStripComboBoxMode.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxMode_SelectedIndexChanged);
-            // 
-            // splitContainer
-            // 
-            this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 61);
-            this.splitContainer.Name = "splitContainer";
-            // 
-            // splitContainer.Panel1
-            // 
-            this.splitContainer.Panel1.Controls.Add(this.editorPanel);
-            // 
-            // splitContainer.Panel2
-            // 
-            this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
-            this.splitContainer.Size = new System.Drawing.Size(1637, 872);
-            this.splitContainer.SplitterDistance = 996;
-            this.splitContainer.SplitterWidth = 10;
-            this.splitContainer.TabIndex = 2;
-            this.splitContainer.TabStop = false;
-            // 
-            // editorPanel
-            // 
-            this.editorPanel.AutoSize = true;
-            this.editorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.editorPanel.BackColor = System.Drawing.Color.Gainsboro;
-            this.editorPanel.Controls.Add(this.editTabControl);
-            this.editorPanel.Controls.Add(this.editorMajorItemList);
-            this.editorPanel.Controls.Add(this.saveLabel);
-            this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.editorPanel.Location = new System.Drawing.Point(0, 0);
-            this.editorPanel.Name = "editorPanel";
-            this.editorPanel.Size = new System.Drawing.Size(996, 872);
-            this.editorPanel.TabIndex = 0;
-            // 
-            // editTabControl
-            // 
-            this.editTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.editTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
-            this.editTabControl.Controls.Add(this.editTabPage1);
-            this.editTabControl.Location = new System.Drawing.Point(0, 25);
-            this.editTabControl.Name = "editTabControl";
-            this.editTabControl.SelectedIndex = 0;
-            this.editTabControl.Size = new System.Drawing.Size(381, 843);
-            this.editTabControl.TabIndex = 2;
-            // 
-            // editTabPage1
-            // 
-            this.editTabPage1.Controls.Add(this.editorResourceView);
-            this.editTabPage1.Location = new System.Drawing.Point(4, 28);
-            this.editTabPage1.Name = "editTabPage1";
-            this.editTabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.editTabPage1.Size = new System.Drawing.Size(373, 811);
-            this.editTabPage1.TabIndex = 0;
-            this.editTabPage1.Text = "Resources";
-            this.editTabPage1.UseVisualStyleBackColor = true;
-            // 
-            // editorResourceView
-            // 
-            this.editorResourceView.AllowCustomization = false;
-            this.editorResourceView.Editor = null;
-            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
-            this.editorResourceView.Name = "editorResourceView";
-            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
-            this.editorResourceView.TabIndex = 1;
-            // 
-            // editorMajorItemList
-            // 
-            this.editorMajorItemList.AllowCustomization = false;
-            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.editorMajorItemList.CanEdit = false;
-            this.editorMajorItemList.CanTransfer = false;
-            this.editorMajorItemList.LibraryEditor = null;
-            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
-            this.editorMajorItemList.LogAction = null;
-            this.editorMajorItemList.Name = "editorMajorItemList";
-            this.editorMajorItemList.SaveEditor = null;
-            this.editorMajorItemList.Size = new System.Drawing.Size(612, 844);
-            this.editorMajorItemList.TabIndex = 1;
-            this.editorMajorItemList.TransferAction = null;
-            // 
-            // saveLabel
-            // 
-            this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveLabel.Location = new System.Drawing.Point(4, 5);
-            this.saveLabel.Name = "saveLabel";
-            this.saveLabel.Size = new System.Drawing.Size(989, 18);
-            this.saveLabel.TabIndex = 0;
-            this.saveLabel.Text = "<save path>";
-            // 
-            // libraryPanel
-            // 
-            this.libraryPanel.AutoSize = true;
-            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.libraryPanel.BackColor = System.Drawing.Color.Gainsboro;
-            this.libraryPanel.Controls.Add(this.libraryMajorItemList);
-            this.libraryPanel.Controls.Add(this.label2);
-            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
-            this.libraryPanel.Name = "libraryPanel";
-            this.libraryPanel.Size = new System.Drawing.Size(631, 872);
-            this.libraryPanel.TabIndex = 0;
-            // 
-            // libraryMajorItemList
-            // 
-            this.libraryMajorItemList.AllowCustomization = false;
-            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
-            this.libraryMajorItemList.CanEdit = false;
-            this.libraryMajorItemList.CanTransfer = false;
-            this.libraryMajorItemList.LibraryEditor = null;
-            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
-            this.libraryMajorItemList.LogAction = null;
-            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
-            this.libraryMajorItemList.Name = "libraryMajorItemList";
-            this.libraryMajorItemList.SaveEditor = null;
-            this.libraryMajorItemList.Size = new System.Drawing.Size(628, 844);
-            this.libraryMajorItemList.TabIndex = 2;
-            this.libraryMajorItemList.TransferAction = null;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 18);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "My Library";
             // 
             // toolStripOpenDefaultDirectoryButton
             // 
@@ -397,6 +297,24 @@
             this.toolStripAboutButton.Text = "About...";
             this.toolStripAboutButton.Click += new System.EventHandler(this.toolStripAboutButton_Click);
             // 
+            // toolStripLabelMode
+            // 
+            this.toolStripLabelMode.Margin = new System.Windows.Forms.Padding(20, 1, 0, 2);
+            this.toolStripLabelMode.Name = "toolStripLabelMode";
+            this.toolStripLabelMode.Size = new System.Drawing.Size(51, 28);
+            this.toolStripLabelMode.Text = "Mode:";
+            // 
+            // toolStripComboBoxMode
+            // 
+            this.toolStripComboBoxMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxMode.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.toolStripComboBoxMode.Items.AddRange(new object[] {
+            "Transfer only",
+            "Cheater"});
+            this.toolStripComboBoxMode.Name = "toolStripComboBoxMode";
+            this.toolStripComboBoxMode.Size = new System.Drawing.Size(121, 31);
+            this.toolStripComboBoxMode.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxMode_SelectedIndexChanged);
+            // 
             // toolStripLabelDirty
             // 
             this.toolStripLabelDirty.Image = global::JumpSaves.Properties.Resources.Dirty;
@@ -421,68 +339,150 @@
             this.toolStripLabelMonitoring.Size = new System.Drawing.Size(252, 28);
             this.toolStripLabelMonitoring.Text = "Monitoring to auto acquire items";
             // 
-            // openDefaultDirectoryToolStripMenuItem
+            // splitContainer
             // 
-            this.openDefaultDirectoryToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenDefaultDirectory;
-            this.openDefaultDirectoryToolStripMenuItem.Name = "openDefaultDirectoryToolStripMenuItem";
-            this.openDefaultDirectoryToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.openDefaultDirectoryToolStripMenuItem.Text = "Open default directory";
-            this.openDefaultDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openDefaultDirectoryToolStripMenuItem_Click);
+            this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 61);
+            this.splitContainer.Name = "splitContainer";
             // 
-            // openDirectoryToolStripMenuItem
+            // splitContainer.Panel1
             // 
-            this.openDirectoryToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenDirectory;
-            this.openDirectoryToolStripMenuItem.Name = "openDirectoryToolStripMenuItem";
-            this.openDirectoryToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.openDirectoryToolStripMenuItem.Text = "Open directory...";
-            this.openDirectoryToolStripMenuItem.Click += new System.EventHandler(this.openDirectoryToolStripMenuItem_Click);
+            this.splitContainer.Panel1.Controls.Add(this.editorPanel);
             // 
-            // openFileToolStripMenuItem
+            // splitContainer.Panel2
             // 
-            this.openFileToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.OpenFile;
-            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.openFileToolStripMenuItem.Text = "Open file...";
-            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
+            this.splitContainer.Size = new System.Drawing.Size(1688, 872);
+            this.splitContainer.SplitterDistance = 996;
+            this.splitContainer.SplitterWidth = 10;
+            this.splitContainer.TabIndex = 2;
+            this.splitContainer.TabStop = false;
             // 
-            // saveToolStripMenuItem
+            // editorPanel
             // 
-            this.saveToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.Save;
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.saveToolStripMenuItem.Text = "Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.editorPanel.AutoSize = true;
+            this.editorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editorPanel.BackColor = System.Drawing.Color.Gainsboro;
+            this.editorPanel.Controls.Add(this.editTabControl);
+            this.editorPanel.Controls.Add(this.editorMajorItemList);
+            this.editorPanel.Controls.Add(this.saveLabel);
+            this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.editorPanel.Location = new System.Drawing.Point(0, 0);
+            this.editorPanel.Name = "editorPanel";
+            this.editorPanel.Size = new System.Drawing.Size(996, 872);
+            this.editorPanel.TabIndex = 0;
             // 
-            // closeToolStripMenuItem
+            // editTabControl
             // 
-            this.closeToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.Close;
-            this.closeToolStripMenuItem.Name = "closeToolStripMenuItem";
-            this.closeToolStripMenuItem.Size = new System.Drawing.Size(242, 26);
-            this.closeToolStripMenuItem.Text = "Close";
-            this.closeToolStripMenuItem.Click += new System.EventHandler(this.closeToolStripMenuItem_Click);
+            this.editTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.editTabControl.Appearance = System.Windows.Forms.TabAppearance.Buttons;
+            this.editTabControl.Controls.Add(this.editTabPage1);
+            this.editTabControl.Location = new System.Drawing.Point(0, 25);
+            this.editTabControl.Name = "editTabControl";
+            this.editTabControl.SelectedIndex = 0;
+            this.editTabControl.Size = new System.Drawing.Size(381, 843);
+            this.editTabControl.TabIndex = 2;
             // 
-            // runCLIToolStripMenuItem
+            // editTabPage1
             // 
-            this.runCLIToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.RunCLI;
-            this.runCLIToolStripMenuItem.Name = "runCLIToolStripMenuItem";
-            this.runCLIToolStripMenuItem.Size = new System.Drawing.Size(141, 26);
-            this.runCLIToolStripMenuItem.Text = "Run CLI";
-            this.runCLIToolStripMenuItem.Click += new System.EventHandler(this.runCLIToolStripMenuItem_Click);
+            this.editTabPage1.Controls.Add(this.editorResourceView);
+            this.editTabPage1.Location = new System.Drawing.Point(4, 28);
+            this.editTabPage1.Name = "editTabPage1";
+            this.editTabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.editTabPage1.Size = new System.Drawing.Size(373, 811);
+            this.editTabPage1.TabIndex = 0;
+            this.editTabPage1.Text = "Resources";
+            this.editTabPage1.UseVisualStyleBackColor = true;
             // 
-            // aboutToolStripMenuItem
+            // saveLabel
             // 
-            this.aboutToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.About;
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 26);
-            this.aboutToolStripMenuItem.Text = "About...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveLabel.Location = new System.Drawing.Point(4, 5);
+            this.saveLabel.Name = "saveLabel";
+            this.saveLabel.Size = new System.Drawing.Size(989, 18);
+            this.saveLabel.TabIndex = 0;
+            this.saveLabel.Text = "<save path>";
+            // 
+            // libraryPanel
+            // 
+            this.libraryPanel.AutoSize = true;
+            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryPanel.BackColor = System.Drawing.Color.Gainsboro;
+            this.libraryPanel.Controls.Add(this.libraryMajorItemList);
+            this.libraryPanel.Controls.Add(this.label2);
+            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
+            this.libraryPanel.Name = "libraryPanel";
+            this.libraryPanel.Size = new System.Drawing.Size(682, 872);
+            this.libraryPanel.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 18);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "My Library";
+            // 
+            // editorResourceView
+            // 
+            this.editorResourceView.AllowCustomization = false;
+            this.editorResourceView.Editor = null;
+            this.editorResourceView.Location = new System.Drawing.Point(8, 8);
+            this.editorResourceView.Name = "editorResourceView";
+            this.editorResourceView.Size = new System.Drawing.Size(354, 230);
+            this.editorResourceView.TabIndex = 1;
+            // 
+            // editorMajorItemList
+            // 
+            this.editorMajorItemList.AllowCustomization = false;
+            this.editorMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.editorMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.editorMajorItemList.CanEdit = false;
+            this.editorMajorItemList.CanTransfer = false;
+            this.editorMajorItemList.LibraryEditor = null;
+            this.editorMajorItemList.Location = new System.Drawing.Point(382, 25);
+            this.editorMajorItemList.LogAction = null;
+            this.editorMajorItemList.Name = "editorMajorItemList";
+            this.editorMajorItemList.SaveEditor = null;
+            this.editorMajorItemList.Size = new System.Drawing.Size(612, 844);
+            this.editorMajorItemList.TabIndex = 1;
+            this.editorMajorItemList.TransferAction = null;
+            // 
+            // libraryMajorItemList
+            // 
+            this.libraryMajorItemList.AllowCustomization = false;
+            this.libraryMajorItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.libraryMajorItemList.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryMajorItemList.BackColor = System.Drawing.Color.Silver;
+            this.libraryMajorItemList.CanEdit = false;
+            this.libraryMajorItemList.CanTransfer = false;
+            this.libraryMajorItemList.LibraryEditor = null;
+            this.libraryMajorItemList.Location = new System.Drawing.Point(0, 25);
+            this.libraryMajorItemList.LogAction = null;
+            this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
+            this.libraryMajorItemList.Name = "libraryMajorItemList";
+            this.libraryMajorItemList.SaveEditor = null;
+            this.libraryMajorItemList.Size = new System.Drawing.Size(679, 844);
+            this.libraryMajorItemList.TabIndex = 2;
+            this.libraryMajorItemList.TransferAction = null;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(1637, 933);
+            this.ClientSize = new System.Drawing.Size(1688, 933);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);

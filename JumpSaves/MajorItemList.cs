@@ -1,4 +1,5 @@
 ﻿using BrightIdeasSoftware;
+using JSL;
 using JumpSaves.Model;
 using System;
 using System.Collections;
@@ -518,6 +519,106 @@ namespace JumpSaves
             }
         }
 
+        private void toolStripButtonExport_Click(object sender, EventArgs e)
+        {
+            if (!IsLibraryEditor)
+            {
+                return;
+            }
+
+            IList selected = list.SelectedObjects;
+            if (selected.Count == 0)
+            {
+                MessageBox.Show("Select one or more items and press this button to export them", "No items selected", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            string path = null;
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Select a location to save this JumpSaves Library Archive file";
+                dialog.Filter = "JumpSaves Library Archives (*.jsla.zip)|*.jsla.zip|All Files (*.*)|*.*";
+                dialog.FilterIndex = 0;
+                dialog.CheckPathExists = true;
+                dialog.CheckFileExists = false;
+                dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                dialog.FileName = Utils.MakeSafeName(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+                DialogResult result = dialog.ShowDialog(this);
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+
+                path = dialog.FileName;
+            }
+
+            List<JSL.MajorItemEditor> items = new List<JSL.MajorItemEditor>();
+            foreach (object o in selected)
+            {
+                items.Add(((Row)o).Editor);
+            }
+
+            try
+            {
+                LibraryEditor.Export(items, path);
+                string msg = $"Successfully exported {SelfDesignation} items to \"{path}\"";
+                Common.OpenFolderAndSelect(path);
+                LogAction(this, ActionLog.Level.Info, msg);
+            }
+            catch (Exception ex)
+            {
+                string msg = $"Failed to export {SelfDesignation} items to \"{path}\": {ex.Message}";
+                LogAction(this, ActionLog.Level.Error, msg);
+                MessageBox.Show(Parent, msg, "Failed to export items", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void toolStripButtonImport_Click(object sender, EventArgs e)
+        {
+            if (!IsLibraryEditor)
+            {
+                return;
+            }
+
+            string path = null;
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Title = "Select a JumpSaves Library Archive file to import";
+                dialog.Filter = "JumpSaves Library Archives (*.jsla.zip)|*.jsla.zip|All Files (*.*)|*.*";
+                dialog.FilterIndex = 0;
+                dialog.Multiselect = false;
+                dialog.CheckPathExists = true;
+                dialog.CheckFileExists = true;
+                dialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+                DialogResult result = dialog.ShowDialog(this);
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+
+                path = dialog.FileName;
+            }
+
+            try
+            {
+                LibraryEditor.Import(path);
+
+                string msg = $"Successfully imported {SelfDesignation} items from \"{path}\"";
+                LogAction(this, ActionLog.Level.Info, msg);
+
+                Reload();
+                MessageBox.Show(Parent, msg, "Successfully imported items", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                string msg = $"Failed to import {SelfDesignation} items from \"{path}\": {ex.Message}";
+                LogAction(this, ActionLog.Level.Error, msg);
+
+                Reload();
+                MessageBox.Show(Parent, msg, "Failed to import items", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void toolStripButtonBrowse_Click(object sender, EventArgs e)
         {
             string path = null;
@@ -611,6 +712,8 @@ namespace JumpSaves
             toolStripButtonEdit.Enabled &= CanEdit;
             toolStripButtonRemove.Enabled &= CanEdit;
             toolStripButtonTransfer.Enabled &= CanTransfer;
+            toolStripButtonExport.Visible = IsLibraryEditor;
+            toolStripButtonImport.Visible = IsLibraryEditor;
             toolStripButtonReload.Visible = IsLibraryEditor;
 
             // Browsing (library only)

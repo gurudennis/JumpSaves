@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace JSL
 {
@@ -1044,6 +1046,28 @@ namespace JSL
         public void Reload()
         {
             library_.Reload();
+        }
+
+        public void Export(IReadOnlyCollection<MajorItemEditor> items, string path)
+        {
+            List<Library.Entry> entries = new List<Library.Entry>();
+            foreach (MajorItemEditor item in items)
+            {
+                Library.Entry entry = library_.Entries.FirstOrDefault((e) => e.Item == (LibraryMajorItem)item.Item);
+                if (entry == null)
+                {
+                    throw new Exception("At least one of the designated items can't be found in the Library");
+                }
+
+                entries.Add(entry);
+            }
+
+            library_.Export(entries, path);
+        }
+
+        public void Import(string path)
+        {
+            library_.Import(path);
         }
 
         public IReadOnlyList<string> TakeFailedFiles()

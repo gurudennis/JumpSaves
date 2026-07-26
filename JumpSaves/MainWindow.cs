@@ -277,7 +277,7 @@ namespace JumpSaves
         private void ShowAboutBox()
         {
             string credits = $"JumpSaves, a Jump Space save file editor.\nVersion {Assembly.GetExecutingAssembly().GetName().Version} (beta)" +
-                              "\n\nProgramming: gurudennis (gurudenis <at> gmail.com)\nBeta testing: Snakeyes";
+                              "\n\nProgramming: gurudennis (gurudenis <at> gmail <dot> com)\nItem property cataloguing, beta testing: Snakeyes";
             MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 #if DEBUG
