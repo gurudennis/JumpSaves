@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO.Ports;
 
 namespace JSL
 {
@@ -222,6 +221,10 @@ namespace JSL
             C_RadiationAfterCorrosion,
             C_DisruptionAfterEMP,
             C_ShieldCapacity,
+            C_VirusSpreadsOnKill,
+            C_RadiationProjectile,
+            C_BreachAfterSear,
+            C_IncreaseSearDamage,
             __COUNT__
         }
 
@@ -291,9 +294,15 @@ namespace JSL
             public MajorItemPurpose Purpose;
         }
 
+#if DEBUG
+        private static readonly string UnkAb = "!!!";
+#else
+        private static readonly string UnkAb = "UNK";
+#endif
+
         private static EnumInfo[] All = new EnumInfo[]
         {
-            new EnumInfo { Title = "Unknown",                   Abbr = "Unk", Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown, Purpose = MajorItemPurpose.Unknown    },
+            new EnumInfo { Title = "Unknown",                   Abbr = UnkAb, Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown, Purpose = MajorItemPurpose.Unknown    },
             // ModuleKind.Feature:
             new EnumInfo { Title = "Reload speed",              Abbr = "Rel", Raw = "9009aa4df2ad3a04ba4dea5518e1d611", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Magazine size",             Abbr = "Mag", Raw = "cafc9599b386ee84a890c2c760b62f5e", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
@@ -325,6 +334,10 @@ namespace JSL
             new EnumInfo { Title = "Radiation after corrosion", Abbr = "Sea", Raw = "66ad1d1ada3da75479cef1a83a739aae", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Disruption after EMP",      Abbr = "Sea", Raw = "a5331df01eb1f1147b27f8cb852c82ca", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Shield capacity",           Abbr = "Cap", Raw = "1a0f06c6024f86d48bdc56076def5dd3", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
+            new EnumInfo { Title = "Virus spreads on kill",     Abbr = "Vir", Raw = "682de849168890a43bd79f0473a0e76b", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Radiation projectile",      Abbr = "Rad", Raw = "2db0439951d75ba4dade764bbcdd1369", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Breach after sear",         Abbr = "Bre", Raw = "32a8f3dc569318142be2483792227bc1", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Increase sear damage",      Abbr = "Sea", Raw = "f59d3b957056095468442df700fb5a08", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();
@@ -383,6 +396,13 @@ namespace JSL
             C_RandomStatusEffectOnHit,
             C_AdditionalShotButLessDamage,
             C_EMPToRestoreHealth,
+            C_SearNearbyOnReload,
+            C_KillsIncreaseSpeed,
+            C_MeleeAfterKillDoesEMP,
+            C_MagazineSizePercent,
+            C_BreachCausesPierce,
+            C_DamageIfRupturePoolFull,
+            C_EMPChanceOnHit,
             __COUNT__
         }
 
@@ -451,9 +471,15 @@ namespace JSL
             public ModuleKind Kind;
         }
 
+#if DEBUG
+        private static readonly string UnkAb = "!!!";
+#else
+        private static readonly string UnkAb = "UNK";
+#endif
+
         private static EnumInfo[] All = new EnumInfo[]
         {
-            new EnumInfo { Title = "Unknown",                         Abbr = "Unk", Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown },
+            new EnumInfo { Title = "Unknown",                         Abbr = UnkAb, Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown },
             // ModuleKind.Feature:
             new EnumInfo { Title = "Damage",                          Abbr = "Dmg", Raw = "8fecf9fa19f5d0748bc7e5794d2e2e93", PotencyCount = 1, Kind = ModuleKind.Feature },
             new EnumInfo { Title = "Fire rate",                       Abbr = "RoF", Raw = "bb21cfa6fd5a9364c99ef22d8d4ea38f", PotencyCount = 1, Kind = ModuleKind.Feature },
@@ -464,13 +490,13 @@ namespace JSL
             new EnumInfo { Title = "Mag size but less damage",        Abbr = "Mag", Raw = "425315a74cef11542b1c3fcb07d8d934", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Consecutive crit damage",         Abbr = "Crt", Raw = "676bc98f5878db4409a11c68b7e2bd59", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Chance to chain enemies",         Abbr = "Chn", Raw = "5ef2583dd770e944e84c8ab47e12b50f", PotencyCount = 3, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Breach chance on hit",            Abbr = "Bre", Raw = "13cec6085efd0a342a6ecfef9f5aa2da", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Breach chance on hit",            Abbr = "Bre", Raw = "c2e9a86756b9729478c43f18a341c2e2", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Crits return ammo",               Abbr = "Amm", Raw = "87320adbde1d5a6448effd71fcba76b3", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Rupture after damage",            Abbr = "Rup", Raw = "3d864ddf5a372664ebcad63c686b0ceb", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Damage but lower fire rate",      Abbr = "Dmg", Raw = "4e049bf738976824ebdfd81f9fd34796", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Damage but lower mag size",       Abbr = "Dmg", Raw = "4ec6f7c2d7fa7734792a2db069c46d9c", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "EMP on crit",                     Abbr = "EMP", Raw = "749c007fa80faf840ade9af6e8d7584f", PotencyCount = 2, Kind = ModuleKind.Custom  },
-            new EnumInfo { Title = "Rupture chance on hit",           Abbr = "Dup", Raw = "15748cbe448ab444c990e086e31fea7b", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Rupture chance on hit",           Abbr = "Rup", Raw = "15748cbe448ab444c990e086e31fea7b", PotencyCount = 3, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Kills restore health",            Abbr = "Hel", Raw = "71a93d1d5c620864c93e796b0218a90b", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Corrosion chance on hit",         Abbr = "Cor", Raw = "3ad789a04e7a05e42affc0e22f0a309a", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Additional projectiles",          Abbr = "Fle", Raw = "f893ca79dbff4b448bdf21715d8e6d1d", PotencyCount = 3, Kind = ModuleKind.Custom  },
@@ -493,6 +519,13 @@ namespace JSL
             new EnumInfo { Title = "Random status effect on hit",     Abbr = "Ran", Raw = "f004308cf75411f4897f0286397ca2c2", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Additional shot but less damage", Abbr = "Add", Raw = "a51a20461ffa1bc489e60f410939e291", PotencyCount = 2, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "EMP to restore health",           Abbr = "Hel", Raw = "704bdac3db82ade45ad1690916d7ad1b", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Sear nearby on reload",           Abbr = "Sea", Raw = "037a3e370b2d3b44a9a51e125e188bf3", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Kills increase speed",            Abbr = "Spd", Raw = "7968a14bbe8c617449c77d016a5ea8d0", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee after kill does EMP",       Abbr = "EMP", Raw = "a313d5434c4944a4db9e07880bdba5aa", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Magazine size percent",           Abbr = "Mag", Raw = "12c40352320ea444f9c77a71395b08aa", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Breach causes pierce",            Abbr = "Prc", Raw = "589234c5148491b4aaf3a5507f66516d", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage if rupture pool full",     Abbr = "Dmg", Raw = "ebf495b7db87dc34095f80c4fd0bea12", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "EMP chance on hit",               Abbr = "EMP", Raw = "e4e5defdb4de7aa41ac619e93975122b", PotencyCount = 1, Kind = ModuleKind.Custom  },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();

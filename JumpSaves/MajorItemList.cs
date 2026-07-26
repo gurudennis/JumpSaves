@@ -655,8 +655,14 @@ namespace JumpSaves
                 return;
             }
 
-            JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
-            e.SubItem.Text = module?.TypeAbbreviation ?? "Unk";
+#if DEBUG
+            string UnkAb = "UNK";
+#else
+            string UnkAb = "Unk";
+#endif
+
+        JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
+            e.SubItem.Text = module?.TypeAbbreviation ?? UnkAb;
             e.SubItem.ForeColor = Style.GetRarityColor(module?.Rarity ?? JSL.Rarity.Unknown, true);
         }
 

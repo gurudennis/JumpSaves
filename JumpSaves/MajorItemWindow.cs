@@ -410,6 +410,20 @@ namespace JumpSaves
             ReloadModuleList();
         }
 
+        private void moduleList_CellClick(object sender, CellClickEventArgs e)
+        {
+            ModuleRow row = (ModuleRow)e.Model;
+
+            if (e.ModifierKeys.HasFlag(Keys.Alt)) // developer popup
+            {
+                if (e.Column == olvColumnEffect)
+                {
+                    MessageBox.Show(this, row.Editor.JSON, "Developer mode: object dump", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
+        }
+
         private void FormatPotencyColumn(ModuleRow row, int potencyIndex, FormatCellEventArgs e)
         {
             if (potencyIndex >= row.Editor.Potencies.Length)

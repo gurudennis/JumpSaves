@@ -54,9 +54,9 @@ namespace JSL
             return prev;
         }
 
-        public void AddEntry(LibraryMajorItem item, ConflictBehavior onConflict)
+        public bool AddEntry(LibraryMajorItem item, ConflictBehavior onConflict)
         {
-            AddEntry(item, item.Bytes, MakeHash(item), onConflict);
+            return AddEntry(item, item.Bytes, MakeHash(item), onConflict);
         }
 
         public void ReplaceEntry(int index, LibraryMajorItem item)
@@ -150,7 +150,7 @@ namespace JSL
             }
         }
 
-        private void AddEntry(LibraryMajorItem item, byte[] serialized, string hash, ConflictBehavior onConflict)
+        private bool AddEntry(LibraryMajorItem item, byte[] serialized, string hash, ConflictBehavior onConflict)
         {
             if (item == null || ContainsItem(item))
             {
@@ -164,7 +164,10 @@ namespace JSL
             if (WriteEntry(entry, serialized, onConflict))
             {
                 entries_.Add(entry);
+                return true;
             }
+
+            return false;
         }
 
         private Entry ReadEntry(FileInfo fileInfo)

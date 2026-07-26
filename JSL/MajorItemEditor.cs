@@ -104,6 +104,14 @@ namespace JSL
             }
         }
 
+        public string JSON
+        {
+            get
+            {
+                return SaveState.JSONFromObject(module_.Root);
+            }
+        }
+
         public static int MaxTheoreticalPotencyCount
         {
             get
@@ -684,7 +692,7 @@ namespace JSL
 
         public abstract MajorItemEditor New();
 
-        public abstract void Add(MajorItemEditor item, ConflictBehavior onConflict);
+        public abstract bool Add(MajorItemEditor item, ConflictBehavior onConflict);
 
         public abstract void Remove(int index);
 
@@ -804,7 +812,7 @@ namespace JSL
             return new StoredMajorItemEditor(RootEditor);
         }
 
-        public override void Add(MajorItemEditor item, ConflictBehavior onConflict)
+        public override bool Add(MajorItemEditor item, ConflictBehavior onConflict)
         {
             StoredMajorItem storedItem = null;
             if (item.GetType() == typeof(LibraryMajorItemEditor))
@@ -829,6 +837,8 @@ namespace JSL
             ItemsArr.InsertProperty(Items.Length, storedItem.Root);
 
             SetDirtyIfNecessary();
+
+            return true;
         }
 
         public override void Remove(int index)
@@ -929,7 +939,7 @@ namespace JSL
             return new RecentMajorItemEditor(RootEditor);
         }
 
-        public override void Add(MajorItemEditor item, ConflictBehavior onConflict)
+        public override bool Add(MajorItemEditor item, ConflictBehavior onConflict)
         {
             if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
@@ -949,6 +959,8 @@ namespace JSL
             }
 
             SetDirtyIfNecessary();
+
+            return true;
         }
 
         public override void Remove(int index)
@@ -1018,19 +1030,19 @@ namespace JSL
             return new LibraryMajorItemEditor(library_, RootEditor);
         }
 
-        public override void Add(MajorItemEditor item, ConflictBehavior onConflict)
+        public override bool Add(MajorItemEditor item, ConflictBehavior onConflict)
         {
             if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                library_.AddEntry((LibraryMajorItem)item.Item, onConflict);
+                return library_.AddEntry((LibraryMajorItem)item.Item, onConflict);
             }
             else if (item.GetType() == typeof(StoredMajorItemEditor))
             {
-                library_.AddEntry(JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)item.Item), onConflict);
+                return library_.AddEntry(JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)item.Item), onConflict);
             }
             else if (item.GetType() == typeof(RecentMajorItemEditor))
             {
-                library_.AddEntry(JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)item.Item), onConflict);
+                return library_.AddEntry(JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)item.Item), onConflict);
             }
             else
             {

@@ -263,8 +263,10 @@ namespace JumpSaves.Model
 
             try
             {
-                LibraryEditor.Add(item, onConflict);
-                ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, $"{mode}d item \"{name}\" to the Library");
+                if (LibraryEditor.Add(item, onConflict))
+                {
+                    ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, $"{mode}d item \"{name}\" to the Library");
+                }
             }
             catch (Exception ex)
             {

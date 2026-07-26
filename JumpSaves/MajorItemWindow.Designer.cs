@@ -232,6 +232,7 @@
             this.moduleList.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.moduleList_CellEditFinished);
             this.moduleList.CellEditFinishing += new BrightIdeasSoftware.CellEditEventHandler(this.moduleList_CellEditFinishing);
             this.moduleList.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.moduleList_CellEditStarting);
+            this.moduleList.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.moduleList_CellClick);
             this.moduleList.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.moduleList_FormatCell);
             // 
             // olvColumnEffect
