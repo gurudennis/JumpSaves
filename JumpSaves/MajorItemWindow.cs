@@ -290,10 +290,14 @@ namespace JumpSaves
             ModuleRow row = (ModuleRow)e.RowObject;
             if (e.Column == olvColumnEffect)
             {
-                row.Editor.RawType = JSL.ModuleType.GetRawFromTitle(Editor.Type, ((ComboBox)e.Control).Text);
-                row.Editor.SetExpectedPotencyCount();
+                string raw = JSL.ModuleType.GetRawFromTitle(Editor.Type, ((ComboBox)e.Control).Text);
+                if (!string.IsNullOrEmpty(raw))
+                {
+                    row.Editor.RawType = raw;
+                    row.Editor.SetExpectedPotencyCount();
+                    IsDirty = true;
+                }
                 e.Control.Visible = false;
-                IsDirty = true;
                 return;
             }
             else if (e.Column == olvColumnRarity)
