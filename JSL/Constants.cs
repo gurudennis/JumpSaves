@@ -304,9 +304,9 @@ namespace JSL
         {
             new EnumInfo { Title = "Unknown",                   Abbr = UnkAb, Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown, Purpose = MajorItemPurpose.Unknown    },
             // ModuleKind.Feature:
-            new EnumInfo { Title = "Reload speed",              Abbr = "Rel", Raw = "9009aa4df2ad3a04ba4dea5518e1d611", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Magazine size",             Abbr = "Mag", Raw = "cafc9599b386ee84a890c2c760b62f5e", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Damage",                    Abbr = "Dmg", Raw = "df5b391e9981fdd47af8f2f6e74a9fd9", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "(F) Reload speed",          Abbr = "Rel", Raw = "9009aa4df2ad3a04ba4dea5518e1d611", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "(F) Magazine size",         Abbr = "Mag", Raw = "cafc9599b386ee84a890c2c760b62f5e", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "(F) Damage",                Abbr = "Dmg", Raw = "df5b391e9981fdd47af8f2f6e74a9fd9", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             // ModuleKind.Custom:
             new EnumInfo { Title = "Reduced materia cost",      Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
             new EnumInfo { Title = "Corrosion chance on hit",   Abbr = "Cor", Raw = "bb680a7ce4769fa4396b560d36435371", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
@@ -481,10 +481,10 @@ namespace JSL
         {
             new EnumInfo { Title = "Unknown",                         Abbr = UnkAb, Raw = null,                               PotencyCount = 0, Kind = ModuleKind.Unknown },
             // ModuleKind.Feature:
-            new EnumInfo { Title = "Damage",                          Abbr = "Dmg", Raw = "8fecf9fa19f5d0748bc7e5794d2e2e93", PotencyCount = 1, Kind = ModuleKind.Feature },
-            new EnumInfo { Title = "Fire rate",                       Abbr = "RoF", Raw = "bb21cfa6fd5a9364c99ef22d8d4ea38f", PotencyCount = 1, Kind = ModuleKind.Feature },
-            new EnumInfo { Title = "Magazine capacity",               Abbr = "Mag", Raw = "68fbcdf863d097c498e0ffb0ec1d4cba", PotencyCount = 1, Kind = ModuleKind.Feature },
-            new EnumInfo { Title = "Reload speed",                    Abbr = "Rel", Raw = "13cec6085efd0a342a6ecfef9f5aa2da", PotencyCount = 1, Kind = ModuleKind.Feature },
+            new EnumInfo { Title = "(F) Damage",                      Abbr = "Dmg", Raw = "8fecf9fa19f5d0748bc7e5794d2e2e93", PotencyCount = 1, Kind = ModuleKind.Feature },
+            new EnumInfo { Title = "(F) Fire rate",                   Abbr = "RoF", Raw = "bb21cfa6fd5a9364c99ef22d8d4ea38f", PotencyCount = 1, Kind = ModuleKind.Feature },
+            new EnumInfo { Title = "(F) Magazine capacity",           Abbr = "Mag", Raw = "68fbcdf863d097c498e0ffb0ec1d4cba", PotencyCount = 1, Kind = ModuleKind.Feature },
+            new EnumInfo { Title = "(F) Reload speed",                Abbr = "Rel", Raw = "13cec6085efd0a342a6ecfef9f5aa2da", PotencyCount = 1, Kind = ModuleKind.Feature },
             // ModuleKind.Custom:
             new EnumInfo { Title = "Reload speed",                    Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Mag size but less damage",        Abbr = "Mag", Raw = "425315a74cef11542b1c3fcb07d8d934", PotencyCount = 2, Kind = ModuleKind.Custom  },
