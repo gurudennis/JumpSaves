@@ -12,6 +12,33 @@ namespace JSL
         bool IsDirty { get; set; }
     }
 
+    public abstract class RootEditor : IRootEditor
+    {
+        public abstract ISaveMetadata SaveMetadata { get; }
+
+        public abstract IMajorItemSlotLimits MajorItemSlotLimits { get; }
+
+        public virtual bool IsDirty
+        {
+            get
+            {
+                return isDirty_;
+            }
+            set
+            {
+                if (value != isDirty_)
+                {
+                    isDirty_ = value;
+                    DirtyChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public EventHandler<EventArgs> DirtyChanged;
+
+        private bool isDirty_ = false;
+    }
+
     public abstract class Editor
     {
         protected Editor(IRootEditor rootEditor)
@@ -32,7 +59,7 @@ namespace JSL
         protected IRootEditor RootEditor { get; private set; }
     }
 
-    public abstract class SaveEditor : IRootEditor
+    public abstract class SaveEditor : RootEditor, IMajorItemSlotLimits
     {
         internal SaveEditor()
         {
@@ -45,15 +72,13 @@ namespace JSL
 
         public abstract DateTime LastEditTime { get; }
 
-        public ISaveMetadata SaveMetadata
+        public override ISaveMetadata SaveMetadata
         {
             get
             {
                 return File?.State?.SaveMetadata;
             }
         }
-
-        public bool IsDirty { get; set; }
 
         public ResourceEditor Resources
         {
@@ -79,11 +104,42 @@ namespace JSL
             }
         }
 
-        public IMajorItemSlotLimits MajorItemSlotLimits
+        public int DefaultMinSlotCount
         {
             get
             {
-                return File.State.MajorItemSlotUpgrades;
+                return File.State.MajorItemSlotUpgrades.DefaultMinSlotCount;
+            }
+        }
+
+        public int DefaultMaxSlotCount
+        {
+            get
+            {
+                return File.State.MajorItemSlotUpgrades.DefaultMaxSlotCount;
+            }
+        }
+
+        public int GetMaxMajorItemSlots(MajorItemCategory.Enum category)
+        {
+            return File.State.MajorItemSlotUpgrades.GetMaxMajorItemSlots(category);
+        }
+
+        public void SetMaxMajorItemSlots(MajorItemCategory.Enum category, int slots)
+        {
+            int prev = GetMaxMajorItemSlots(category);
+            File.State.MajorItemSlotUpgrades.SetMaxMajorItemSlots(category, slots);
+            if (slots != prev)
+            {
+                IsDirty = true;
+            }
+        }
+
+        public override IMajorItemSlotLimits MajorItemSlotLimits
+        {
+            get
+            {
+                return this;
             }
         }
 
@@ -193,9 +249,9 @@ namespace JSL
             return new LibraryMajorItemListEditor(library, new LibraryRootEditor());
         }
 
-        private class LibraryRootEditor : IRootEditor, ISaveMetadata, IMajorItemSlotLimits
+        private class LibraryRootEditor : RootEditor, ISaveMetadata, IMajorItemSlotLimits
         {
-            public ISaveMetadata SaveMetadata
+            public override ISaveMetadata SaveMetadata
             {
                 get
                 {
@@ -203,7 +259,7 @@ namespace JSL
                 }
             }
 
-            public IMajorItemSlotLimits MajorItemSlotLimits
+            public override IMajorItemSlotLimits MajorItemSlotLimits
             {
                 get
                 {
@@ -211,7 +267,7 @@ namespace JSL
                 }
             }
 
-            public bool IsDirty
+            public override bool IsDirty
             {
                 get
                 {

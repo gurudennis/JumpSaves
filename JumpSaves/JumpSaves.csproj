@@ -94,6 +94,12 @@
     <Compile Include="ResourceView.Designer.cs">
       <DependentUpon>ResourceView.cs</DependentUpon>
     </Compile>
+    <Compile Include="SlotsView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SlotsView.Designer.cs">
+      <DependentUpon>SlotsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Style.cs" />
     <EmbeddedResource Include="BackupsWindow.resx">
       <DependentUpon>BackupsWindow.cs</DependentUpon>
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ResourceView.resx">
       <DependentUpon>ResourceView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SlotsView.resx">
+      <DependentUpon>SlotsView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

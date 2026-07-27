@@ -1,6 +1,4 @@
 ﻿using BrightIdeasSoftware;
-using JSL;
-using JumpSaves.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -21,8 +19,6 @@ namespace JumpSaves
         public Action<MajorItemList, IReadOnlyList<JSL.MajorItemEditor>> TransferAction { get; set; }
 
         public Action<MajorItemList, Model.ActionLog.Level, string> LogAction { get; set; }
-
-        public EventHandler<EventArgs> MaybeDirty;
 
         public JSL.SaveEditor SaveEditor
         {
@@ -542,7 +538,7 @@ namespace JumpSaves
                 dialog.CheckPathExists = true;
                 dialog.CheckFileExists = false;
                 dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                dialog.FileName = Utils.MakeSafeName(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
+                dialog.FileName = JSL.Utils.MakeSafeName(DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss"));
                 DialogResult result = dialog.ShowDialog(this);
                 if (result != DialogResult.OK)
                 {
@@ -563,12 +559,12 @@ namespace JumpSaves
                 LibraryEditor.Export(items, path);
                 string msg = $"Successfully exported {SelfDesignation} items to \"{path}\"";
                 Common.OpenFolderAndSelect(path);
-                LogAction(this, ActionLog.Level.Info, msg);
+                LogAction(this, Model.ActionLog.Level.Info, msg);
             }
             catch (Exception ex)
             {
                 string msg = $"Failed to export {SelfDesignation} items to \"{path}\": {ex.Message}";
-                LogAction(this, ActionLog.Level.Error, msg);
+                LogAction(this, Model.ActionLog.Level.Error, msg);
                 MessageBox.Show(Parent, msg, "Failed to export items", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -604,7 +600,7 @@ namespace JumpSaves
                 LibraryEditor.Import(path);
 
                 string msg = $"Successfully imported {SelfDesignation} items from \"{path}\"";
-                LogAction(this, ActionLog.Level.Info, msg);
+                LogAction(this, Model.ActionLog.Level.Info, msg);
 
                 Reload();
                 MessageBox.Show(Parent, msg, "Successfully imported items", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -612,7 +608,7 @@ namespace JumpSaves
             catch (Exception ex)
             {
                 string msg = $"Failed to import {SelfDesignation} items from \"{path}\": {ex.Message}";
-                LogAction(this, ActionLog.Level.Error, msg);
+                LogAction(this, Model.ActionLog.Level.Error, msg);
 
                 Reload();
                 MessageBox.Show(Parent, msg, "Failed to import items", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -679,7 +675,7 @@ namespace JumpSaves
 
         private void LogAndShowError(string text, string caption)
         {
-            LogAction(this, ActionLog.Level.Error, text);
+            LogAction(this, Model.ActionLog.Level.Error, text);
             MessageBox.Show(Parent, text, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 

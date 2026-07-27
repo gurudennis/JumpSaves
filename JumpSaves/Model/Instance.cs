@@ -55,6 +55,7 @@ namespace JumpSaves.Model
         {
             if (SaveEditor != null)
             {
+                SaveEditor.DirtyChanged = null;
                 SaveEditor = null;
                 ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, "Closed save");
             }
@@ -308,6 +309,10 @@ namespace JumpSaves.Model
                 try
                 {
                     JSL.SaveEditor editor = JSL.EditorFactory.OpenSave(Path);
+                    if (SaveEditor != null)
+                    {
+                        SaveEditor.DirtyChanged = null;
+                    }
                     SaveEditor = editor;
                     ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Detected a change and re-opened save \"{Path}\"");
                     return true;

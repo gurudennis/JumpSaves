@@ -25,22 +25,15 @@ namespace JumpSaves
 
             editorMajorItemList.TransferAction = DoTransfer;
             editorMajorItemList.LogAction = DoListLog;
-            editorMajorItemList.MaybeDirty += OnEditorMajorItemList_MaybeDirty;
 
             libraryMajorItemList.TransferAction = DoTransfer;
             libraryMajorItemList.LogAction = DoListLog;
-            editorResourceView.MaybeDirty += OnEditorResourceView_MaybeDirty;
 
             OnStateChanged();
             OpenDefaultDirectory();
         }
 
-        private void OnEditorResourceView_MaybeDirty(object sender, EventArgs e)
-        {
-            OnStateChanged();
-        }
-
-        private void OnEditorMajorItemList_MaybeDirty(object sender, EventArgs e)
+        private void OnDirtyChanged(object sender, EventArgs e)
         {
             OnStateChanged();
         }
@@ -358,6 +351,12 @@ namespace JumpSaves
 
         private void OnStateChanged()
         {
+            // Save editor
+            if (model_.SaveEditor != null)
+            {
+                model_.SaveEditor.DirtyChanged += OnDirtyChanged;
+            }
+
             // Menu and toolbar
             toolStripCloseButton.Visible = model_.IsOpen;
             toolStripSaveButton.Visible = model_.IsOpen && !model_.IsMonitoring;
@@ -377,6 +376,9 @@ namespace JumpSaves
             editorResourceView.Editor = model_.SaveEditor?.Resources;
             editorResourceView.AllowCustomization = IsCheaterMode;
             editorResourceView.Enabled = CanEdit;
+            editorSlotsView.Editor = model_.SaveEditor;
+            editorSlotsView.AllowCustomization = IsCheaterMode;
+            editorSlotsView.Enabled = CanEdit;
 
             // Library panel
             if (model_.LibraryEditor != null)

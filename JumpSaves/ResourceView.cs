@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -16,8 +9,6 @@ namespace JumpSaves
         {
             InitializeComponent();
         }
-
-        public EventHandler<EventArgs> MaybeDirty;
 
         public JSL.ResourceEditor Editor
         {
@@ -69,7 +60,6 @@ namespace JumpSaves
             if (CanEdit)
             {
                 Editor.Credits = Convert.ToInt32(numericCredits.Value);
-                EmitMaybeDirty();
             }
         }
 
@@ -78,7 +68,6 @@ namespace JumpSaves
             if (CanEdit)
             {
                 Editor.GreenIngots = Convert.ToInt32(numericGreen.Value);
-                EmitMaybeDirty();
             }
         }
 
@@ -87,7 +76,6 @@ namespace JumpSaves
             if (CanEdit)
             {
                 Editor.BlueIngots = Convert.ToInt32(numericBlue.Value);
-                EmitMaybeDirty();
             }
         }
 
@@ -96,7 +84,6 @@ namespace JumpSaves
             if (CanEdit)
             {
                 Editor.PurpleIngots = Convert.ToInt32(numericPurple.Value);
-                EmitMaybeDirty();
             }
         }
 
@@ -105,7 +92,6 @@ namespace JumpSaves
             if (CanEdit)
             {
                 Editor.OrangeIngots = Convert.ToInt32(numericOrange.Value);
-                EmitMaybeDirty();
             }
         }
 
@@ -114,7 +100,6 @@ namespace JumpSaves
             if (CanEdit)
             {
                 Editor.RedIngots = Convert.ToInt32(numericRed.Value);
-                EmitMaybeDirty();
             }
         }
 
@@ -151,11 +136,6 @@ namespace JumpSaves
             numericPurple.Value = CanEdit ? Editor.PurpleIngots : 0;
             numericOrange.Value = CanEdit ? Editor.OrangeIngots : 0;
             numericRed.Value = CanEdit ? Editor.RedIngots : 0;
-        }
-
-        private void EmitMaybeDirty()
-        {
-            MaybeDirty?.Invoke(this, null);
         }
 
         private JSL.ResourceEditor editor_;

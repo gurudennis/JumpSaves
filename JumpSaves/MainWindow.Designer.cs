@@ -60,12 +60,14 @@
             this.editorPanel = new System.Windows.Forms.Panel();
             this.editTabControl = new System.Windows.Forms.TabControl();
             this.editTabPage1 = new System.Windows.Forms.TabPage();
-            this.saveLabel = new System.Windows.Forms.Label();
-            this.libraryPanel = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelSlots = new System.Windows.Forms.Label();
+            this.editorSlotsView = new JumpSaves.SlotsView();
             this.editorResourceView = new JumpSaves.ResourceView();
             this.editorMajorItemList = new JumpSaves.MajorItemList();
+            this.saveLabel = new System.Windows.Forms.Label();
+            this.libraryPanel = new System.Windows.Forms.Panel();
             this.libraryMajorItemList = new JumpSaves.MajorItemList();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -87,7 +89,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1688, 30);
+            this.menuStrip.Size = new System.Drawing.Size(1688, 28);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "Menu";
             // 
@@ -101,7 +103,7 @@
             this.closeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 26);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
             this.fileToolStripMenuItem.Text = "File";
             // 
             // openDefaultDirectoryToolStripMenuItem
@@ -156,7 +158,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runCLIToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 26);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // runCLIToolStripMenuItem
@@ -172,7 +174,7 @@
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
@@ -201,7 +203,7 @@
             this.toolStripLabelDirty,
             this.toolStripGameRunningLabel,
             this.toolStripLabelMonitoring});
-            this.toolStrip.Location = new System.Drawing.Point(0, 30);
+            this.toolStrip.Location = new System.Drawing.Point(0, 28);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(1688, 31);
             this.toolStrip.TabIndex = 1;
@@ -343,7 +345,7 @@
             // 
             this.splitContainer.BackColor = System.Drawing.Color.Gainsboro;
             this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 61);
+            this.splitContainer.Location = new System.Drawing.Point(0, 59);
             this.splitContainer.Name = "splitContainer";
             // 
             // splitContainer.Panel1
@@ -353,7 +355,7 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.libraryPanel);
-            this.splitContainer.Size = new System.Drawing.Size(1688, 872);
+            this.splitContainer.Size = new System.Drawing.Size(1688, 874);
             this.splitContainer.SplitterDistance = 996;
             this.splitContainer.SplitterWidth = 10;
             this.splitContainer.TabIndex = 2;
@@ -370,7 +372,7 @@
             this.editorPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.editorPanel.Location = new System.Drawing.Point(0, 0);
             this.editorPanel.Name = "editorPanel";
-            this.editorPanel.Size = new System.Drawing.Size(996, 872);
+            this.editorPanel.Size = new System.Drawing.Size(996, 874);
             this.editorPanel.TabIndex = 0;
             // 
             // editTabControl
@@ -382,53 +384,40 @@
             this.editTabControl.Location = new System.Drawing.Point(0, 25);
             this.editTabControl.Name = "editTabControl";
             this.editTabControl.SelectedIndex = 0;
-            this.editTabControl.Size = new System.Drawing.Size(381, 843);
+            this.editTabControl.Size = new System.Drawing.Size(381, 845);
             this.editTabControl.TabIndex = 2;
             // 
             // editTabPage1
             // 
+            this.editTabPage1.Controls.Add(this.labelSlots);
+            this.editTabPage1.Controls.Add(this.editorSlotsView);
             this.editTabPage1.Controls.Add(this.editorResourceView);
             this.editTabPage1.Location = new System.Drawing.Point(4, 28);
             this.editTabPage1.Name = "editTabPage1";
             this.editTabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.editTabPage1.Size = new System.Drawing.Size(373, 811);
+            this.editTabPage1.Size = new System.Drawing.Size(373, 813);
             this.editTabPage1.TabIndex = 0;
             this.editTabPage1.Text = "Resources";
             this.editTabPage1.UseVisualStyleBackColor = true;
             // 
-            // saveLabel
+            // labelSlots
             // 
-            this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.saveLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.saveLabel.Location = new System.Drawing.Point(4, 5);
-            this.saveLabel.Name = "saveLabel";
-            this.saveLabel.Size = new System.Drawing.Size(989, 18);
-            this.saveLabel.TabIndex = 0;
-            this.saveLabel.Text = "<save path>";
+            this.labelSlots.AutoSize = true;
+            this.labelSlots.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSlots.Location = new System.Drawing.Point(15, 263);
+            this.labelSlots.Name = "labelSlots";
+            this.labelSlots.Size = new System.Drawing.Size(189, 16);
+            this.labelSlots.TabIndex = 3;
+            this.labelSlots.Text = "Major item slots available:";
             // 
-            // libraryPanel
+            // editorSlotsView
             // 
-            this.libraryPanel.AutoSize = true;
-            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.libraryPanel.BackColor = System.Drawing.Color.Gainsboro;
-            this.libraryPanel.Controls.Add(this.libraryMajorItemList);
-            this.libraryPanel.Controls.Add(this.label2);
-            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
-            this.libraryPanel.Name = "libraryPanel";
-            this.libraryPanel.Size = new System.Drawing.Size(682, 872);
-            this.libraryPanel.TabIndex = 0;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 18);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "My Library";
+            this.editorSlotsView.AllowCustomization = false;
+            this.editorSlotsView.Editor = null;
+            this.editorSlotsView.Location = new System.Drawing.Point(7, 291);
+            this.editorSlotsView.Name = "editorSlotsView";
+            this.editorSlotsView.Size = new System.Drawing.Size(353, 329);
+            this.editorSlotsView.TabIndex = 2;
             // 
             // editorResourceView
             // 
@@ -453,9 +442,33 @@
             this.editorMajorItemList.LogAction = null;
             this.editorMajorItemList.Name = "editorMajorItemList";
             this.editorMajorItemList.SaveEditor = null;
-            this.editorMajorItemList.Size = new System.Drawing.Size(612, 844);
+            this.editorMajorItemList.Size = new System.Drawing.Size(612, 846);
             this.editorMajorItemList.TabIndex = 1;
             this.editorMajorItemList.TransferAction = null;
+            // 
+            // saveLabel
+            // 
+            this.saveLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.saveLabel.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveLabel.Location = new System.Drawing.Point(4, 5);
+            this.saveLabel.Name = "saveLabel";
+            this.saveLabel.Size = new System.Drawing.Size(989, 18);
+            this.saveLabel.TabIndex = 0;
+            this.saveLabel.Text = "<save path>";
+            // 
+            // libraryPanel
+            // 
+            this.libraryPanel.AutoSize = true;
+            this.libraryPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.libraryPanel.BackColor = System.Drawing.Color.Gainsboro;
+            this.libraryPanel.Controls.Add(this.libraryMajorItemList);
+            this.libraryPanel.Controls.Add(this.label2);
+            this.libraryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.libraryPanel.Location = new System.Drawing.Point(0, 0);
+            this.libraryPanel.Name = "libraryPanel";
+            this.libraryPanel.Size = new System.Drawing.Size(682, 874);
+            this.libraryPanel.TabIndex = 0;
             // 
             // libraryMajorItemList
             // 
@@ -473,9 +486,19 @@
             this.libraryMajorItemList.Margin = new System.Windows.Forms.Padding(0);
             this.libraryMajorItemList.Name = "libraryMajorItemList";
             this.libraryMajorItemList.SaveEditor = null;
-            this.libraryMajorItemList.Size = new System.Drawing.Size(679, 844);
+            this.libraryMajorItemList.Size = new System.Drawing.Size(679, 846);
             this.libraryMajorItemList.TabIndex = 2;
             this.libraryMajorItemList.TransferAction = null;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 4);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(88, 18);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "My Library";
             // 
             // MainWindow
             // 
@@ -506,6 +529,7 @@
             this.editorPanel.ResumeLayout(false);
             this.editTabControl.ResumeLayout(false);
             this.editTabPage1.ResumeLayout(false);
+            this.editTabPage1.PerformLayout();
             this.libraryPanel.ResumeLayout(false);
             this.libraryPanel.PerformLayout();
             this.ResumeLayout(false);
@@ -552,6 +576,8 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabelMonitoring;
         private System.Windows.Forms.ToolStripButton toolStripButtonLog;
         private System.Windows.Forms.ToolStripButton toolStripButtonBackups;
+        private SlotsView editorSlotsView;
+        private System.Windows.Forms.Label labelSlots;
     }
 }
 
