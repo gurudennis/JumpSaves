@@ -3,7 +3,7 @@
 JumpSaves is a save file manipulation utility for [Jump Space](https://store.steampowered.com/app/1757300/Jump_Space/)
 (the game).
 
-JumpSaves is entirely free for any use. Our goal is to make your experience with JumpSaves better, but you should
+JumpSaves is entirely free for any use. Our goal is to make your experience with Jump Space better, but you should
 understand that the software is provided as-is, with no warranty of any kind, and your should exercise reasonable
 caution when editing your save files. If anything should go wrong, JumpSaves keeps plenty of automatic backups of
 recent save state that you can restore as needed.
