@@ -26,7 +26,7 @@ permanent collection it calls Library. This way you don't have to worry about lo
 add it to your exceedingly limited in-game item slots. At any time when the game is not running, you can copy items from your
 library to your item slots or recent item list in the save, or vice versa.
 
-We feel that expanding the list of items you can permanently keep in the game is only fair, especially a this stage in the
+We feel that expanding the list of items you can permanently keep in the game is only fair, especially at this stage in the
 game's lifecycle when item rebalancing is frequent and impactful.
 
 In this mode, you can also export your own items from the library to share with friends, and import theirs.
