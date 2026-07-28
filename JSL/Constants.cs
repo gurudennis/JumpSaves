@@ -661,6 +661,142 @@ namespace JSL
         }
     }
 
+    public static class PlayerWeaponCustomizationType
+    {
+        static PlayerWeaponCustomizationType()
+        {
+            Debug.Assert(All.Length == Count);
+            for (int i = 1; i < Count; ++i)
+            {
+                byRaw_[All[i].Raw] = (Enum)i;
+            }
+        }
+
+        public enum Category
+        {
+            Unknown = -1,
+            Scope = 0,
+            Color = 4
+        }
+
+        public enum Enum
+        {
+            Unknown,
+            // Category.Scope:
+            S_3x,
+            S_Acog,
+            S_Box,
+            S_Halo,
+            S_Holo,
+            S_Moon,
+            S_Hollow,
+            S_Reflex,
+            S_Tube,
+            S_Battle,
+            S_Flip,
+            S_Rear,
+            S_Hollow2,
+            S_Ring,
+            // Category.Color:
+            C_Blue,
+            C_Orange,
+            C_Green,
+            C_Red,
+            C_Grey,
+            C_DerelictRed,
+            C_DerelictGreen,
+            C_DerelictBlue,
+            C_White,
+            C_BlackWithBlue,
+            C_Yellow,
+            C_BlackWithRed,
+            __COUNT__
+        }
+
+        public static int Count
+        {
+            get
+            {
+                return (int)Enum.__COUNT__;
+            }
+        }
+
+        public static string GetTitle(Enum e)
+        {
+            return All[(int)e].Title;
+        }
+
+        public static string GetRaw(Enum e)
+        {
+            return All[(int)e].Raw;
+        }
+
+        public static Category GetCategory(Enum e)
+        {
+            return All[(int)e].Category;
+        }
+
+        public static Enum FromTitle(string title)
+        {
+            for (int i = 1; i < All.Length; ++i)
+            {
+                if (All[i].Title.ToLower() == title.ToLower())
+                {
+                    return (Enum)i;
+                }
+            }
+
+            return Enum.Unknown;
+        }
+
+        public static Enum FromRaw(string raw)
+        {
+            return raw != null && byRaw_.TryGetValue(raw, out Enum e) ? e : Enum.Unknown;
+        }
+
+        private struct EnumInfo
+        {
+            public string Title;
+            public string Raw;
+            public Category Category;
+        }
+
+        private static EnumInfo[] All = new EnumInfo[]
+        {
+            new EnumInfo { Title = "Unknown",         Raw = null,                               Category = Category.Unknown },
+            // Category.Scope:
+            new EnumInfo { Title = "3x Scope",        Raw = "3ab99e9b2ba799e42a59853851fe3223", Category = Category.Scope   },
+            new EnumInfo { Title = "Acog Scope",      Raw = "5678a13323b2bc44b843bdaa3a23008b", Category = Category.Scope   },
+            new EnumInfo { Title = "Box Scope",       Raw = "237d7a2fe9081474ea26f93da1918e34", Category = Category.Scope   },
+            new EnumInfo { Title = "Halo Sight",      Raw = "a1bd8252662e0fa42941fc09ff6d348a", Category = Category.Scope   },
+            new EnumInfo { Title = "Holo Sight",      Raw = "3e70bec2f408b224ea8c3d710d92a3af", Category = Category.Scope   },
+            new EnumInfo { Title = "Moon Sight",      Raw = "5e43546a2fc05b94a92bfa5bf40b1e0f", Category = Category.Scope   },
+            new EnumInfo { Title = "Hollow Sight",    Raw = "237d7a2fe9081474ea26f93da1918e34", Category = Category.Scope   },
+            new EnumInfo { Title = "Reflex Sight",    Raw = "4d32685806784a44ab612b8dd1f6157c", Category = Category.Scope   },
+            new EnumInfo { Title = "Tube Scope",      Raw = "83ac190cde3365a45a8f47a91cc44fdf", Category = Category.Scope   },
+            new EnumInfo { Title = "Battle Sight",    Raw = "bec00b2b2b8b82e429632e2775552e53", Category = Category.Scope   },
+            new EnumInfo { Title = "Flip Sight",      Raw = "6235966a303a8024fb8629cf87c44936", Category = Category.Scope   },
+            new EnumInfo { Title = "Rear Sight",      Raw = "c552bf5c4142ab4418baaf4d508324bc", Category = Category.Scope   },
+            new EnumInfo { Title = "Hollow Sight 2",  Raw = "2cd7a7d28a4087240a39bcac0ea66cac", Category = Category.Scope   },
+            new EnumInfo { Title = "Ring Sight",      Raw = "9c539085d71f0204587fd9c30365894c", Category = Category.Scope   },
+            // Category.Color:
+            new EnumInfo { Title = "Blue",            Raw = "275950df1b6a3f048861c84e013c660c", Category = Category.Color   },
+            new EnumInfo { Title = "Orange",          Raw = "091ddcba29a05954dbde3f03597251be", Category = Category.Color   },
+            new EnumInfo { Title = "Green",           Raw = "ed5012b0093c60146a90a51a5b69d1d6", Category = Category.Color   },
+            new EnumInfo { Title = "Red",             Raw = "dbe9422bbc6635b45a42540d75ecd5a2", Category = Category.Color   },
+            new EnumInfo { Title = "Grey",            Raw = "bed6ab5800040bd48b3726648ca3c72b", Category = Category.Color   },
+            new EnumInfo { Title = "Derelict Red",    Raw = "0615262be625fe040929959fd5982afb", Category = Category.Color   },
+            new EnumInfo { Title = "Derelict Green",  Raw = "b6740c13675d05e4883797b2750e2a7e", Category = Category.Color   },
+            new EnumInfo { Title = "Derelict Blue",   Raw = "f739d4ee59609d74d8aea843504e985d", Category = Category.Color   },
+            new EnumInfo { Title = "White",           Raw = "e5dc305da253a7b4f93707e78652bea0", Category = Category.Color   },
+            new EnumInfo { Title = "Black with Blue", Raw = "ddf771bee43b05646892c0db68c0bf2b", Category = Category.Color   },
+            new EnumInfo { Title = "Yellow",          Raw = "68bebab2fa83fe74daaa90ca723e715b", Category = Category.Color   },
+            new EnumInfo { Title = "Black with Red",  Raw = "f45303b368c40ed4eb6a1a123817c5ab", Category = Category.Color   },
+        };
+
+        private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();
+    }
+
     public static class MajorItemType
     {
         static MajorItemType()
@@ -754,6 +890,13 @@ namespace JSL
         public static MajorItemPurpose GetPurpose(Enum e)
         {
             return All[(int)e].Purpose;
+        }
+
+        public static bool HasCustomizations(Enum e)
+        {
+            // Only non-melee player weapons have customizations
+            return (GetCategory(e) == MajorItemCategory.Enum.PlayerWeapons) &&
+                   (e != Enum.PW_HeatBlade || e != Enum.PW_Wrench || e != Enum.PW_Crowbar);
         }
 
         public static Enum FromTitle(string title, MajorItemCategory.Enum category = MajorItemCategory.Enum.Unknown)

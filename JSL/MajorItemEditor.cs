@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -240,6 +241,72 @@ namespace JSL
         private string typeAbbreviation_;
     }
 
+    public class PlayerWeaponCustomizationsEditor : Editor
+    {
+        internal PlayerWeaponCustomizationsEditor(object customizations, object[] parent, IRootEditor rootEditor)
+            : base(rootEditor)
+        {
+            list_ = new ArrayBasedObject(customizations, parent);
+            scope_ = EnsureExists(PlayerWeaponCustomizationType.Category.Scope);
+            color_ = EnsureExists(PlayerWeaponCustomizationType.Category.Color);
+        }
+
+        public PlayerWeaponCustomizationType.Enum Scope
+        {
+            get
+            {
+                PlayerWeaponCustomizationType.Enum value = PlayerWeaponCustomizationType.FromRaw(scope_.RawType);
+                Debug.Assert(value == PlayerWeaponCustomizationType.Enum.Unknown || PlayerWeaponCustomizationType.GetCategory(value) == PlayerWeaponCustomizationType.Category.Scope);
+                return value;
+            }
+            set
+            {
+                if (value != PlayerWeaponCustomizationType.Enum.Unknown && value != Scope)
+                {
+                    Debug.Assert(PlayerWeaponCustomizationType.GetCategory(value) == PlayerWeaponCustomizationType.Category.Scope);
+                    scope_.RawType = PlayerWeaponCustomizationType.GetRaw(value);
+                    SetDirtyIfNecessary();
+                }
+            }
+        }
+
+        public PlayerWeaponCustomizationType.Enum Color
+        {
+            get
+            {
+                PlayerWeaponCustomizationType.Enum value = PlayerWeaponCustomizationType.FromRaw(color_.RawType);
+                Debug.Assert(value == PlayerWeaponCustomizationType.Enum.Unknown || PlayerWeaponCustomizationType.GetCategory(value) == PlayerWeaponCustomizationType.Category.Color);
+                return value;
+            }
+            set
+            {
+                if (value != PlayerWeaponCustomizationType.Enum.Unknown && value != Color)
+                {
+                    Debug.Assert(PlayerWeaponCustomizationType.GetCategory(value) == PlayerWeaponCustomizationType.Category.Color);
+                    color_.RawType = PlayerWeaponCustomizationType.GetRaw(value);
+                    SetDirtyIfNecessary();
+                }
+            }
+        }
+
+        private Customization EnsureExists(PlayerWeaponCustomizationType.Category category)
+        {
+            Customization customization = list_.Root.Select((o) => new Customization(o, list_.Root)).FirstOrDefault((c) => c.RawCategory == (int)category);
+            if (customization == null)
+            {
+                customization = new Customization();
+                customization.RawCategory = (int)category;
+                list_.InsertProperty(list_.Root.Length, customization.Root);
+            }
+
+            return customization;
+        }
+
+        private ArrayBasedObject list_;
+        private Customization scope_;
+        private Customization color_;
+    }
+
     // Any major item
     public abstract class MajorItemEditor : Editor
     {
@@ -270,6 +337,12 @@ namespace JSL
                 if (Item.Blueprint.RawType != value)
                 {
                     Item.Blueprint.RawType = value;
+
+                    // If the item can't have customizations, or has them as null, then reset to an empty array
+                    if (!MajorItemType.HasCustomizations(Type) || Item.Blueprint.Customizations == null)
+                    {
+                        Item.Blueprint.Customizations = new object[0];
+                    }
 
                     SetDirtyIfNecessary();
                 }
@@ -472,6 +545,26 @@ namespace JSL
             return new ModuleEditor(RootEditor);
         }
 
+        public PlayerWeaponCustomizationsEditor PlayerWeaponCustomizations
+        {
+            get
+            {
+                if (MajorItemType.HasCustomizations(Type))
+                {
+                    if (playerWeaponCustomizationsEditor_ == null)
+                    {
+                        playerWeaponCustomizationsEditor_ = new PlayerWeaponCustomizationsEditor(Item.Blueprint.Customizations, Item.Blueprint.Root, RootEditor);
+                    }
+                }
+                else
+                {
+                    playerWeaponCustomizationsEditor_ = null;
+                }
+
+                return playerWeaponCustomizationsEditor_;
+            }
+        }
+
         public void ResetActivePips()
         {
             Item.Blueprint.ResetActivePips();
@@ -533,6 +626,7 @@ namespace JSL
         }
 
         private ModuleEditor[] modules_;
+        private PlayerWeaponCustomizationsEditor playerWeaponCustomizationsEditor_;
     }
 
     // Stored major item

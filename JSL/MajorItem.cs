@@ -98,6 +98,63 @@ namespace JSL
         private const int ExpectedElementCount = 4;
     }
 
+    public class Customization : ArrayBasedObject
+    {
+        public Customization() : this(New(), null)
+        {
+        }
+
+        public Customization(object o, object[] parent) : base(o, parent)
+        {
+            if (Root.Length != ExpectedElementCount)
+            {
+                throw new ArgumentException($"Expected {ExpectedElementCount} elements in Customization, found {Root.Length}.");
+            }
+        }
+
+        public new Module Clone()
+        {
+            return new Module(Bytes, null);
+        }
+
+        public int RawCategory
+        {
+            get
+            {
+                return GetPropertyStrict<int>(Index_RawCategory);
+            }
+            set
+            {
+                SetPropertyStrict(Index_RawCategory, value);
+            }
+        }
+
+        public string RawType
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_RawType);
+            }
+            set
+            {
+                SetPropertyStrict(Index_RawType, value);
+            }
+        }
+
+        private static object New()
+        {
+            Module module = new Module(new object[ExpectedElementCount], null);
+            module.SetPropertyStrict(Index_RawCategory, (byte)0);
+            module.SetPropertyStrict(1, (byte)0); // unknown, always zero
+            module.SetPropertyStrict(Index_RawType, string.Empty);
+            return module.Root;
+        }
+
+        private const int Index_RawCategory = 0;
+        private const int Index_RawType = 2;
+        private const int ExpectedElementCount = 3;
+    }
+
     public class MajorItemBlueprint : ArrayBasedObject
     {
         public MajorItemBlueprint() : this(New(), null)
@@ -178,6 +235,18 @@ namespace JSL
             set
             {
                 SetSubArrayStrict(Index_Modules, value);
+            }
+        }
+
+        public object[] Customizations
+        {
+            get
+            {
+                return GetSubArrayStrict(Index_Customizations);
+            }
+            set
+            {
+                SetSubArrayStrict(Index_Customizations, value);
             }
         }
 
@@ -293,7 +362,7 @@ namespace JSL
             blueprint.SetPropertyStrict(Index_Level, (byte)1);
             blueprint.SetPropertyStrict(Index_Rarity, (byte)0);
             blueprint.SetPropertyStrict(Index_Modules, new object[0]);
-            blueprint.SetPropertyStrict(Index_Furniture, new object[0]);
+            blueprint.SetPropertyStrict(Index_Customizations, new object[0]);
             blueprint.SetPropertyStrict(5, (uint)1342734106); // unknown, always in this ballpark
             blueprint.SetPropertyStrict(6, (byte)5); // unknown constant
             blueprint.SetPropertyStrict(7, Guid.NewGuid().ToString("D")); // unknown, always unique
@@ -312,7 +381,7 @@ namespace JSL
         private const int Index_Level = 1;
         private const int Index_Rarity = 2;
         private const int Index_Modules = 3;
-        private const int Index_Furniture = 4;
+        private const int Index_Customizations = 4;
         private const int Index_SaveVersion = 8;
         private const int Index_CraftedBy = 9;
         private const int Index_ItemSchool = 11;
