@@ -143,7 +143,7 @@ namespace JSL
 
         private static object New()
         {
-            Module module = new Module(new object[ExpectedElementCount], null);
+            Customization module = new Customization(new object[ExpectedElementCount], null);
             module.SetPropertyStrict(Index_RawCategory, (byte)0);
             module.SetPropertyStrict(1, (byte)0); // unknown, always zero
             module.SetPropertyStrict(Index_RawType, string.Empty);

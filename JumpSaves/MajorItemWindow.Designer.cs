@@ -53,6 +53,10 @@
             this.toolStripModules = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
+            this.labelColor = new System.Windows.Forms.Label();
+            this.labelScope = new System.Windows.Forms.Label();
+            this.comboBoxColor = new System.Windows.Forms.ComboBox();
+            this.comboBoxScope = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.moduleList)).BeginInit();
             this.toolStripModules.SuspendLayout();
@@ -61,7 +65,7 @@
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonOK.Location = new System.Drawing.Point(492, 456);
+            this.buttonOK.Location = new System.Drawing.Point(492, 499);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(131, 35);
             this.buttonOK.TabIndex = 0;
@@ -73,7 +77,7 @@
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(644, 456);
+            this.buttonCancel.Location = new System.Drawing.Point(644, 499);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(131, 35);
             this.buttonCancel.TabIndex = 0;
@@ -101,7 +105,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(408, 66);
+            this.label1.Location = new System.Drawing.Point(405, 66);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 16);
             this.label1.TabIndex = 1;
@@ -176,7 +180,7 @@
             // labelType
             // 
             this.labelType.AutoSize = true;
-            this.labelType.Location = new System.Drawing.Point(411, 23);
+            this.labelType.Location = new System.Drawing.Point(404, 23);
             this.labelType.Name = "labelType";
             this.labelType.Size = new System.Drawing.Size(42, 16);
             this.labelType.TabIndex = 1;
@@ -217,7 +221,7 @@
             this.moduleList.HasCollapsibleGroups = false;
             this.moduleList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.moduleList.HideSelection = false;
-            this.moduleList.Location = new System.Drawing.Point(21, 177);
+            this.moduleList.Location = new System.Drawing.Point(21, 219);
             this.moduleList.Name = "moduleList";
             this.moduleList.ShowGroups = false;
             this.moduleList.ShowSortIndicators = false;
@@ -298,7 +302,7 @@
             // labelModules
             // 
             this.labelModules.AutoSize = true;
-            this.labelModules.Location = new System.Drawing.Point(18, 110);
+            this.labelModules.Location = new System.Drawing.Point(18, 152);
             this.labelModules.Name = "labelModules";
             this.labelModules.Size = new System.Drawing.Size(62, 16);
             this.labelModules.TabIndex = 1;
@@ -315,7 +319,7 @@
             this.toolStripModules.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonAdd,
             this.toolStripButtonRemove});
-            this.toolStripModules.Location = new System.Drawing.Point(21, 146);
+            this.toolStripModules.Location = new System.Drawing.Point(21, 188);
             this.toolStripModules.Name = "toolStripModules";
             this.toolStripModules.Size = new System.Drawing.Size(754, 31);
             this.toolStripModules.TabIndex = 6;
@@ -340,22 +344,64 @@
             this.toolStripButtonRemove.Text = "Remove selected module";
             this.toolStripButtonRemove.Click += new System.EventHandler(this.toolStripButtonRemove_Click);
             // 
+            // labelColor
+            // 
+            this.labelColor.AutoSize = true;
+            this.labelColor.Location = new System.Drawing.Point(18, 108);
+            this.labelColor.Name = "labelColor";
+            this.labelColor.Size = new System.Drawing.Size(42, 16);
+            this.labelColor.TabIndex = 1;
+            this.labelColor.Text = "Color:";
+            this.labelColor.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // labelScope
+            // 
+            this.labelScope.AutoSize = true;
+            this.labelScope.Location = new System.Drawing.Point(405, 108);
+            this.labelScope.Name = "labelScope";
+            this.labelScope.Size = new System.Drawing.Size(50, 16);
+            this.labelScope.TabIndex = 1;
+            this.labelScope.Text = "Scope:";
+            this.labelScope.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // comboBoxColor
+            // 
+            this.comboBoxColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxColor.FormattingEnabled = true;
+            this.comboBoxColor.Location = new System.Drawing.Point(91, 105);
+            this.comboBoxColor.Name = "comboBoxColor";
+            this.comboBoxColor.Size = new System.Drawing.Size(279, 24);
+            this.comboBoxColor.TabIndex = 3;
+            // 
+            // comboBoxScope
+            // 
+            this.comboBoxScope.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxScope.FormattingEnabled = true;
+            this.comboBoxScope.Location = new System.Drawing.Point(459, 105);
+            this.comboBoxScope.Name = "comboBoxScope";
+            this.comboBoxScope.Size = new System.Drawing.Size(316, 24);
+            this.comboBoxScope.TabIndex = 3;
+            // 
             // MajorItemWindow
             // 
             this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(794, 505);
+            this.ClientSize = new System.Drawing.Size(794, 548);
             this.Controls.Add(this.toolStripModules);
             this.Controls.Add(this.moduleList);
             this.Controls.Add(this.numericUpDownLevel);
+            this.Controls.Add(this.comboBoxScope);
+            this.Controls.Add(this.comboBoxColor);
             this.Controls.Add(this.comboBoxType);
             this.Controls.Add(this.comboBoxCategory);
             this.Controls.Add(this.comboBoxRarity);
             this.Controls.Add(this.textBoxName);
+            this.Controls.Add(this.labelScope);
             this.Controls.Add(this.labelLevel);
             this.Controls.Add(this.labelType);
+            this.Controls.Add(this.labelColor);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelCategory);
             this.Controls.Add(this.labelModules);
@@ -407,5 +453,9 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
         private System.Windows.Forms.ToolStripButton toolStripButtonRemove;
         private BrightIdeasSoftware.OLVColumn olvColumnRarity;
+        private System.Windows.Forms.Label labelColor;
+        private System.Windows.Forms.Label labelScope;
+        private System.Windows.Forms.ComboBox comboBoxColor;
+        private System.Windows.Forms.ComboBox comboBoxScope;
     }
 }

@@ -554,6 +554,7 @@ namespace JSL
                     if (playerWeaponCustomizationsEditor_ == null)
                     {
                         playerWeaponCustomizationsEditor_ = new PlayerWeaponCustomizationsEditor(Item.Blueprint.Customizations, Item.Blueprint.Root, RootEditor);
+                        playerWeaponCustomizationsEditor_.IsOrphaned = IsOrphaned;
                     }
                 }
                 else

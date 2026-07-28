@@ -19,7 +19,7 @@ namespace JumpSaves
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            Text = $"JumpSaves {Assembly.GetExecutingAssembly().GetName().Version} (beta)";
+            Text = $"JumpSaves {Assembly.GetExecutingAssembly().GetName().Version}";
 
             toolStripComboBoxMode.SelectedIndex = 0;
 
@@ -269,7 +269,7 @@ namespace JumpSaves
 
         private void ShowAboutBox()
         {
-            string credits = $"JumpSaves, a Jump Space save file editor.\nVersion {Assembly.GetExecutingAssembly().GetName().Version} (beta)" +
+            string credits = $"JumpSaves, a Jump Space save file editor.\nVersion {Assembly.GetExecutingAssembly().GetName().Version}" +
                               "\n\nProgramming: gurudennis (gurudenis <at> gmail <dot> com)\nItem property cataloguing, beta testing: Snakeyes";
             MessageBox.Show(this, credits, "About JumpSaves", MessageBoxButtons.OK, MessageBoxIcon.Information);
 

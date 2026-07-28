@@ -102,6 +102,27 @@ namespace JumpSaves
 
         private void MajorItemWindow_Load(object sender, EventArgs e)
         {
+            // Cached values
+            purpose_ = JSL.MajorItemType.GetPurpose(Editor.Type);
+
+            // Color and Scope
+            for (int i = 1; i < (int)JSL.PlayerWeaponCustomizationType.Enum.__COUNT__; ++i)
+            {
+                JSL.PlayerWeaponCustomizationType.Enum type = (JSL.PlayerWeaponCustomizationType.Enum)i;
+                JSL.PlayerWeaponCustomizationType.Category category = JSL.PlayerWeaponCustomizationType.GetCategory(type);
+                if (category == JSL.PlayerWeaponCustomizationType.Category.Color)
+                {
+                    comboBoxColor.Items.Add(JSL.PlayerWeaponCustomizationType.GetTitle(type));
+                }
+                else if (category == JSL.PlayerWeaponCustomizationType.Category.Scope)
+                {
+                    comboBoxScope.Items.Add(JSL.PlayerWeaponCustomizationType.GetTitle(type));
+                }
+            }
+
+            // Type
+            comboBoxType.Enabled = canEdit_;
+
             // Category
             comboBoxCategory.Enabled = canEdit_;
             for (int i = 1; i < (int)JSL.MajorItemCategory.Enum.__COUNT__; ++i)
@@ -109,10 +130,7 @@ namespace JumpSaves
                 comboBoxCategory.Items.Add(JSL.MajorItemCategory.GetTitle((JSL.MajorItemCategory.Enum)i));
             }
             comboBoxCategory.SelectedIndex = ((int)Editor.Category) - 1;
-            CategoryUpdated(false);
-
-            // Type
-            comboBoxType.Enabled = canEdit_;
+            CategoryUpdated();
 
             // Name (can always be edited)
             textBoxName.Text = Editor.GivenName ?? string.Empty;
@@ -147,6 +165,8 @@ namespace JumpSaves
             numericUpDownLevel.ValueChanged += new EventHandler(numericUpDownLevel_ValueChanged);
             comboBoxCategory.SelectedIndexChanged += new EventHandler(comboBoxCategory_SelectedIndexChanged);
             comboBoxType.SelectedIndexChanged += new EventHandler(comboBoxType_SelectedIndexChanged);
+            comboBoxColor.SelectedIndexChanged += new EventHandler(comboBoxColor_SelectedIndexChanged);
+            comboBoxScope.SelectedIndexChanged += new EventHandler(comboBoxScope_SelectedIndexChanged);
         }
 
         private void MajorItemWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -376,6 +396,34 @@ namespace JumpSaves
             TypeUpdated();
         }
 
+        private void comboBoxColor_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IsDirty = true;
+            JSL.PlayerWeaponCustomizationsEditor editor = Editor.PlayerWeaponCustomizations;
+            if (editor != null)
+            {
+                JSL.PlayerWeaponCustomizationType.Enum color = JSL.PlayerWeaponCustomizationType.FromTitle((string)comboBoxColor.SelectedItem);
+                if (color != JSL.PlayerWeaponCustomizationType.Enum.Unknown)
+                {
+                    editor.Color = color;
+                }
+            }
+        }
+
+        private void comboBoxScope_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IsDirty = true;
+            JSL.PlayerWeaponCustomizationsEditor editor = Editor.PlayerWeaponCustomizations;
+            if (editor != null)
+            {
+                JSL.PlayerWeaponCustomizationType.Enum scope = JSL.PlayerWeaponCustomizationType.FromTitle((string)comboBoxScope.SelectedItem);
+                if (scope != JSL.PlayerWeaponCustomizationType.Enum.Unknown)
+                {
+                    editor.Scope = scope;
+                }
+            }
+        }
+
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
             Debug.Assert(canEdit_);
@@ -440,7 +488,7 @@ namespace JumpSaves
             e.SubItem.Text = potencyPercent.ToString("F2") + "%";
         }
 
-        private void CategoryUpdated(bool cascade = true)
+        private void CategoryUpdated()
         {
             comboBoxType.Items.Clear();
 
@@ -463,25 +511,40 @@ namespace JumpSaves
                 comboBoxType.SelectedIndex = 0;
             }
 
-            if (cascade)
-            {
-                TypeUpdated();
-            }
-
-            OnStateChange();
+            TypeUpdated();
         }
 
         private void TypeUpdated()
         {
+            // Clear the modules if they no longer fit the item type
             JSL.MajorItemPurpose purpose = JSL.MajorItemType.GetPurpose(Editor.Type);
             if (purpose != purpose_)
             {
+                purpose_ = purpose;
+
                 while (Editor.ModuleCount != 0)
                 {
                     Editor.RemoveModule(0);
                 }
 
                 ReloadModuleList();
+            }
+
+            // Update the Color and Scope
+            bool hasCustomizations = JSL.MajorItemType.HasCustomizations(Editor.Type);
+            JSL.PlayerWeaponCustomizationType.Enum color = Editor.PlayerWeaponCustomizations?.Color ?? JSL.PlayerWeaponCustomizationType.Enum.Unknown;
+            comboBoxColor.SelectedItem = color == JSL.PlayerWeaponCustomizationType.Enum.Unknown ? null : JSL.PlayerWeaponCustomizationType.GetTitle(color);
+            comboBoxColor.Enabled = hasCustomizations;
+            if (hasCustomizations && comboBoxColor.SelectedIndex == -1)
+            {
+                comboBoxColor.SelectedIndex = 0;
+            }
+            JSL.PlayerWeaponCustomizationType.Enum scope = Editor.PlayerWeaponCustomizations?.Scope ?? JSL.PlayerWeaponCustomizationType.Enum.Unknown;
+            comboBoxScope.SelectedItem = scope == JSL.PlayerWeaponCustomizationType.Enum.Unknown ? null : JSL.PlayerWeaponCustomizationType.GetTitle(scope);
+            comboBoxScope.Enabled = hasCustomizations;
+            if (hasCustomizations && comboBoxScope.SelectedIndex == -1)
+            {
+                comboBoxScope.SelectedIndex = 0;
             }
 
             OnStateChange();

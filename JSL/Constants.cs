@@ -683,6 +683,7 @@ namespace JSL
         {
             Unknown,
             // Category.Scope:
+            S_Rear,
             S_3x,
             S_Acog,
             S_Box,
@@ -694,15 +695,14 @@ namespace JSL
             S_Tube,
             S_Battle,
             S_Flip,
-            S_Rear,
             S_Hollow2,
             S_Ring,
             // Category.Color:
+            C_Grey,
             C_Blue,
             C_Orange,
             C_Green,
             C_Red,
-            C_Grey,
             C_DerelictRed,
             C_DerelictGreen,
             C_DerelictBlue,
@@ -765,6 +765,7 @@ namespace JSL
         {
             new EnumInfo { Title = "Unknown",         Raw = null,                               Category = Category.Unknown },
             // Category.Scope:
+            new EnumInfo { Title = "Rear Sight",      Raw = "c552bf5c4142ab4418baaf4d508324bc", Category = Category.Scope   },
             new EnumInfo { Title = "3x Scope",        Raw = "3ab99e9b2ba799e42a59853851fe3223", Category = Category.Scope   },
             new EnumInfo { Title = "Acog Scope",      Raw = "5678a13323b2bc44b843bdaa3a23008b", Category = Category.Scope   },
             new EnumInfo { Title = "Box Scope",       Raw = "237d7a2fe9081474ea26f93da1918e34", Category = Category.Scope   },
@@ -776,15 +777,14 @@ namespace JSL
             new EnumInfo { Title = "Tube Scope",      Raw = "83ac190cde3365a45a8f47a91cc44fdf", Category = Category.Scope   },
             new EnumInfo { Title = "Battle Sight",    Raw = "bec00b2b2b8b82e429632e2775552e53", Category = Category.Scope   },
             new EnumInfo { Title = "Flip Sight",      Raw = "6235966a303a8024fb8629cf87c44936", Category = Category.Scope   },
-            new EnumInfo { Title = "Rear Sight",      Raw = "c552bf5c4142ab4418baaf4d508324bc", Category = Category.Scope   },
             new EnumInfo { Title = "Hollow Sight 2",  Raw = "2cd7a7d28a4087240a39bcac0ea66cac", Category = Category.Scope   },
             new EnumInfo { Title = "Ring Sight",      Raw = "9c539085d71f0204587fd9c30365894c", Category = Category.Scope   },
             // Category.Color:
+            new EnumInfo { Title = "Grey",            Raw = "bed6ab5800040bd48b3726648ca3c72b", Category = Category.Color   },
             new EnumInfo { Title = "Blue",            Raw = "275950df1b6a3f048861c84e013c660c", Category = Category.Color   },
             new EnumInfo { Title = "Orange",          Raw = "091ddcba29a05954dbde3f03597251be", Category = Category.Color   },
             new EnumInfo { Title = "Green",           Raw = "ed5012b0093c60146a90a51a5b69d1d6", Category = Category.Color   },
             new EnumInfo { Title = "Red",             Raw = "dbe9422bbc6635b45a42540d75ecd5a2", Category = Category.Color   },
-            new EnumInfo { Title = "Grey",            Raw = "bed6ab5800040bd48b3726648ca3c72b", Category = Category.Color   },
             new EnumInfo { Title = "Derelict Red",    Raw = "0615262be625fe040929959fd5982afb", Category = Category.Color   },
             new EnumInfo { Title = "Derelict Green",  Raw = "b6740c13675d05e4883797b2750e2a7e", Category = Category.Color   },
             new EnumInfo { Title = "Derelict Blue",   Raw = "f739d4ee59609d74d8aea843504e985d", Category = Category.Color   },
@@ -896,7 +896,7 @@ namespace JSL
         {
             // Only non-melee player weapons have customizations
             return (GetCategory(e) == MajorItemCategory.Enum.PlayerWeapons) &&
-                   (e != Enum.PW_HeatBlade || e != Enum.PW_Wrench || e != Enum.PW_Crowbar);
+                   (e != Enum.PW_HeatBlade && e != Enum.PW_Wrench && e != Enum.PW_Crowbar);
         }
 
         public static Enum FromTitle(string title, MajorItemCategory.Enum category = MajorItemCategory.Enum.Unknown)
