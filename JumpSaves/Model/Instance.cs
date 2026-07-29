@@ -137,6 +137,14 @@ namespace JumpSaves.Model
             }
         }
 
+        public Settings Settings
+        {
+            get
+            {
+                return manager_.Settings;
+            }
+        }
+
         public JSL.SaveEditor SaveEditor { get; private set; }
 
         public JSL.LibraryMajorItemListEditor LibraryEditor

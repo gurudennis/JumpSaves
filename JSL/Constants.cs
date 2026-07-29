@@ -695,7 +695,7 @@ namespace JSL
             S_Tube,
             S_Battle,
             S_Flip,
-            S_Hollow2,
+            S_Smalldot,
             S_Ring,
             // Category.Color:
             C_Grey,
@@ -772,12 +772,12 @@ namespace JSL
             new EnumInfo { Title = "Halo Sight",      Raw = "a1bd8252662e0fa42941fc09ff6d348a", Category = Category.Scope   },
             new EnumInfo { Title = "Holo Sight",      Raw = "3e70bec2f408b224ea8c3d710d92a3af", Category = Category.Scope   },
             new EnumInfo { Title = "Moon Sight",      Raw = "5e43546a2fc05b94a92bfa5bf40b1e0f", Category = Category.Scope   },
-            new EnumInfo { Title = "Hollow Sight",    Raw = "237d7a2fe9081474ea26f93da1918e34", Category = Category.Scope   },
+            new EnumInfo { Title = "Hollow Sight",    Raw = "2cd7a7d28a4087240a39bcac0ea66cac", Category = Category.Scope   },
             new EnumInfo { Title = "Reflex Sight",    Raw = "4d32685806784a44ab612b8dd1f6157c", Category = Category.Scope   },
             new EnumInfo { Title = "Tube Scope",      Raw = "83ac190cde3365a45a8f47a91cc44fdf", Category = Category.Scope   },
             new EnumInfo { Title = "Battle Sight",    Raw = "bec00b2b2b8b82e429632e2775552e53", Category = Category.Scope   },
             new EnumInfo { Title = "Flip Sight",      Raw = "6235966a303a8024fb8629cf87c44936", Category = Category.Scope   },
-            new EnumInfo { Title = "Hollow Sight 2",  Raw = "2cd7a7d28a4087240a39bcac0ea66cac", Category = Category.Scope   },
+            new EnumInfo { Title = "Smalldot Scope",  Raw = "618c7fa7689450e439315b109847e2e8", Category = Category.Scope   },
             new EnumInfo { Title = "Ring Sight",      Raw = "9c539085d71f0204587fd9c30365894c", Category = Category.Scope   },
             // Category.Color:
             new EnumInfo { Title = "Grey",            Raw = "bed6ab5800040bd48b3726648ca3c72b", Category = Category.Color   },

@@ -19,6 +19,12 @@ namespace JumpSaves
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            if (model_.Settings.ShowTutorial)
+            {
+                TutorialWindow tutorial = new TutorialWindow(model_);
+                tutorial.ShowDialog();
+            }
+
             Text = $"JumpSaves {Assembly.GetExecutingAssembly().GetName().Version}";
 
             toolStripComboBoxMode.SelectedIndex = 0;

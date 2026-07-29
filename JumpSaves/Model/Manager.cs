@@ -13,7 +13,8 @@ namespace JumpSaves.Model
     {
         public Manager()
         {
-            this.ActionLog = new ActionLog();
+            Settings = new Settings(DefaultSettingsPath);
+            ActionLog = new ActionLog();
 
             thread_ = new Thread(() => { ThreadProc(); });
             thread_.Start();
@@ -25,12 +26,15 @@ namespace JumpSaves.Model
             thread_.Join();
 
             ActionLog.Dispose();
+            Settings.Dispose();
         }
 
         public Instance CreateInstance(SynchronizationContext syncContext)
         {
             return new Instance(syncContext, this, new OnlyManagerShouldCreateThis());
         }
+
+        public Settings Settings { get; private set; }
 
         public ActionLog ActionLog { get; private set; }
 
@@ -74,6 +78,14 @@ namespace JumpSaves.Model
             args.IsGameRunning = (processes != null && processes.Length > 0);
 
             PeriodicInfoEvent?.Invoke(this, args);
+        }
+
+        private string DefaultSettingsPath
+        {
+            get
+            {
+                return System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "JumpSaves", "JumpSavesSettings.json");
+            }
         }
 
         private string DefaultLibraryPath
