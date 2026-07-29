@@ -68,6 +68,8 @@
             this.libraryPanel = new System.Windows.Forms.Panel();
             this.libraryMajorItemList = new JumpSaves.MajorItemList();
             this.label2 = new System.Windows.Forms.Label();
+            this.backupsToolStripMenuItemBackups = new System.Windows.Forms.ToolStripMenuItem();
+            this.logsToolStripMenuItemLogs = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
@@ -156,6 +158,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.backupsToolStripMenuItemBackups,
+            this.logsToolStripMenuItemLogs,
             this.runCLIToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(58, 24);
@@ -165,7 +169,7 @@
             // 
             this.runCLIToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.RunCLI;
             this.runCLIToolStripMenuItem.Name = "runCLIToolStripMenuItem";
-            this.runCLIToolStripMenuItem.Size = new System.Drawing.Size(141, 26);
+            this.runCLIToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.runCLIToolStripMenuItem.Text = "Run CLI";
             this.runCLIToolStripMenuItem.Click += new System.EventHandler(this.runCLIToolStripMenuItem_Click);
             // 
@@ -181,7 +185,7 @@
             // 
             this.aboutToolStripMenuItem.Image = global::JumpSaves.Properties.Resources.About;
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.aboutToolStripMenuItem.Text = "About...";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -276,7 +280,7 @@
             this.toolStripButtonBackups.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonBackups.Name = "toolStripButtonBackups";
             this.toolStripButtonBackups.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonBackups.Text = "Backups";
+            this.toolStripButtonBackups.Text = "Show Backups";
             this.toolStripButtonBackups.Click += new System.EventHandler(this.toolStripButtonBackups_Click);
             // 
             // toolStripButtonLog
@@ -286,7 +290,7 @@
             this.toolStripButtonLog.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonLog.Name = "toolStripButtonLog";
             this.toolStripButtonLog.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonLog.Text = "Show Log";
+            this.toolStripButtonLog.Text = "Show Logs";
             this.toolStripButtonLog.Click += new System.EventHandler(this.toolStripButtonLog_Click);
             // 
             // toolStripAboutButton
@@ -500,6 +504,22 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "My Library";
             // 
+            // backupsToolStripMenuItemBackups
+            // 
+            this.backupsToolStripMenuItemBackups.Image = global::JumpSaves.Properties.Resources.Backup;
+            this.backupsToolStripMenuItemBackups.Name = "backupsToolStripMenuItemBackups";
+            this.backupsToolStripMenuItemBackups.Size = new System.Drawing.Size(224, 26);
+            this.backupsToolStripMenuItemBackups.Text = "Backups";
+            this.backupsToolStripMenuItemBackups.Click += new System.EventHandler(this.backupsToolStripMenuItemBackups_Click);
+            // 
+            // logsToolStripMenuItemLogs
+            // 
+            this.logsToolStripMenuItemLogs.Image = global::JumpSaves.Properties.Resources.Log;
+            this.logsToolStripMenuItemLogs.Name = "logsToolStripMenuItemLogs";
+            this.logsToolStripMenuItemLogs.Size = new System.Drawing.Size(224, 26);
+            this.logsToolStripMenuItemLogs.Text = "Logs";
+            this.logsToolStripMenuItemLogs.Click += new System.EventHandler(this.logsToolStripMenuItemLogs_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -578,6 +598,8 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonBackups;
         private SlotsView editorSlotsView;
         private System.Windows.Forms.Label labelSlots;
+        private System.Windows.Forms.ToolStripMenuItem backupsToolStripMenuItemBackups;
+        private System.Windows.Forms.ToolStripMenuItem logsToolStripMenuItemLogs;
     }
 }
 

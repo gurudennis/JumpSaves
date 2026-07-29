@@ -72,6 +72,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "TutorialWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "How to use JumpSaves (at your own risk!)";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TutorialWindow_FormClosed);
             this.Load += new System.EventHandler(this.TutorialWindow_Load);

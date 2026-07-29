@@ -119,40 +119,24 @@ namespace JumpSaves
             Save();
         }
 
+        private void backupsToolStripMenuItemBackups_Click(object sender, EventArgs e)
+        {
+            ShowBackups();
+        }
+
         private void toolStripButtonBackups_Click(object sender, EventArgs e)
         {
-            if (backupsWindow_ == null || backupsWindow_.IsDisposed)
-            {
-                backupsWindow_ = new BackupsWindow(model_, OnStateChanged);
-            }
+            ShowBackups();
+        }
 
-            if (backupsWindow_.Visible)
-            {
-                backupsWindow_.Focus();
-                backupsWindow_.BringToFront();
-            }
-            else
-            {
-                backupsWindow_.Show();
-            }
+        private void logsToolStripMenuItemLogs_Click(object sender, EventArgs e)
+        {
+            ShowLogs();
         }
 
         private void toolStripButtonLog_Click(object sender, EventArgs e)
         {
-            if (logWindow_ == null || logWindow_.IsDisposed)
-            {
-                logWindow_ = new LogWindow(model_.ActionLog);
-            }
-
-            if (logWindow_.Visible)
-            {
-                logWindow_.Focus();
-                logWindow_.BringToFront();
-            }
-            else
-            {
-                logWindow_.Show();
-            }
+            ShowLogs();
         }
 
         private void toolStripComboBoxMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -270,6 +254,42 @@ namespace JumpSaves
             if (!model_.IsOpen)
             {
                 model_.RunCLI(path);
+            }
+        }
+
+        private void ShowBackups()
+        {
+            if (backupsWindow_ == null || backupsWindow_.IsDisposed)
+            {
+                backupsWindow_ = new BackupsWindow(model_, OnStateChanged);
+            }
+
+            if (backupsWindow_.Visible)
+            {
+                backupsWindow_.Focus();
+                backupsWindow_.BringToFront();
+            }
+            else
+            {
+                backupsWindow_.Show();
+            }
+        }
+
+        private void ShowLogs()
+        {
+            if (logWindow_ == null || logWindow_.IsDisposed)
+            {
+                logWindow_ = new LogWindow(model_.ActionLog);
+            }
+
+            if (logWindow_.Visible)
+            {
+                logWindow_.Focus();
+                logWindow_.BringToFront();
+            }
+            else
+            {
+                logWindow_.Show();
             }
         }
 
