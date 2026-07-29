@@ -83,7 +83,7 @@
             this.toolStripButtonRestore.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonRestore.Name = "toolStripButtonRestore";
             this.toolStripButtonRestore.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonRestore.Text = "toolStripButtonRestore";
+            this.toolStripButtonRestore.Text = "Restore selected backup";
             this.toolStripButtonRestore.Click += new System.EventHandler(this.toolStripButtonRestore_Click);
             // 
             // toolStripButtonBrowse
@@ -93,7 +93,7 @@
             this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
             this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonBrowse.Text = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Text = "Browse backups";
             this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
             // 
             // list
@@ -105,6 +105,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.list.CellEditActivation = BrightIdeasSoftware.ObjectListView.CellEditActivateMode.DoubleClick;
+            this.list.CellEditUseWholeCell = false;
             this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName,
             this.olvColumnTimeCreated,

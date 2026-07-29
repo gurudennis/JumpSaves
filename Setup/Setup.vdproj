@@ -617,7 +617,7 @@
         "DisplayName" = "8:Release"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
-        "OutputFilename" = "8:Release\\JumpSavesSetup_1_0_20_4.msi"
+        "OutputFilename" = "8:Release\\JumpSavesSetup_1_0_20_5.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -1558,7 +1558,7 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:JumpSaves"
-        "ProductCode" = "8:{EFF8E7C1-397F-4E34-911E-1D879E7B99C7}"
+        "ProductCode" = "8:{A42EB109-F21E-4F5D-95CC-909A37BCE74E}"
         "PackageCode" = "8:{93EE00D1-C798-4DA7-9E31-065B6630B674}"
         "UpgradeCode" = "8:{F3C90592-3F16-4285-A930-9CCEA8EC2C95}"
         "AspNetVersion" = "8:2.0.50727.0"

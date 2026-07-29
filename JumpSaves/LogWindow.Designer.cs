@@ -115,7 +115,7 @@
             this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
             this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonBrowse.Text = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Text = "Browse logs";
             this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
             // 
             // LogWindow
