@@ -36,7 +36,18 @@ namespace JumpSaves
             libraryMajorItemList.LogAction = DoListLog;
 
             OnStateChanged();
-            OpenDefaultDirectory();
+
+            try
+            {
+                OpenDefaultDirectory();
+            }
+            catch
+            {
+                string msg = $"JumpSaves couldn't locate a valid Jump Ship save directory automatically.\n\n" +
+                              "To open a save directory, select File -> Open Directory from the menu. Typically, it should be something like:\n" +
+                              "C:\\Program Files (x86)\\Steam\\userdata\\<user_id>\\1757300\\remote";
+                MessageBox.Show(this, msg, "Couldn't locate the live save directory", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void OnDirtyChanged(object sender, EventArgs e)
@@ -200,6 +211,15 @@ namespace JumpSaves
 
         private void OpenFile()
         {
+            string prompt = "To modify a live save, JumpSaves needs to open the Jump Ship save directory, not just one file.\n\n" +
+                            "Changing a single save file from the game save directory may result in your changes being discarded by the game.\n\n" +
+                            "Are you sure you want to open a single file?";
+            if (MessageBox.Show(this, prompt, "Are you sure you want to open a single file?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+            {
+                OpenDirectory();
+                return;
+            }
+
             using (OpenFileDialog dialog = new OpenFileDialog())
             {
                 dialog.Title = "Select a Jump Ship save file";
