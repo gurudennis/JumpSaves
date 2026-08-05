@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace JSL
 {
@@ -194,6 +196,8 @@ namespace JSL
             F_ReloadSpeed,
             F_MagazineSize,
             F_Damage,
+            F_BonusDamage,
+            F_FireRate,
             // ModuleKind.Custom:
             C_ReduceMateriaCost,
             C_CorrosionChanceOnHit,
@@ -219,12 +223,20 @@ namespace JSL
             C_SearChanceOnHit,
             C_RuptureProjectile,
             C_RadiationAfterCorrosion,
-            C_DisruptionAfterEMP,
+            C_CorrosionAfterEMP,
             C_ShieldCapacity,
             C_VirusSpreadsOnKill,
             C_RadiationProjectile,
             C_BreachAfterSear,
             C_IncreaseSearDamage,
+            C_DamageAfterEMP,
+            C_ReloadSpeed,
+            C_DamagePerStatusEffect,
+            C_DamageAfterSear,
+            C_SearProjectile,
+            C_CorrosionAfterSear,
+            C_DisruptionAfterEMP,
+            C_SearAfterRupture,
             __COUNT__
         }
 
@@ -307,6 +319,8 @@ namespace JSL
             new EnumInfo { Title = "(F) Reload speed",          Abbr = "Rel", Raw = "9009aa4df2ad3a04ba4dea5518e1d611", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "(F) Magazine size",         Abbr = "Mag", Raw = "cafc9599b386ee84a890c2c760b62f5e", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "(F) Damage",                Abbr = "Dmg", Raw = "df5b391e9981fdd47af8f2f6e74a9fd9", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "(F) Bonus damage",          Abbr = "Dmg", Raw = "1cb68cd7f09dd6843a9ea451429e6139", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "(F) Fire rate",             Abbr = "RoF", Raw = "8395a832a680a8741b9e61af12c72307", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             // ModuleKind.Custom:
             new EnumInfo { Title = "Reduced materia cost",      Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
             new EnumInfo { Title = "Corrosion chance on hit",   Abbr = "Cor", Raw = "bb680a7ce4769fa4396b560d36435371", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
@@ -332,12 +346,20 @@ namespace JSL
             new EnumInfo { Title = "Sear chance on hit",        Abbr = "Sea", Raw = "318504b5400b90d4c81cc63c64baf0ac", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Rupture projectile",        Abbr = "Sea", Raw = "e8ca44d9362a2e143917f65180369a6d", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Radiation after corrosion", Abbr = "Sea", Raw = "66ad1d1ada3da75479cef1a83a739aae", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Disruption after EMP",      Abbr = "Sea", Raw = "a5331df01eb1f1147b27f8cb852c82ca", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Corrosion after EMP",       Abbr = "Cor", Raw = "a5331df01eb1f1147b27f8cb852c82ca", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Shield capacity",           Abbr = "Cap", Raw = "1a0f06c6024f86d48bdc56076def5dd3", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
             new EnumInfo { Title = "Virus spreads on kill",     Abbr = "Vir", Raw = "682de849168890a43bd79f0473a0e76b", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Radiation projectile",      Abbr = "Rad", Raw = "2db0439951d75ba4dade764bbcdd1369", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Breach after sear",         Abbr = "Bre", Raw = "32a8f3dc569318142be2483792227bc1", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Increase sear damage",      Abbr = "Sea", Raw = "f59d3b957056095468442df700fb5a08", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Damage after EMP",          Abbr = "Dmg", Raw = "b0c37c92a2ca2f4418bd366fc1717911", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Reload speed",              Abbr = "Rel", Raw = "52e9347eefe773444bc3a1520f4221af", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Damage per status effect",  Abbr = "Dmg", Raw = "c364f658905ff554dbda3ba3aa5bb34f", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Damage after Sear",         Abbr = "Dmg", Raw = "0858882df0957284780955d88b67f44c", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Sear projectile",           Abbr = "Sea", Raw = "44a3739d1453d884cad555454d1dd242", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Corrosion after Sear",      Abbr = "Cor", Raw = "0f8329280d1551a4981a1bab85732db7", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Disruption after EMP",      Abbr = "Dis", Raw = "594cfedb80c49f548be209204da1eed6", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Sear after Rupture",        Abbr = "Sea", Raw = "a12a873fd77ff6c45bb949d78d06240b", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();
@@ -361,6 +383,7 @@ namespace JSL
             F_Damage,
             F_FireRate,
             F_MagazineSize,
+            F_BonusMagazineSize,
             F_ReloadSpeed,
             // ModuleKind.Custom:
             C_ReloadSpeed,
@@ -403,6 +426,34 @@ namespace JSL
             C_BreachCausesPierce,
             C_DamageIfRupturePoolFull,
             C_EMPChanceOnHit,
+            C_ParryIncreasesSpeed,
+            C_HitsOnBreachReturnAmmo,
+            C_IncreaseSpeed,
+            C_HitsOnVirusRestoreHealth,
+            C_DamageAfterVirus,
+            C_CorrosionSpreadsOnKill,
+            C_MeleeCorrosionAfterDeflect,
+            C_MeleeDamageAfterDeflect,
+            C_BreachIfRupturePoolFull,
+            C_DamageCausesVirus,
+            C_RadiationOnCrit,
+            C_DamageAfterSear,
+            C_VirusSpreadsOnKill,
+            C_MeleeVirusAfterDeflect,
+            C_MeleeSearAfterDeflect,
+            C_SearWhileBurning,
+            C_SearSpreadsOnKill,
+            C_HitsOnEMPRestoreShield,
+            C_RadiationChanceOnHit,
+            C_EMPAfterCorrosion,
+            C_MeleeBreachAfterDeflect,
+            C_MeleeRuptureAfterDeflect,
+            C_VirusChanceOnHit,
+            C_CritDamage,
+            C_VirusSpreadsStatusesOnKill,
+            C_VirusStrengthensStatuses,
+            C_FireRateRampsUp,
+            C_CorrosionAfterEMP,
             __COUNT__
         }
 
@@ -484,6 +535,7 @@ namespace JSL
             new EnumInfo { Title = "(F) Damage",                      Abbr = "Dmg", Raw = "8fecf9fa19f5d0748bc7e5794d2e2e93", PotencyCount = 1, Kind = ModuleKind.Feature },
             new EnumInfo { Title = "(F) Fire rate",                   Abbr = "RoF", Raw = "bb21cfa6fd5a9364c99ef22d8d4ea38f", PotencyCount = 1, Kind = ModuleKind.Feature },
             new EnumInfo { Title = "(F) Magazine capacity",           Abbr = "Mag", Raw = "68fbcdf863d097c498e0ffb0ec1d4cba", PotencyCount = 1, Kind = ModuleKind.Feature },
+            new EnumInfo { Title = "(F) Bonus magazine capacity",     Abbr = "Mag", Raw = "2a17d7fe09ea50a47b88336247b9c5ff", PotencyCount = 1, Kind = ModuleKind.Feature },
             new EnumInfo { Title = "(F) Reload speed",                Abbr = "Rel", Raw = "13cec6085efd0a342a6ecfef9f5aa2da", PotencyCount = 1, Kind = ModuleKind.Feature },
             // ModuleKind.Custom:
             new EnumInfo { Title = "Reload speed",                    Abbr = "Rel", Raw = "e755854780143a1419bec0445b46f072", PotencyCount = 1, Kind = ModuleKind.Custom  },
@@ -526,6 +578,34 @@ namespace JSL
             new EnumInfo { Title = "Breach causes pierce",            Abbr = "Prc", Raw = "589234c5148491b4aaf3a5507f66516d", PotencyCount = 3, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "Damage if rupture pool full",     Abbr = "Dmg", Raw = "ebf495b7db87dc34095f80c4fd0bea12", PotencyCount = 1, Kind = ModuleKind.Custom  },
             new EnumInfo { Title = "EMP chance on hit",               Abbr = "EMP", Raw = "e4e5defdb4de7aa41ac619e93975122b", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Parry increases speed",           Abbr = "Spd", Raw = "8990c7ff4b2a1a34cac6b37f53e53055", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Hits on breach return ammo",      Abbr = "Amm", Raw = "7b2a61372446d15499ae0f69327ceb83", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Increase speed",                  Abbr = "Spd", Raw = "5c66eb6f47c008349a8b49f84e2e2082", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Hits on Virus restore health",    Abbr = "Hel", Raw = "d26c525617760824f8227086dd3d96a2", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage after Virus",              Abbr = "Dmg", Raw = "b4e2f2222eb9d434885137e1bf8ccfd0", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Corrosion spreads on kill",       Abbr = "Cor", Raw = "9d86d4d33ad602d4aa60423ffce533ce", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee Corrosion after deflect",   Abbr = "Cor", Raw = "92aa6c968e8654f4bada9f3ef80b1640", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee damage after deflect",      Abbr = "Dmg", Raw = "b3770c83f3075a446803fa24b8985510", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Breach if Rupture pool full",     Abbr = "Bre", Raw = "3a7e482e13b43c34997f26b5c2919733", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage causes Virus",             Abbr = "Vir", Raw = "97113ea8e3a5b2a44a86b82d09fe836d", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Radiation on crit",               Abbr = "Rad", Raw = "ce3dc6eae836c7744a841123d95dfc18", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Damage after Sear",               Abbr = "Dmg", Raw = "d766bd983a8afd941a5684e0c251aa0e", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Virus spreads on kill",           Abbr = "Vir", Raw = "01e31fd07b981f04aa2f1dd074b76054", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee Virus after deflect",       Abbr = "Vir", Raw = "139ad3ab83c9d54408630df4b97f9f44", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee Sear after deflect",        Abbr = "Sea", Raw = "bb60b003dfc8fed4e9737d0a3ba8268b", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Sear while burning",              Abbr = "Sea", Raw = "38382857f879220468fcbaceb56e6fda", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Sear spreads on kill",            Abbr = "Sea", Raw = "a12c412c1a390ac4493cfda03b175993", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Hits on EMP restore shield",      Abbr = "Shl", Raw = "d4ed62e9c08e23f46ad535e356990af4", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Radiation chance on hit",         Abbr = "Rad", Raw = "440c9c4e30c1abd43bc5b67832bc5745", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "EMP after corrosion",             Abbr = "EMP", Raw = "f4703aefe41a81541a3328bcb0583567", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee Breach after deflect",      Abbr = "Bre", Raw = "5478a45dbd9c0b7428ec597f0531619e", PotencyCount = 0, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Melee Rupture after deflect",     Abbr = "Rup", Raw = "9f1db6fbb63757a48ad3d0a98d94286d", PotencyCount = 0, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Virus chance on hit",             Abbr = "Vir", Raw = "268f2baa7d7a5e449bae9eba401b5fcc", PotencyCount = 3, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Crit damage",                     Abbr = "Crt", Raw = "e1af7dcc04bf7994e8f37f4043a56733", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Virus spreads statuses on kill",  Abbr = "Sta", Raw = "48734eef325405640b5c7602305b0aa6", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Virus strengthens statuses",      Abbr = "Sta", Raw = "4ce8ab4b7c0cc94498d825166f9cbbfb", PotencyCount = 1, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Fire rate ramps up",              Abbr = "RoF", Raw = "2230c9a581041174c90d8ca3546ad1ad", PotencyCount = 2, Kind = ModuleKind.Custom  },
+            new EnumInfo { Title = "Corrosion after EMP",             Abbr = "Cor", Raw = "1758c4f911d6d964cad36a998c5d0e22", PotencyCount = 2, Kind = ModuleKind.Custom  },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();

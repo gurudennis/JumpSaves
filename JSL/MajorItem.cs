@@ -62,7 +62,11 @@ namespace JSL
         {
             get
             {
-                object[] arr = GetSubArrayStrict(Index_Potencies);
+                if (!GetSubArray(Index_Potencies, out object[] arr))
+                {
+                    return new double[0];
+                }
+
                 double[] res = new double[arr.Length];
                 for (int i = 0; i < arr.Length; ++i)
                 {

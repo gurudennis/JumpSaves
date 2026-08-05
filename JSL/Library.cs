@@ -123,7 +123,7 @@ namespace JSL
                 {
                     using (Stream stream = file.Open())
                     {
-                        entries_.Add(ReadEntry(stream, file.Length, file.Name));
+                        AddEntry(ReadEntry(stream, file.Length, file.Name).Item, ConflictBehavior.Error);
                     }
                 }
             }
