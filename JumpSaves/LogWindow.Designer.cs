@@ -36,6 +36,7 @@
             this.olvColumnText = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
+            this.toolStripComboBoxLevel = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -101,7 +102,8 @@
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonBrowse});
+            this.toolStripButtonBrowse,
+            this.toolStripComboBoxLevel});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1018, 31);
@@ -118,6 +120,21 @@
             this.toolStripButtonBrowse.Text = "Browse logs";
             this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
             // 
+            // toolStripComboBoxLevel
+            // 
+            this.toolStripComboBoxLevel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripComboBoxLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.toolStripComboBoxLevel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.toolStripComboBoxLevel.Items.AddRange(new object[] {
+            "Debug",
+            "Verbose",
+            "Info",
+            "Warning",
+            "Error"});
+            this.toolStripComboBoxLevel.Name = "toolStripComboBoxLevel";
+            this.toolStripComboBoxLevel.Size = new System.Drawing.Size(121, 31);
+            this.toolStripComboBoxLevel.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxLevel_SelectedIndexChanged);
+            // 
             // LogWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -131,7 +148,7 @@
             this.MinimizeBox = false;
             this.Name = "LogWindow";
             this.Text = "JumpSaves Log";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.LogWindow_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogWindow_FormClosing);
             this.Load += new System.EventHandler(this.LogWindow_Load);
             ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
             this.toolStrip1.ResumeLayout(false);
@@ -150,5 +167,6 @@
         private BrightIdeasSoftware.OLVColumn olvColumnText;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButtonBrowse;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboBoxLevel;
     }
 }

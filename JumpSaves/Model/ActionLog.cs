@@ -12,6 +12,7 @@ namespace JumpSaves.Model
         public enum Level
         {
             Debug,
+            Verbose,
             Info,
             Warning,
             Error

@@ -205,7 +205,7 @@ namespace JumpSaves.Model
         {
             string selfPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             string cliPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(selfPath), "JumpSavesCLI.exe");
-            Process.Start(cliPath, $"-s {path ?? (SaveEditor?.Path ?? DefaultSavePath)}");
+            Process.Start(cliPath, $"-s \"{path ?? (SaveEditor?.Path ?? DefaultSavePath)}\"");
         }
 
         public void TransferToLibrary(JSL.MajorItemEditor item, JSL.ConflictBehavior onConflict)
@@ -236,7 +236,7 @@ namespace JumpSaves.Model
                 throw new Exception("Can't auto-acquire when no save is open");
             }
 
-            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, "Started Auto-acquiring items to the Library");
+            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Verbose, "Started Auto-acquiring items to the Library");
 
             {
                 JSL.MajorItemListEditor stored = SaveEditor.StoredMajorItems;
@@ -262,7 +262,7 @@ namespace JumpSaves.Model
                 }
             }
 
-            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Info, "Finished Auto-acquiring items to the Library");
+            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Verbose, "Finished Auto-acquiring items to the Library");
         }
 
         private void TransferToLibrary(JSL.MajorItemEditor item, JSL.ConflictBehavior onConflict, bool isAutomated)

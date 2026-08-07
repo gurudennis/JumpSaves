@@ -30,6 +30,8 @@ namespace JumpSaves
             {
                 if (saveEditor_ != value)
                 {
+                    saveEditor_ = null;
+                    OnStateChange(); // ensure that the list is cleared before being repopulated
                     saveEditor_ = value;
                     OnStateChange();
                 }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace JumpSaves
@@ -17,12 +17,27 @@ namespace JumpSaves
 
         public Model.ActionLog Log { get; private set; }
 
-        private void LogWindow_Load(object sender, EventArgs e)
+        private Model.ActionLog.Level Level
         {
-            OnChanged(Log, null);
+            get
+            {
+                try
+                {
+                    return (Model.ActionLog.Level)toolStripComboBoxLevel.SelectedIndex;
+                }
+                catch
+                {
+                    return Model.ActionLog.Level.Info;
+                }
+            }
         }
 
-        private void LogWindow_FormClosed(object sender, FormClosedEventArgs e)
+        private void LogWindow_Load(object sender, EventArgs e)
+        {
+            toolStripComboBoxLevel.SelectedIndex = (int)Model.ActionLog.Level.Info; // also triggers OnChanged
+        }
+
+        private void LogWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             Log.Changed -= OnChanged;
         }
@@ -36,9 +51,19 @@ namespace JumpSaves
             });
         }
 
+        private void toolStripComboBoxLevel_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OnChanged(Log, null);
+        }
+
         private void OnChanged(object sender, EventArgs e)
         {
-            list.SetObjects(Log.Entries);
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            list.SetObjects(Log.Entries.Where((entry) => entry.Level >= Level));
         }
     }
 }
