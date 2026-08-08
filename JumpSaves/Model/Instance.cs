@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using System.Xml.Linq;
-using static System.Windows.Forms.AxHost;
 
 namespace JumpSaves.Model
 {
@@ -23,6 +21,12 @@ namespace JumpSaves.Model
             syncContext_ = syncContext;
             manager_ = manager;
 
+#if DEBUG
+            DefaultSavePath = "C:\\Prj\\JumpSpaceSaves\\Data\\NewVersion_2";
+#else
+            DefaultSavePath = JSL.SaveDir.Default?.Path;
+#endif
+
             manager_.PeriodicInfoEvent += OnGlobalPeriodicInfo;
         }
 
@@ -31,17 +35,7 @@ namespace JumpSaves.Model
             Close();
         }
 
-        public string DefaultSavePath
-        {
-            get
-            {
-#if DEBUG
-                return "C:\\Prj\\JumpSpaceSaves\\Data\\NewVersion_2";
-#else
-                return JSL.SaveDir.Default?.Path;
-#endif
-            }
-        }
+        public string DefaultSavePath { get; private set; }
 
         public void Open(string path)
         {

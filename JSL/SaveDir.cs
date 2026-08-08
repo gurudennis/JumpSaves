@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace JSL
 {
@@ -30,7 +31,15 @@ namespace JSL
                     string saveRoot = System.IO.Path.Combine(userDir.FullName, "1757300", "remote");
                     if (Directory.Exists(saveRoot))
                     {
-                        return new SaveDir(saveRoot);
+                        try
+                        {
+                            return new SaveDir(saveRoot);
+                        }
+                        catch
+                        {
+                            Thread.Sleep(1000); // Is the game contending with us? Try again after a second.
+                            return new SaveDir(saveRoot);
+                        }
                     }
                 }
 
