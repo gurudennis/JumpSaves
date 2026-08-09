@@ -31,9 +31,23 @@ namespace JumpSaves.Model
             }
         }
 
+        public bool Colorblind
+        {
+            get
+            {
+                return params_.Colorblind;
+            }
+            set
+            {
+                params_.Colorblind = value;
+            }
+        }
+
         private class Params
         {
             public bool ShowTutorial { get; set; } = true;
+
+            public bool Colorblind { get; set; } = false;
         }
 
         private void Load()

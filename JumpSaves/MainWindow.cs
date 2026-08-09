@@ -27,6 +27,7 @@ namespace JumpSaves
 
             Text = $"JumpSaves {Assembly.GetExecutingAssembly().GetName().Version}";
 
+            colorblindModeToolStripMenuItem.Checked = model_.Settings.Colorblind;
             toolStripComboBoxMode.SelectedIndex = 0;
 
             editorMajorItemList.TransferAction = DoTransfer;
@@ -152,6 +153,12 @@ namespace JumpSaves
 
         private void toolStripComboBoxMode_SelectedIndexChanged(object sender, EventArgs e)
         {
+            OnStateChanged();
+        }
+
+        private void colorblindModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            model_.Settings.Colorblind = colorblindModeToolStripMenuItem.Checked;
             OnStateChanged();
         }
 
@@ -419,6 +426,7 @@ namespace JumpSaves
             editorMajorItemList.AllowCustomization = IsCheaterMode;
             editorMajorItemList.CanEdit = CanEdit;
             editorMajorItemList.CanTransfer = model_.IsOpen;
+            editorMajorItemList.Colorblind = model_.Settings.Colorblind;
             editorResourceView.Editor = model_.SaveEditor?.Resources;
             editorResourceView.AllowCustomization = IsCheaterMode;
             editorResourceView.Enabled = CanEdit;
@@ -435,6 +443,7 @@ namespace JumpSaves
             libraryMajorItemList.AllowCustomization = IsCheaterMode;
             libraryMajorItemList.CanEdit = true;
             libraryMajorItemList.CanTransfer = CanEdit;
+            libraryMajorItemList.Colorblind = model_.Settings.Colorblind;
 
             // Now that the game is started, warn about a dirty file
             if (!gameWasRunning_ && model_.IsGameRunning)

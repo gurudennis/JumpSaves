@@ -30,6 +30,7 @@ namespace JumpSaves
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.list = new BrightIdeasSoftware.FastObjectListView();
             this.olvColumnName = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnCategory = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -47,17 +48,23 @@ namespace JumpSaves
             this.toolStripButtonClone = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonRemove = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonReload = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonImport = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonReload = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonBrowse = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabelFilter = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxFilter = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabelTotal = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabelMonitor = new System.Windows.Forms.ToolStripLabel();
             this.toolStripComboBoxMonitor = new System.Windows.Forms.ToolStripComboBox();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.selectAllSuperiorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAllRareToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAllUncommonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAllCommonToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.list)).BeginInit();
             this.toolStrip.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // list
@@ -78,6 +85,7 @@ namespace JumpSaves
             this.list.CellEditUseWholeCell = false;
             this.list.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnName,
+            this.olvColumnRarity,
             this.olvColumnLevel,
             this.olvColumnModule1,
             this.olvColumnModule2,
@@ -94,7 +102,7 @@ namespace JumpSaves
             this.list.ShowGroups = false;
             this.list.ShowItemCountOnGroups = true;
             this.list.ShowSortIndicators = false;
-            this.list.Size = new System.Drawing.Size(724, 684);
+            this.list.Size = new System.Drawing.Size(800, 684);
             this.list.SpaceBetweenGroups = 10;
             this.list.TabIndex = 0;
             this.list.UseCellFormatEvents = true;
@@ -132,14 +140,12 @@ namespace JumpSaves
             // olvColumnRarity
             // 
             this.olvColumnRarity.AspectName = "Rarity";
-            this.olvColumnRarity.DisplayIndex = 1;
             this.olvColumnRarity.IsEditable = false;
-            this.olvColumnRarity.IsVisible = false;
-            this.olvColumnRarity.MaximumWidth = 0;
-            this.olvColumnRarity.MinimumWidth = 0;
+            this.olvColumnRarity.MaximumWidth = 65;
+            this.olvColumnRarity.MinimumWidth = 65;
             this.olvColumnRarity.Sortable = false;
             this.olvColumnRarity.Text = "Rarity";
-            this.olvColumnRarity.Width = 0;
+            this.olvColumnRarity.Width = 65;
             // 
             // olvColumnLevel
             // 
@@ -222,7 +228,7 @@ namespace JumpSaves
             this.toolStripComboBoxMonitor});
             this.toolStrip.Location = new System.Drawing.Point(1, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(723, 31);
+            this.toolStrip.Size = new System.Drawing.Size(799, 31);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "Actions";
             // 
@@ -276,26 +282,6 @@ namespace JumpSaves
             this.toolStripButtonEdit.Text = "Properties of selected item";
             this.toolStripButtonEdit.Click += new System.EventHandler(this.toolStripButtonEdit_Click);
             // 
-            // toolStripButtonBrowse
-            // 
-            this.toolStripButtonBrowse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonBrowse.Image = global::JumpSaves.Properties.Resources.Browse;
-            this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
-            this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonBrowse.Text = "Browse library directory";
-            this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
-            // 
-            // toolStripButtonReload
-            // 
-            this.toolStripButtonReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonReload.Image = global::JumpSaves.Properties.Resources.Reload;
-            this.toolStripButtonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonReload.Name = "toolStripButtonReload";
-            this.toolStripButtonReload.Size = new System.Drawing.Size(29, 28);
-            this.toolStripButtonReload.Text = "Reload from disk";
-            this.toolStripButtonReload.Click += new System.EventHandler(this.toolStripButtonReload_Click);
-            // 
             // toolStripButtonExport
             // 
             this.toolStripButtonExport.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -315,6 +301,26 @@ namespace JumpSaves
             this.toolStripButtonImport.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonImport.Text = "Import items from a file";
             this.toolStripButtonImport.Click += new System.EventHandler(this.toolStripButtonImport_Click);
+            // 
+            // toolStripButtonReload
+            // 
+            this.toolStripButtonReload.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonReload.Image = global::JumpSaves.Properties.Resources.Reload;
+            this.toolStripButtonReload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonReload.Name = "toolStripButtonReload";
+            this.toolStripButtonReload.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonReload.Text = "Reload from disk";
+            this.toolStripButtonReload.Click += new System.EventHandler(this.toolStripButtonReload_Click);
+            // 
+            // toolStripButtonBrowse
+            // 
+            this.toolStripButtonBrowse.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonBrowse.Image = global::JumpSaves.Properties.Resources.Browse;
+            this.toolStripButtonBrowse.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
+            this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
+            this.toolStripButtonBrowse.Text = "Browse library directory";
+            this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
             // 
             // toolStripLabelFilter
             // 
@@ -356,12 +362,53 @@ namespace JumpSaves
             this.toolStripComboBoxMonitor.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxMonitor.Items.AddRange(new object[] {
             "Superior",
+            "Rare & up",
             "All",
             "OFF"});
             this.toolStripComboBoxMonitor.Margin = new System.Windows.Forms.Padding(0, 0, 1, 0);
             this.toolStripComboBoxMonitor.Name = "toolStripComboBoxMonitor";
-            this.toolStripComboBoxMonitor.Size = new System.Drawing.Size(100, 28);
+            this.toolStripComboBoxMonitor.Size = new System.Drawing.Size(110, 31);
             this.toolStripComboBoxMonitor.ToolTipText = "Filter";
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAllSuperiorToolStripMenuItem,
+            this.selectAllRareToolStripMenuItem,
+            this.selectAllUncommonToolStripMenuItem,
+            this.selectAllCommonToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(220, 100);
+            this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            // 
+            // selectAllSuperiorToolStripMenuItem
+            // 
+            this.selectAllSuperiorToolStripMenuItem.Name = "selectAllSuperiorToolStripMenuItem";
+            this.selectAllSuperiorToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
+            this.selectAllSuperiorToolStripMenuItem.Text = "Select all Superior";
+            this.selectAllSuperiorToolStripMenuItem.Click += new System.EventHandler(this.selectAllSuperiorToolStripMenuItem_Click);
+            // 
+            // selectAllRareToolStripMenuItem
+            // 
+            this.selectAllRareToolStripMenuItem.Name = "selectAllRareToolStripMenuItem";
+            this.selectAllRareToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
+            this.selectAllRareToolStripMenuItem.Text = "Select all Rare";
+            this.selectAllRareToolStripMenuItem.Click += new System.EventHandler(this.selectAllRareToolStripMenuItem_Click);
+            // 
+            // selectAllUncommonToolStripMenuItem
+            // 
+            this.selectAllUncommonToolStripMenuItem.Name = "selectAllUncommonToolStripMenuItem";
+            this.selectAllUncommonToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
+            this.selectAllUncommonToolStripMenuItem.Text = "Select all Uncommon";
+            this.selectAllUncommonToolStripMenuItem.Click += new System.EventHandler(this.selectAllUncommonToolStripMenuItem_Click);
+            // 
+            // selectAllCommonToolStripMenuItem
+            // 
+            this.selectAllCommonToolStripMenuItem.Name = "selectAllCommonToolStripMenuItem";
+            this.selectAllCommonToolStripMenuItem.Size = new System.Drawing.Size(219, 24);
+            this.selectAllCommonToolStripMenuItem.Text = "Select all Common";
+            this.selectAllCommonToolStripMenuItem.Click += new System.EventHandler(this.selectAllCommonToolStripMenuItem_Click);
             // 
             // MajorItemList
             // 
@@ -370,12 +417,13 @@ namespace JumpSaves
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.list);
             this.Name = "MajorItemList";
-            this.Size = new System.Drawing.Size(725, 717);
+            this.Size = new System.Drawing.Size(801, 717);
             this.Load += new System.EventHandler(this.OnLoad);
             this.EnabledChanged += new System.EventHandler(this.OnEnabledChanged);
             ((System.ComponentModel.ISupportInitialize)(this.list)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -407,5 +455,10 @@ namespace JumpSaves
         private System.Windows.Forms.ToolStripButton toolStripButtonClone;
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
         private System.Windows.Forms.ToolStripButton toolStripButtonImport;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem selectAllSuperiorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectAllRareToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectAllUncommonToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectAllCommonToolStripMenuItem;
     }
 }

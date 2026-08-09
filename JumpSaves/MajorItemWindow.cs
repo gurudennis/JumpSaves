@@ -10,10 +10,11 @@ namespace JumpSaves
 {
     public partial class MajorItemWindow : Form
     {
-        public MajorItemWindow(JSL.MajorItemEditor editor, bool canEdit)
+        public MajorItemWindow(JSL.MajorItemEditor editor, bool canEdit, bool colorblind)
         {
             editor_ = editor;
             canEdit_ = canEdit;
+            colorblind_ = colorblind;
 
             InitializeComponent();
         }
@@ -208,14 +209,14 @@ namespace JumpSaves
             if (e.Column == olvColumnEffect)
             {
                 e.Item.Text = row.Effect;
-                e.Item.ForeColor = Style.GetRarityColor(row.Editor.Rarity, true);
+                e.Item.ForeColor = Style.GetRarityColor(row.Editor.Rarity, true, colorblind_);
                 e.Item.SelectedForeColor = e.Item.ForeColor;
-                e.Item.SelectedBackColor = Style.GetRarityColor(row.Editor.Rarity, false);
+                e.Item.SelectedBackColor = Style.GetRarityColor(row.Editor.Rarity, false, colorblind_);
             }
             else if (e.Column == olvColumnRarity)
             {
                 e.SubItem.Text = JSL.RarityStrings.GetTitle(row.Rarity, false);
-                e.SubItem.ForeColor = Style.GetRarityColor(row.Editor.Rarity, true);
+                e.SubItem.ForeColor = Style.GetRarityColor(row.Editor.Rarity, true, colorblind_);
             }
             else if (e.Column == olvColumnPotency1)
             {
@@ -557,7 +558,7 @@ namespace JumpSaves
 
         private void RarityUpdated()
         {
-            this.BackColor = Style.GetRarityColor(Editor.Rarity, false);
+            this.BackColor = Style.GetRarityColor(Editor.Rarity, false, colorblind_);
 
             for (int i = 0; i < Editor.ModuleCount; ++i)
             {
@@ -636,8 +637,9 @@ namespace JumpSaves
 
         private JSL.MajorItemEditor editor_;
         private JSL.MajorItemPurpose purpose_ = JSL.MajorItemPurpose.Unknown; // determines what modules fit, loosely speaking
-        bool canEdit_;
-        bool isDirty_;
+        private bool canEdit_;
+        private bool colorblind_;
+        private bool isDirty_;
         private List<ModuleRow> moduleRows_;
     }
 }

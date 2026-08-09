@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
@@ -14,6 +15,8 @@ namespace JumpSaves
         public MajorItemList()
         {
             InitializeComponent();
+
+            list.ContextMenuStrip = contextMenuStrip;
         }
 
         public Action<MajorItemList, IReadOnlyList<JSL.MajorItemEditor>> TransferAction { get; set; }
@@ -125,6 +128,22 @@ namespace JumpSaves
                 }
             }
         }
+        public bool Colorblind
+        {
+            get
+            {
+                return colorblind_;
+            }
+            set
+            {
+                if (colorblind_ != value)
+                {
+                    colorblind_ = value;
+                    OnStateChange();
+                }
+            }
+        }
+
 
         public string SelfDesignation
         {
@@ -155,7 +174,7 @@ namespace JumpSaves
         {
             get
             {
-                return toolStripComboBoxMonitor.SelectedIndex != 2;
+                return toolStripComboBoxMonitor.SelectedIndex != 3; // OFF
             }
         }
 
@@ -165,13 +184,22 @@ namespace JumpSaves
             {
                 return item.Rarity == JSL.Rarity.Superior;
             }
-            else if (toolStripComboBoxMonitor.SelectedIndex == 2) // None
+            else if (toolStripComboBoxMonitor.SelectedIndex == 1) // Rare & up
+            {
+                return item.Rarity == JSL.Rarity.Rare || item.Rarity == JSL.Rarity.Superior;
+            }
+            else if (toolStripComboBoxMonitor.SelectedIndex == 2) // All
+            {
+                return true;
+            }
+            else if (toolStripComboBoxMonitor.SelectedIndex == 3) // OFF
             {
                 Debug.Assert(false); // we shouldn't even be here since acquisition is disabled
                 return false;
             }
 
-            return true;
+            Debug.Assert(false); // we shouldn't be here since all valid cases are handled above
+            return false;
         }
 
         public void Reload()
@@ -266,9 +294,14 @@ namespace JumpSaves
             if (e.Column == olvColumnName)
             {
                 e.Item.Text = row.Name;
-                e.Item.ForeColor = Style.GetRarityColor(row.Rarity, true);
+                e.Item.ForeColor = Style.GetRarityColor(row.Rarity, true, Colorblind);
                 e.Item.SelectedForeColor = e.Item.ForeColor;
-                e.Item.SelectedBackColor = Style.GetRarityColor(row.Rarity, false);
+                e.Item.SelectedBackColor = Style.GetRarityColor(row.Rarity, false, Colorblind);
+            }
+            else if (e.Column == olvColumnRarity)
+            {
+                e.SubItem.Text = JSL.RarityStrings.GetTitle(row.Rarity, false);
+                e.SubItem.ForeColor = Style.GetRarityColor(row.Rarity, true, Colorblind);
             }
             else if (e.Column == olvColumnModule1)
             {
@@ -353,6 +386,34 @@ namespace JumpSaves
             e.Parameters.GroupComparer = new GroupComparer();
         }
 
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            selectAllSuperiorToolStripMenuItem.ForeColor = Style.GetRarityColor(JSL.Rarity.Superior, true, Colorblind);
+            selectAllRareToolStripMenuItem.ForeColor = Style.GetRarityColor(JSL.Rarity.Rare, true, Colorblind);
+            selectAllUncommonToolStripMenuItem.ForeColor = Style.GetRarityColor(JSL.Rarity.Uncommon, true, Colorblind);
+            selectAllCommonToolStripMenuItem.ForeColor = Style.GetRarityColor(JSL.Rarity.Common, true, Colorblind);
+        }
+
+        private void selectAllSuperiorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectAllByRarity(JSL.Rarity.Superior);
+        }
+
+        private void selectAllRareToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectAllByRarity(JSL.Rarity.Rare);
+        }
+
+        private void selectAllUncommonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectAllByRarity(JSL.Rarity.Uncommon);
+        }
+
+        private void selectAllCommonToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SelectAllByRarity(JSL.Rarity.Common);
+        }
+
         private void toolStripComboBoxFilter_SelectedIndexChanged(object sender, EventArgs e)
         {
             Editor = null;
@@ -407,7 +468,7 @@ namespace JumpSaves
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
         {
-            MajorItemWindow propsWindow = new MajorItemWindow(Editor.New(), AllowCustomization);
+            MajorItemWindow propsWindow = new MajorItemWindow(Editor.New(), AllowCustomization, Colorblind);
             propsWindow.ShowDialog();
             if (propsWindow.ShouldSave)
             {
@@ -475,7 +536,7 @@ namespace JumpSaves
                 return;
             }
 
-            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(JSL.CloneIdentity.Same), AllowCustomization);
+            MajorItemWindow propsWindow = new MajorItemWindow(row.Editor.Clone(JSL.CloneIdentity.Same), AllowCustomization, Colorblind);
             propsWindow.ShowDialog();
             if (propsWindow.ShouldSave)
             {
@@ -661,7 +722,7 @@ namespace JumpSaves
 
         JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
             e.SubItem.Text = module?.TypeAbbreviation ?? UnkAb;
-            e.SubItem.ForeColor = Style.GetRarityColor(module?.Rarity ?? JSL.Rarity.Unknown, true);
+            e.SubItem.ForeColor = Style.GetRarityColor(module?.Rarity ?? JSL.Rarity.Unknown, true, Colorblind);
         }
 
         private void FormatModuleColumnTooltip(Row row, int moduleIndex, ToolTipShowingEventArgs e)
@@ -673,6 +734,11 @@ namespace JumpSaves
 
             JSL.ModuleEditor module = row.Editor.GetModule(moduleIndex);
             e.Text = module?.TypeName ?? "Unknown";
+        }
+
+        private void SelectAllByRarity(JSL.Rarity rarity)
+        {
+            list.SelectedObjects = rows_.FindAll(r => r.Rarity == rarity);
         }
 
         private void LogAndShowError(string text, string caption)
@@ -704,6 +770,10 @@ namespace JumpSaves
             // List
             list.Enabled = Enabled;
             list.BackColor = Enabled ? Color.White : Color.Gainsboro;
+            olvColumnRarity.IsVisible = Colorblind;
+            olvColumnRarity.MinimumWidth = Colorblind ? 65 : 0;
+            olvColumnRarity.Width = olvColumnRarity.MinimumWidth;
+            list.Refresh();
 
             // Tool strip buttons
             toolStrip.Enabled = Enabled;
@@ -810,5 +880,6 @@ namespace JumpSaves
         private bool allowCustomization_;
         private bool canEdit_;
         private bool canTransfer_;
+        private bool colorblind_;
     }
 }
