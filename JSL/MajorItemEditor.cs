@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 
 namespace JSL
@@ -373,7 +372,7 @@ namespace JSL
         {
             get
             {
-                return Item.Blueprint.Name;
+                return Item.Blueprint.GivenName;
             }
             set
             {
@@ -384,7 +383,7 @@ namespace JSL
 
                 if (GivenName != value)
                 {
-                    Item.Blueprint.Name = value;
+                    Item.Blueprint.GivenName = value;
                     SetDirtyIfNecessary();
                 }
             }
@@ -394,15 +393,7 @@ namespace JSL
         {
             get
             {
-                string name = Item.Blueprint.Name;
-                if (string.IsNullOrEmpty(name))
-                {
-                    return TypeName;
-                }
-                else
-                {
-                    return name;
-                }
+                return Item.Name;
             }
             set
             {
@@ -1125,8 +1116,25 @@ namespace JSL
             return new LibraryMajorItemEditor(library_, RootEditor);
         }
 
+        public bool Contains(MajorItemEditor item)
+        {
+            return library_.ContainsEntry(item?.Item);
+        }
+
         public override bool Add(MajorItemEditor item, ConflictBehavior onConflict)
         {
+            if (onConflict != ConflictBehavior.Overwrite && library_.ContainsEntry(item.Item))
+            {
+                if (onConflict == ConflictBehavior.Skip)
+                {
+                    return false;
+                }
+                else if (onConflict == ConflictBehavior.Error)
+                {
+                    throw new Exception($"Library already contains this item. Try cloning the item and adding the clone instead.");
+                }
+            }
+
             if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
                 return library_.AddEntry((LibraryMajorItem)item.Item, onConflict);

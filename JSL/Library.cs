@@ -4,7 +4,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
-using static System.Net.WebRequestMethods;
 
 namespace JSL
 {
@@ -54,8 +53,23 @@ namespace JSL
             return prev;
         }
 
+        public bool ContainsEntry(MajorItem item)
+        {
+            return FindByBlueprintID(item?.Blueprint?.ID) != null;
+        }
+
         public bool AddEntry(LibraryMajorItem item, ConflictBehavior onConflict)
         {
+            if (onConflict == ConflictBehavior.Overwrite)
+            {
+                Entry previous = FindByBlueprintID(item?.Blueprint?.ID);
+                if (previous != null)
+                {
+                    ReplaceEntry(entries_.IndexOf(previous), item);
+                    return true;
+                }
+            }
+
             return AddEntry(item, item.Bytes, MakeHash(item), onConflict);
         }
 
@@ -69,7 +83,7 @@ namespace JSL
             // Prepare everything so as to make it less likely that we remove and then fail to add
             byte[] serialized = item.Bytes;
             string hash = MakeHash(item);
-            string fileName = MakeFileName(item.Blueprint.Name, hash);
+            string fileName = MakeFileName(item.Blueprint.GivenName, hash);
 
             // There can be an identical item only if it's the one being replaced
             Entry previous = FindByFileName(fileName);
@@ -141,7 +155,16 @@ namespace JSL
             {
                 try
                 {
-                    entries_.Add(ReadEntry(file));
+                    Entry entry = ReadEntry(file);
+                    
+                    // Can't do this because a user's library may already contain such conflicts today.
+                    // Entry previous = FindByBlueprintID(entry?.Item?.Blueprint?.ID);
+                    // if (previous != null)
+                    // {
+                    //     throw new Exception("Duplicate item detected in the library");
+                    // }
+
+                    entries_.Add(entry);
                 }
                 catch
                 {
@@ -158,7 +181,7 @@ namespace JSL
             }
 
             Entry entry = new Entry();
-            entry.FileName = MakeFileName(item.Blueprint.Name, hash);
+            entry.FileName = MakeFileName(item.Blueprint.GivenName, hash);
             entry.Item = item;
 
             if (WriteEntry(entry, serialized, onConflict))
@@ -219,12 +242,13 @@ namespace JSL
                 throw new Exception("Invalid entry path");
             }
 
-            Entry previous = FindByFileName(entry.FileName);
+            // Attempt to find a duplicate either by file name (hash) or by blueprint ID
+            Entry previous = FindByFileName(entry.FileName) ?? FindByBlueprintID(entry.Item?.Blueprint?.ID);
             if (previous != null)
             {
                 if (onConflict == ConflictBehavior.Error)
                 {
-                    throw new Exception($"Would overwrite an existing item at {previous.FileName}, skipping!");
+                    throw new Exception($"Would overwrite an existing item \"{previous.Item.Name}\" at \"{previous.FileName}\", skipping!");
                 }
                 else if (onConflict == ConflictBehavior.Skip)
                 {
@@ -271,6 +295,16 @@ namespace JSL
         private Entry FindByFileName(string fileName)
         {
             return entries_.Where(e => e.FileName == fileName).FirstOrDefault();
+        }
+
+        private Entry FindByBlueprintID(string blueprintID)
+        {
+            if (string.IsNullOrEmpty(blueprintID))
+            {
+                return null;
+            }
+
+            return entries_.Where(e => e.Item.Blueprint.ID == blueprintID).FirstOrDefault();
         }
 
         private void AddFailure(string path)

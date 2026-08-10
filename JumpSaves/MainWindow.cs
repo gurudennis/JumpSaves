@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
@@ -339,18 +340,45 @@ namespace JumpSaves
 
         private void DoTransfer(MajorItemList from, IReadOnlyList<JSL.MajorItemEditor> items)
         {
+            bool fromLibrary = from.IsLibraryEditor;
+
+            JSL.ConflictBehavior onConflict = JSL.ConflictBehavior.Error;
+            if (!fromLibrary)
+            {
+                bool hasRepeats = items.Any((i) => model_.LibraryEditor.Contains(i));
+                if (hasRepeats)
+                {
+                    string msgCount = items.Count == 1 ? "Item is" : "One or more of the items are";
+                    string msg = $"{msgCount} already present in the Library. Overwrite?\n\n" +
+                                 "Yes = overwrite conflict(s)\nNo = skip conflict(s)\nCancel = transfer nothing";
+                    DialogResult decision = MessageBox.Show(this, msg, "Overwrite?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    if (decision == DialogResult.Yes)
+                    {
+                        onConflict = JSL.ConflictBehavior.Overwrite;
+                    }
+                    else if (decision == DialogResult.No)
+                    {
+                        onConflict = JSL.ConflictBehavior.Skip;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
             List<string> failures = new List<string>();
             foreach (JSL.MajorItemEditor item in items)
             {
                 try
                 {
-                    if (from.IsLibraryEditor)
+                    if (fromLibrary)
                     {
                         model_.TransferFromLibrary(item, editorMajorItemList.Editor);
                     }
                     else
                     {
-                        model_.TransferToLibrary(item, JSL.ConflictBehavior.Error);
+                        model_.TransferToLibrary(item, onConflict);
                     }
                 }
                 catch (Exception ex)

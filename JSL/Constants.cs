@@ -1048,7 +1048,7 @@ namespace JSL
             new EnumInfo { Title = "Burst Shield",              Raw = "e1d2c08495890004e9ebb0ca7fe7c5a1", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Vulcan Rotary Cannon",      Raw = "3290a7dbea83de5488cca77e44cae0a8", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Thunderburst Heavy Cannon", Raw = "889c471a3fab57d44b28f2592be5d7f8", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
-            new EnumInfo { Title = "Railgun",                   Raw = "d593e671947518544ab6dcd2deef3e2e", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
+            new EnumInfo { Title = "Lance Railgun",             Raw = "d593e671947518544ab6dcd2deef3e2e", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Missile Launcher",          Raw = "15bebeb1e9273af4fb7f4213452a6c58", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Targeting Module",          Raw = "10b36cf783993154cbcf8679744cd900", Category = MajorItemCategory.Enum.SpecialWeapons,   Purpose = MajorItemPurpose.Weapon     },
             // MajorItemCategory.Enum.Engines

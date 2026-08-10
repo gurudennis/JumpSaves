@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using System;
+using static JSL.PlayerWeaponCustomizationType;
 
 namespace JSL
 {
@@ -290,15 +291,15 @@ namespace JSL
             }
         }
 
-        public string Name
+        public string GivenName
         {
             get
             {
-                return GetPropertyStrict<string>(Index_Name);
+                return GetPropertyStrict<string>(Index_GivenName);
             }
             set
             {
-                SetPropertyStrict(Index_Name, value);
+                SetPropertyStrict(Index_GivenName, value);
             }
         }
 
@@ -374,7 +375,7 @@ namespace JSL
             blueprint.SetPropertyStrict(Index_CraftedBy, null);
             blueprint.SetPropertyStrict(10, false); // unknown constant
             blueprint.SetPropertyStrict(Index_ItemSchool, "4c508dd3046b4cb4b8bd5a0e24877f12"); // irrlevant once the item is spawned
-            blueprint.SetPropertyStrict(Index_Name, null);
+            blueprint.SetPropertyStrict(Index_GivenName, null);
             blueprint.SetNewIdentity(); // ID
             blueprint.SetPropertyStrict(Index_OwningPlayerID, string.Empty); // same for all modules in a given save, must be copied from SaveMetadata.PlayerID
             blueprint.SetPropertyStrict(Index_OriginLobbyID, "Tv2HrDk8AJM5rEKi");
@@ -389,7 +390,7 @@ namespace JSL
         private const int Index_SaveVersion = 8;
         private const int Index_CraftedBy = 9;
         private const int Index_ItemSchool = 11;
-        private const int Index_Name = 12;
+        private const int Index_GivenName = 12;
         private const int Index_ID = 13;
         private const int Index_OwningPlayerID = 14;
         private const int Index_OriginLobbyID = 15;
@@ -400,6 +401,22 @@ namespace JSL
     {
         public MajorItem(object o, object[] parent) : base(o, parent)
         {
+        }
+
+        public string TypeName
+        {
+            get
+            {
+                return MajorItemType.GetTitle(MajorItemType.FromRaw(Blueprint?.RawType, MajorItemCategory.FromRaw(RawCategory)));
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return string.IsNullOrEmpty(Blueprint?.GivenName) ? TypeName : Blueprint.GivenName;
+            }
         }
 
         public abstract string RawCategory { get; set; }
