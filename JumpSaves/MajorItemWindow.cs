@@ -131,7 +131,7 @@ namespace JumpSaves
                 comboBoxCategory.Items.Add(JSL.MajorItemCategory.GetTitle((JSL.MajorItemCategory.Enum)i));
             }
             comboBoxCategory.SelectedIndex = ((int)Editor.Category) - 1;
-            CategoryUpdated();
+            CategoryUpdated(true);
 
             // Name (can always be edited)
             textBoxName.Text = Editor.GivenName ?? string.Empty;
@@ -386,7 +386,7 @@ namespace JumpSaves
             IsDirty = true;
             Editor.Category = (JSL.MajorItemCategory.Enum)(comboBoxCategory.SelectedIndex + 1);
 
-            CategoryUpdated();
+            CategoryUpdated(false);
         }
 
         private void comboBoxType_SelectedIndexChanged(object sender, EventArgs e)
@@ -394,7 +394,7 @@ namespace JumpSaves
             IsDirty = true;
             Editor.RawType = ((TypeEntry)comboBoxType.SelectedItem).Raw;
 
-            TypeUpdated();
+            TypeUpdated(false);
         }
 
         private void comboBoxColor_SelectedIndexChanged(object sender, EventArgs e)
@@ -489,7 +489,7 @@ namespace JumpSaves
             e.SubItem.Text = potencyPercent.ToString("F2") + "%";
         }
 
-        private void CategoryUpdated()
+        private void CategoryUpdated(bool initial)
         {
             comboBoxType.Items.Clear();
 
@@ -512,14 +512,14 @@ namespace JumpSaves
                 comboBoxType.SelectedIndex = 0;
             }
 
-            TypeUpdated();
+            TypeUpdated(!initial);
         }
 
-        private void TypeUpdated()
+        private void TypeUpdated(bool categoryAlsoUpdated)
         {
             // Clear the modules if they no longer fit the item type
             JSL.MajorItemPurpose purpose = JSL.MajorItemType.GetPurpose(Editor.Type);
-            if (purpose != purpose_)
+            if (purpose != purpose_ || categoryAlsoUpdated)
             {
                 purpose_ = purpose;
 

@@ -60,13 +60,17 @@ namespace JSL
     }
 
     // Representation of the overall purpose of an item
+    [Flags]
     public enum MajorItemPurpose
     {
-        Unknown,
-        Weapon,
-        Propulsion,
-        Shield,
-        General
+        Unknown    = 0,
+        Weapon     = (1 << 0),
+        Propulsion = (1 << 1),
+        Shield     = (1 << 2),
+        Reactor    = (1 << 3),
+        Sensor     = (1 << 4),
+        General    = Reactor | Sensor,
+        Civilian   = Propulsion | General,
     }
 
     public enum ModuleKind
@@ -170,9 +174,9 @@ namespace JSL
             new EnumInfo { Title = "Special Weapons",   Raw = "9eb5cd7261a6dba439db975e7e05d069", Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Engines",           Raw = "d7c2724a0c49930438f6d6ed3da628ba", Purpose = MajorItemPurpose.Propulsion },
             new EnumInfo { Title = "Shield Generators", Raw = "1292627bbf531c84ba2c56e6e55af6d3", Purpose = MajorItemPurpose.Shield     },
-            new EnumInfo { Title = "Sensors",           Raw = "6ef31e2e90989364d8e2d4958615b299", Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Reactors",          Raw = "2546892240b110847b64e524e9bd1d39", Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Aux. Generators",   Raw = "0c28f786865a0b142926742a182c0011", Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Sensors",           Raw = "6ef31e2e90989364d8e2d4958615b299", Purpose = MajorItemPurpose.Sensor     },
+            new EnumInfo { Title = "Reactors",          Raw = "2546892240b110847b64e524e9bd1d39", Purpose = MajorItemPurpose.Reactor    },
+            new EnumInfo { Title = "Aux. Generators",   Raw = "0c28f786865a0b142926742a182c0011", Purpose = MajorItemPurpose.Reactor    },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();
@@ -324,7 +328,7 @@ namespace JSL
             new EnumInfo { Title = "(F) Bonus damage",            Abbr = "Dmg", Raw = "1cb68cd7f09dd6843a9ea451429e6139", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "(F) Fire rate",               Abbr = "RoF", Raw = "8395a832a680a8741b9e61af12c72307", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             // ModuleKind.Custom:
-            new EnumInfo { Title = "Reduced materia cost",        Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Reduced materia cost",        Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Civilian   },
             new EnumInfo { Title = "Corrosion chance on hit",     Abbr = "Cor", Raw = "bb680a7ce4769fa4396b560d36435371", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Additional projectiles",      Abbr = "Frg", Raw = "b4c71cf386f6f3a42aaf7fe311eb202c", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Additional shot % per mag",   Abbr = "Mag", Raw = "09dd872497cec754bba28c7616b8810f", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
@@ -343,7 +347,7 @@ namespace JSL
             new EnumInfo { Title = "Faster shield recharge",      Abbr = "Rec", Raw = "8dacbec9a6bac2947ab3eaecb8a020f5", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
             new EnumInfo { Title = "Lower shield break chance",   Abbr = "Brk", Raw = "76dc2ea8251eafe4b9752f33a15f90df", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
             new EnumInfo { Title = "Shorter shield downtime",     Abbr = "Dwn", Raw = "34f7c993f959fbe459777c90eab95189", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Shield     },
-            new EnumInfo { Title = "Reactor capacity",            Abbr = "Cap", Raw = "987886742b6da2740b8f64922c59b0b1", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Reactor capacity",            Abbr = "Cap", Raw = "987886742b6da2740b8f64922c59b0b1", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Reactor    },
             new EnumInfo { Title = "Additional shots per mag",    Abbr = "Mag", Raw = "fe1243281c445474da91a86cd378d640", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Sear chance on hit",          Abbr = "Sea", Raw = "318504b5400b90d4c81cc63c64baf0ac", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Rupture projectile",          Abbr = "Sea", Raw = "e8ca44d9362a2e143917f65180369a6d", PotencyCount = 0, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
@@ -698,7 +702,7 @@ namespace JSL
                         continue;
                     }
 
-                    if (purpose != PlayerWeaponModuleType.GetPurpose((PlayerWeaponModuleType.Enum)i))
+                    if ((purpose & PlayerWeaponModuleType.GetPurpose((PlayerWeaponModuleType.Enum)i)) != purpose)
                     {
                         continue;
                     }
@@ -715,7 +719,7 @@ namespace JSL
                         continue;
                     }
 
-                    if (purpose != ShipModuleType.GetPurpose((ShipModuleType.Enum)i))
+                    if ((purpose & ShipModuleType.GetPurpose((ShipModuleType.Enum)i)) != purpose)
                     {
                         continue;
                     }
@@ -1061,18 +1065,18 @@ namespace JSL
             new EnumInfo { Title = "Fighter Shield",            Raw = "554d65de54698714c9f5d2f73bc33261", Category = MajorItemCategory.Enum.ShieldGenerators, Purpose = MajorItemPurpose.Shield     },
             new EnumInfo { Title = "Fortress Shield",           Raw = "7a2d7e2dbbb33f742a1c885667377425", Category = MajorItemCategory.Enum.ShieldGenerators, Purpose = MajorItemPurpose.Shield     },
             // MajorItemCategory.Enum.Sensors
-            new EnumInfo { Title = "Sector Scanner",            Raw = "3ee2f96ed55e8de4898d4f922eba8f66", Category = MajorItemCategory.Enum.Sensors,          Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Supply Uplink Unit",        Raw = "eac8acd058989964ab7a07cf7de03fa5", Category = MajorItemCategory.Enum.Sensors,          Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Vector Targeting Module",   Raw = "d4b4eb9b7856fce4e9c1bb3a78c9807e", Category = MajorItemCategory.Enum.Sensors,          Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Sector Scanner",            Raw = "3ee2f96ed55e8de4898d4f922eba8f66", Category = MajorItemCategory.Enum.Sensors,          Purpose = MajorItemPurpose.Sensor     },
+            new EnumInfo { Title = "Supply Uplink Unit",        Raw = "eac8acd058989964ab7a07cf7de03fa5", Category = MajorItemCategory.Enum.Sensors,          Purpose = MajorItemPurpose.Sensor     },
+            new EnumInfo { Title = "Vector Targeting Module",   Raw = "d4b4eb9b7856fce4e9c1bb3a78c9807e", Category = MajorItemCategory.Enum.Sensors,          Purpose = MajorItemPurpose.Sensor     },
             // MajorItemCategory.Enum.Reactors
-            new EnumInfo { Title = "Null Wave Reactor",         Raw = "95c51a0f21d28ba459a43bbf3dbc0790", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Split Reactor",             Raw = "65e495611fd9233419832053f8ce55bd", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Materia Scatter Reactor",   Raw = "f400f9acd1731b64a87b69ce40517971", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Solid State Reactor",       Raw = "85b241f7f2fa6654e9c522519358d1bc", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Null Wave Reactor",         Raw = "95c51a0f21d28ba459a43bbf3dbc0790", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.Reactor    },
+            new EnumInfo { Title = "Split Reactor",             Raw = "65e495611fd9233419832053f8ce55bd", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.Reactor    },
+            new EnumInfo { Title = "Materia Scatter Reactor",   Raw = "f400f9acd1731b64a87b69ce40517971", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.Reactor    },
+            new EnumInfo { Title = "Solid State Reactor",       Raw = "85b241f7f2fa6654e9c522519358d1bc", Category = MajorItemCategory.Enum.Reactors,         Purpose = MajorItemPurpose.Reactor    },
             // MajorItemCategory.Enum.AuxGenerators
-            new EnumInfo { Title = "Bio Fission Generator",     Raw = "2c60b00a88d34b546865a36738fabc2a", Category = MajorItemCategory.Enum.AuxGenerators,    Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Materia Shift Generator",   Raw = "4bfcb457279ce824e8fd7989760d9252", Category = MajorItemCategory.Enum.AuxGenerators,    Purpose = MajorItemPurpose.General    },
-            new EnumInfo { Title = "Null Tension Generator",    Raw = "8cbe912f6e885134680a52935cca96a5", Category = MajorItemCategory.Enum.AuxGenerators,    Purpose = MajorItemPurpose.General    },
+            new EnumInfo { Title = "Bio Fission Generator",     Raw = "2c60b00a88d34b546865a36738fabc2a", Category = MajorItemCategory.Enum.AuxGenerators,    Purpose = MajorItemPurpose.Reactor    },
+            new EnumInfo { Title = "Materia Shift Generator",   Raw = "4bfcb457279ce824e8fd7989760d9252", Category = MajorItemCategory.Enum.AuxGenerators,    Purpose = MajorItemPurpose.Reactor    },
+            new EnumInfo { Title = "Null Tension Generator",    Raw = "8cbe912f6e885134680a52935cca96a5", Category = MajorItemCategory.Enum.AuxGenerators,    Purpose = MajorItemPurpose.Reactor    },
         };
 
         private static Dictionary<string, Enum> byRaw_ = new Dictionary<string, Enum>();
