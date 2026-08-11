@@ -255,6 +255,18 @@ namespace JSL
             }
         }
 
+        public string UniqueID
+        {
+            get
+            {
+                return GetPropertyStrict<string>(Index_UniqueID);
+            }
+            set
+            {
+                SetPropertyStrict(Index_UniqueID, value);
+            }
+        }
+
         public int SaveVersion
         {
             get
@@ -303,15 +315,15 @@ namespace JSL
             }
         }
 
-        public string ID
+        public string StoredID
         {
             get
             {
-                return GetPropertyStrict<string>(Index_ID);
+                return GetPropertyStrict<string>(Index_StoredID);
             }
             set
             {
-                SetPropertyStrict(Index_ID, value);
+                SetPropertyStrict(Index_StoredID, value);
             }
         }
 
@@ -341,7 +353,8 @@ namespace JSL
 
         public void SetNewIdentity()
         {
-            SetPropertyStrict(Index_ID, Guid.NewGuid().ToString("D"));
+            SetPropertyStrict(Index_UniqueID, Guid.NewGuid().ToString("D"));
+            SetPropertyStrict(Index_StoredID, Guid.NewGuid().ToString("D"));
         }
 
         public void ResetActivePips()
@@ -370,15 +383,14 @@ namespace JSL
             blueprint.SetPropertyStrict(Index_Customizations, new object[0]);
             blueprint.SetPropertyStrict(5, (uint)1342734106); // unknown, always in this ballpark
             blueprint.SetPropertyStrict(6, (byte)5); // unknown constant
-            blueprint.SetPropertyStrict(7, Guid.NewGuid().ToString("D")); // unknown, always unique
             blueprint.SetPropertyStrict(Index_SaveVersion, (byte)0); // same for all modules in a given save, must be copied from SaveMetadata.SaveVersion
             blueprint.SetPropertyStrict(Index_CraftedBy, null);
             blueprint.SetPropertyStrict(10, false); // unknown constant
             blueprint.SetPropertyStrict(Index_ItemSchool, "4c508dd3046b4cb4b8bd5a0e24877f12"); // irrlevant once the item is spawned
             blueprint.SetPropertyStrict(Index_GivenName, null);
-            blueprint.SetNewIdentity(); // ID
             blueprint.SetPropertyStrict(Index_OwningPlayerID, string.Empty); // same for all modules in a given save, must be copied from SaveMetadata.PlayerID
             blueprint.SetPropertyStrict(Index_OriginLobbyID, "Tv2HrDk8AJM5rEKi");
+            blueprint.SetNewIdentity(); // UniqueID(7) and StoredID(13)
             return blueprint.Root;
         }
 
@@ -387,11 +399,12 @@ namespace JSL
         private const int Index_Rarity = 2;
         private const int Index_Modules = 3;
         private const int Index_Customizations = 4;
+        private const int Index_UniqueID = 7;
         private const int Index_SaveVersion = 8;
         private const int Index_CraftedBy = 9;
         private const int Index_ItemSchool = 11;
         private const int Index_GivenName = 12;
-        private const int Index_ID = 13;
+        private const int Index_StoredID = 13;
         private const int Index_OwningPlayerID = 14;
         private const int Index_OriginLobbyID = 15;
         private const int ExpectedElementCount = 16;
@@ -477,7 +490,7 @@ namespace JSL
             set
             {
                 SetSubObjectStrict(Index_Blueprint, value.Root);
-                BlueprintID = value?.ID ?? string.Empty;
+                BlueprintStoredID = value?.StoredID ?? string.Empty;
             }
         }
 
@@ -505,15 +518,15 @@ namespace JSL
             }
         }
 
-        public string BlueprintID
+        public string BlueprintStoredID
         {
             get
             {
-                return GetPropertyStrict<string>(Index_BlueprintID);
+                return GetPropertyStrict<string>(Index_BlueprintStoredID);
             }
             set
             {
-                SetPropertyStrict(Index_BlueprintID, value);
+                SetPropertyStrict(Index_BlueprintStoredID, value);
             }
         }
 
@@ -537,7 +550,7 @@ namespace JSL
             item.SetPropertyStrict(Index_Blueprint, blueprint.Root);
             item.SetPropertyStrict(Index_Timestamp, (ulong)DateTime.Now.Ticks);
             item.SetPropertyStrict(Index_PlacementInCategory, (byte)0);
-            item.SetPropertyStrict(Index_BlueprintID, blueprint.ID);
+            item.SetPropertyStrict(Index_BlueprintStoredID, blueprint.StoredID);
             item.SetPropertyStrict(Index_HasEverBeenStored, true);
             return item.Root;
         }
@@ -546,7 +559,7 @@ namespace JSL
         private const int Index_Blueprint = 1;
         private const int Index_Timestamp = 2;
         private const int Index_PlacementInCategory = 3;
-        private const int Index_BlueprintID = 4;
+        private const int Index_BlueprintStoredID = 4;
         private const int Index_HasEverBeenStored = 5;
         private const int ExpectedElementCount = 6;
     }

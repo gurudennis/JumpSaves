@@ -42,27 +42,35 @@ namespace JSL
         public void Reload()
         {
             entries_.Clear();
-            failedFiles_.Clear();
+            failures_.Clear();
+            warnings_.Clear();
             Load();
         }
 
-        public IReadOnlyList<string> TakeFailedFiles()
+        public IReadOnlyList<string> TakeFailures()
         {
-            IReadOnlyList<string> prev = failedFiles_;
-            failedFiles_ = new List<string>();
+            IReadOnlyList<string> prev = failures_;
+            failures_ = new List<string>();
+            return prev;
+        }
+
+        public IReadOnlyList<string> TakeWarnings()
+        {
+            IReadOnlyList<string> prev = warnings_;
+            warnings_ = new List<string>();
             return prev;
         }
 
         public bool ContainsEntry(MajorItem item)
         {
-            return FindByBlueprintID(item?.Blueprint?.ID) != null;
+            return FindByBlueprint(item?.Blueprint) != null;
         }
 
         public bool AddEntry(LibraryMajorItem item, ConflictBehavior onConflict)
         {
             if (onConflict == ConflictBehavior.Overwrite)
             {
-                Entry previous = FindByBlueprintID(item?.Blueprint?.ID);
+                Entry previous = FindByBlueprint(item?.Blueprint);
                 if (previous != null)
                 {
                     ReplaceEntry(entries_.IndexOf(previous), item);
@@ -156,19 +164,18 @@ namespace JSL
                 try
                 {
                     Entry entry = ReadEntry(file);
-                    
-                    // Can't do this because a user's library may already contain such conflicts today.
-                    // Entry previous = FindByBlueprintID(entry?.Item?.Blueprint?.ID);
-                    // if (previous != null)
-                    // {
-                    //     throw new Exception("Duplicate item detected in the library");
-                    // }
+
+                    Entry previous = FindByBlueprint(entry?.Item?.Blueprint);
+                    if (previous != null)
+                    {
+                        AddWarning($"Identical items \"{previous.Item.Name}\" and \"{entry.Item.Name}\" detected in the library");
+                    }
 
                     entries_.Add(entry);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    AddFailure(file.FullName);
+                    AddFailure($"Error loading \"{file.FullName}\": {ex.Message}");
                 }
             }
         }
@@ -243,7 +250,7 @@ namespace JSL
             }
 
             // Attempt to find a duplicate either by file name (hash) or by blueprint ID
-            Entry previous = FindByFileName(entry.FileName) ?? FindByBlueprintID(entry.Item?.Blueprint?.ID);
+            Entry previous = FindByFileName(entry.FileName) ?? FindByBlueprint(entry.Item?.Blueprint);
             if (previous != null)
             {
                 if (onConflict == ConflictBehavior.Error)
@@ -297,19 +304,44 @@ namespace JSL
             return entries_.Where(e => e.FileName == fileName).FirstOrDefault();
         }
 
-        private Entry FindByBlueprintID(string blueprintID)
+        private Entry FindByBlueprint(MajorItemBlueprint blueprint)
         {
-            if (string.IsNullOrEmpty(blueprintID))
+            if (blueprint == null)
             {
                 return null;
             }
 
-            return entries_.Where(e => e.Item.Blueprint.ID == blueprintID).FirstOrDefault();
+            Entry found = null;
+
+             if (!string.IsNullOrEmpty(blueprint.StoredID))
+             {
+                 found = entries_.FirstOrDefault(e => e.Item.Blueprint.StoredID == blueprint.StoredID);
+                 if (found != null)
+                 {
+                     return found;
+                 }
+             }
+
+            if (!string.IsNullOrEmpty(blueprint.UniqueID))
+            {
+                found = entries_.FirstOrDefault(e => e.Item.Blueprint.UniqueID == blueprint.UniqueID);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
 
-        private void AddFailure(string path)
+        private void AddFailure(string msg)
         {
-            failedFiles_.Add(path);
+            failures_.Add(msg);
+        }
+
+        private void AddWarning(string msg)
+        {
+            warnings_.Add(msg);
         }
 
         private string MakeFileName(string name, string hash)
@@ -351,6 +383,7 @@ namespace JSL
         private static readonly uint Version = 1; // version of the format of the library itself
 
         private List<Entry> entries_ = new List<Entry>();
-        private List<string> failedFiles_ = new List<string>();
+        private List<string> failures_ = new List<string>();
+        private List<string> warnings_ = new List<string>();
     }
 }

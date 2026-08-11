@@ -642,7 +642,7 @@ namespace JSL
             if (identity == CloneIdentity.New)
             {
                 e.Item.Blueprint.SetNewIdentity();
-                ((StoredMajorItem)e.Item).BlueprintID = e.Item.Blueprint.ID;
+                ((StoredMajorItem)e.Item).BlueprintStoredID = e.Item.Blueprint.StoredID;
             }
             e.IsOrphaned = true;
             return e;
@@ -1185,9 +1185,14 @@ namespace JSL
             library_.Import(path);
         }
 
-        public IReadOnlyList<string> TakeFailedFiles()
+        public IReadOnlyList<string> TakeFailures()
         {
-            return library_.TakeFailedFiles();
+            return library_.TakeFailures();
+        }
+
+        public IReadOnlyList<string> TakeWarnings()
+        {
+            return library_.TakeWarnings();
         }
 
         private Library library_;
