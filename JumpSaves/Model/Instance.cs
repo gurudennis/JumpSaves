@@ -148,12 +148,22 @@ namespace JumpSaves.Model
                 if (libraryEditor_ == null && manager_.Library != null)
                 {
                     libraryEditor_ = JSL.EditorFactory.OpenLibrary(manager_.Library);
-                    IReadOnlyList<string> failedFiles = libraryEditor_.TakeFailedFiles();
-                    if (failedFiles != null && failedFiles.Count > 0)
+                    
+                    IReadOnlyList<string> failures = libraryEditor_.TakeFailures();
+                    if (failures != null && failures.Count > 0)
                     {
-                        foreach (string file in failedFiles)
+                        foreach (string failure in failures)
                         {
-                            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, $"Failed to open library file \"{file}\"");
+                            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Error, failure);
+                        }
+                    }
+
+                    IReadOnlyList<string> warnings = libraryEditor_.TakeWarnings();
+                    if (warnings != null && warnings.Count > 0)
+                    {
+                        foreach (string warning in warnings)
+                        {
+                            ActionLog.AddEntry(ActionLog.Origin.Library, ActionLog.Level.Warning, warning);
                         }
                     }
                 }
