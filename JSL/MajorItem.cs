@@ -1,6 +1,5 @@
 ﻿using MessagePack;
 using System;
-using static JSL.PlayerWeaponCustomizationType;
 
 namespace JSL
 {
@@ -435,6 +434,23 @@ namespace JSL
         public abstract string RawCategory { get; set; }
 
         public abstract MajorItemBlueprint Blueprint { get; set; }
+
+        public object UserCookie { get; set; }
+
+        public T GetUserCookie<T>() where T : class
+        {
+            return UserCookie as T;
+        }
+
+        public T EnsureUserCookie<T>() where T : class, new()
+        {
+            if (UserCookie == null)
+            {
+                UserCookie = new T();
+            }
+
+            return UserCookie as T;
+        }
     }
 
     public class StoredMajorItem : MajorItem

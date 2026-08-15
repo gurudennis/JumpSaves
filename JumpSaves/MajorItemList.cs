@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Windows.Forms;
 
@@ -260,6 +259,18 @@ namespace JumpSaves
                 }
             }
 
+            public bool IsNew
+            {
+                get
+                {
+                    return Editor.IsNew;
+                }
+                set
+                {
+                    Editor.IsNew = value;
+                }
+            }
+
             public JSL.MajorItemEditor Editor { get; private set; }
         }
 
@@ -293,10 +304,11 @@ namespace JumpSaves
 
             if (e.Column == olvColumnName)
             {
-                e.Item.Text = row.Name;
+                e.Item.Text = row.IsNew ? $"[NEW] {row.Name}" : row.Name;
                 e.Item.ForeColor = Style.GetRarityColor(row.Rarity, true, Colorblind);
                 e.Item.SelectedForeColor = e.Item.ForeColor;
                 e.Item.SelectedBackColor = Style.GetRarityColor(row.Rarity, false, Colorblind);
+                e.Item.Font = new Font(e.Item.Font, row.IsNew ? FontStyle.Bold : FontStyle.Regular);
             }
             else if (e.Column == olvColumnRarity)
             {
@@ -384,6 +396,15 @@ namespace JumpSaves
             e.Parameters.SecondarySort = olvColumnName;
             e.Parameters.SecondarySortOrder = SortOrder.Ascending;
             e.Parameters.GroupComparer = new GroupComparer();
+        }
+
+        private void list_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            foreach (object o in list.SelectedObjects)
+            {
+                Row r = (Row)o;
+                r.IsNew = false;
+            }
         }
 
         private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)

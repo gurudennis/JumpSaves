@@ -11,6 +11,11 @@ namespace JSL
         New
     }
 
+    public class MajorItemUserCookie
+    {
+        public bool IsNew { get; set; }
+    }
+
     // Any module of a major item
     public class ModuleEditor : Editor
     {
@@ -324,6 +329,33 @@ namespace JSL
         public abstract MajorItemEditor Clone(CloneIdentity identity);
 
         public abstract string SelfDesignation { get; }
+
+        public bool IsNew
+        {
+            get
+            {
+                return Item?.GetUserCookie<MajorItemUserCookie>()?.IsNew ?? false;
+            }
+            set
+            {
+                if (value && Item != null)
+                {
+                    Item.EnsureUserCookie<MajorItemUserCookie>().IsNew = value;
+                }
+                else
+                {
+                    MajorItemUserCookie cookie = Item?.GetUserCookie<MajorItemUserCookie>();
+                    if (cookie != null)
+                    {
+                        cookie.IsNew = value;
+                    }
+                    else
+                    {
+                        Debug.Assert(!value, "Can't set IsNew to true on an empty item");
+                    }
+                }
+            }
+        }
 
         public string RawType
         {
@@ -718,6 +750,7 @@ namespace JSL
             library_ = library;
             Item = new MajorItemFactory(RootEditor.SaveMetadata).CreateLibrary();
             IsOrphaned = true;
+            IsNew = true;
         }
 
         internal LibraryMajorItemEditor(Library library, int index, IRootEditor rootEditor)
@@ -740,6 +773,7 @@ namespace JSL
                 e.Item.Blueprint.SetNewIdentity();
             }
             e.IsOrphaned = true;
+            e.IsNew = true;
             return e;
         }
 
@@ -1027,22 +1061,25 @@ namespace JSL
 
         public override bool Add(MajorItemEditor item, ConflictBehavior onConflict)
         {
+            RecentMajorItem recentItem = null;
             if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                ItemsArr.InsertProperty(Items.Length, JSL.RecentMajorItem.FromLibrary((LibraryMajorItem)item.Item).Root);
+                recentItem = JSL.RecentMajorItem.FromLibrary((LibraryMajorItem)item.Item);
             }
             else if (item.GetType() == typeof(StoredMajorItemEditor))
             {
-                ItemsArr.InsertProperty(Items.Length, JSL.RecentMajorItem.FromStored((StoredMajorItem)item.Item).Root);
+                recentItem = JSL.RecentMajorItem.FromStored((StoredMajorItem)item.Item);
             }
             else if (item.GetType() == typeof(RecentMajorItemEditor))
             {
-                ItemsArr.InsertProperty(Items.Length, item.Item.Root);
+                recentItem = (RecentMajorItem)item.Item;
             }
             else
             {
                 throw new ArgumentException($"Item type {item.GetType().FullName} cannot be added to recent items");
             }
+
+            ItemsArr.InsertProperty(Items.Length, recentItem.Root);
 
             SetDirtyIfNecessary();
 
@@ -1135,22 +1172,27 @@ namespace JSL
                 }
             }
 
+            LibraryMajorItem libraryItem = null;
             if (item.GetType() == typeof(LibraryMajorItemEditor))
             {
-                return library_.AddEntry((LibraryMajorItem)item.Item, onConflict);
+                libraryItem = (LibraryMajorItem)item.Item;
             }
             else if (item.GetType() == typeof(StoredMajorItemEditor))
             {
-                return library_.AddEntry(JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)item.Item), onConflict);
+                libraryItem = JSL.LibraryMajorItem.FromStored((JSL.StoredMajorItem)item.Item);
             }
             else if (item.GetType() == typeof(RecentMajorItemEditor))
             {
-                return library_.AddEntry(JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)item.Item), onConflict);
+                libraryItem = JSL.LibraryMajorItem.FromRecent((JSL.RecentMajorItem)item.Item);
             }
             else
             {
                 throw new ArgumentException($"Item type {item.GetType().FullName} cannot be added to the library");
             }
+
+            libraryItem.EnsureUserCookie<MajorItemUserCookie>().IsNew = true;
+
+            return library_.AddEntry(libraryItem, onConflict);
         }
 
         public override void Remove(int index)

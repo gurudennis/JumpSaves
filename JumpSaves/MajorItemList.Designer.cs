@@ -113,6 +113,7 @@ namespace JumpSaves
             this.list.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.list_CellClick);
             this.list.CellToolTipShowing += new System.EventHandler<BrightIdeasSoftware.ToolTipShowingEventArgs>(this.list_CellToolTipShowing);
             this.list.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.list_FormatCell);
+            this.list.SelectedIndexChanged += new System.EventHandler(this.list_SelectedIndexChanged);
             this.list.DoubleClick += new System.EventHandler(this.list_DoubleClick);
             // 
             // olvColumnName
