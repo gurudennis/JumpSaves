@@ -321,6 +321,7 @@ namespace JumpSaves
             this.toolStripButtonBrowse.Name = "toolStripButtonBrowse";
             this.toolStripButtonBrowse.Size = new System.Drawing.Size(29, 28);
             this.toolStripButtonBrowse.Text = "Browse library directory";
+            this.toolStripButtonBrowse.ToolTipText = "Browse directory";
             this.toolStripButtonBrowse.Click += new System.EventHandler(this.toolStripButtonBrowse_Click);
             // 
             // toolStripLabelFilter

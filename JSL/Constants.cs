@@ -70,7 +70,7 @@ namespace JSL
         Reactor    = (1 << 3),
         Sensor     = (1 << 4),
         General    = Reactor | Sensor,
-        Civilian   = Propulsion | General,
+        Universal  = Weapon | Propulsion | Shield | Reactor | Sensor,
     }
 
     public enum ModuleKind
@@ -328,7 +328,7 @@ namespace JSL
             new EnumInfo { Title = "(F) Bonus damage",            Abbr = "Dmg", Raw = "1cb68cd7f09dd6843a9ea451429e6139", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "(F) Fire rate",               Abbr = "RoF", Raw = "8395a832a680a8741b9e61af12c72307", PotencyCount = 1, Kind = ModuleKind.Feature, Purpose = MajorItemPurpose.Weapon     },
             // ModuleKind.Custom:
-            new EnumInfo { Title = "Reduced materia cost",        Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Civilian   },
+            new EnumInfo { Title = "Reduced materia cost",        Abbr = "Mat", Raw = "072b30aa0e26c5c49b7c3ca156c62282", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Universal  },
             new EnumInfo { Title = "Corrosion chance on hit",     Abbr = "Cor", Raw = "bb680a7ce4769fa4396b560d36435371", PotencyCount = 2, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Additional projectiles",      Abbr = "Frg", Raw = "b4c71cf386f6f3a42aaf7fe311eb202c", PotencyCount = 3, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Additional shot % per mag",   Abbr = "Mag", Raw = "09dd872497cec754bba28c7616b8810f", PotencyCount = 1, Kind = ModuleKind.Custom,  Purpose = MajorItemPurpose.Weapon     },
