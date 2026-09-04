@@ -48,7 +48,7 @@ namespace JumpSaves
 
             try
             {
-                JSL.Backup backup = BackupStore.Add(path, "User created");
+                JSL.Backup backup = BackupStore.Add(path, model_.IsExperimental, "User created");
                 model_.ActionLog.AddEntry(Model.ActionLog.Origin.Editor, Model.ActionLog.Level.Info,
                                          $"Created a new backup of save \"{path}\"");
             }
@@ -133,7 +133,7 @@ namespace JumpSaves
 
             try
             {
-                BackupStore.Add(backup.OriginalPath, "Before restoring");
+                BackupStore.Add(backup.OriginalPath, model_.IsExperimental, "Before restoring");
                 model_.ActionLog.AddEntry(Model.ActionLog.Origin.Editor, Model.ActionLog.Level.Info,
                                           $"Created a new backup of save \"{backup.OriginalPath}\" before restoring another backup to that location.");
             }
@@ -158,9 +158,10 @@ namespace JumpSaves
             }
 
             string path = model_.Path;
+            bool experimental = model_.IsExperimental;
             model_.Close();
             onStateChange_(); // needed to persuade the editor list to fully reopen on the next refresh
-            model_.Open(path);
+            model_.Open(path, experimental);
             onStateChange_();
         }
 

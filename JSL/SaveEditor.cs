@@ -72,6 +72,8 @@ namespace JSL
 
         public abstract DateTime LastEditTime { get; }
 
+        public abstract bool IsExperimental { get; }
+
         public override ISaveMetadata SaveMetadata
         {
             get
@@ -172,6 +174,14 @@ namespace JSL
             }
         }
 
+        public override bool IsExperimental
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override void Save()
         {
             File.Save();
@@ -181,9 +191,9 @@ namespace JSL
 
     public class SaveDirEditor : SaveEditor
     {
-        internal SaveDirEditor(string path)
+        internal SaveDirEditor(string path, bool experimental)
         {
-            dir_ = new SaveDir(path);
+            dir_ = new SaveDir(path, experimental);
             File = dir_.SaveFile;
         }
 
@@ -200,7 +210,7 @@ namespace JSL
             get
             {
                 DateTime latest = DateTime.MinValue;
-                foreach (string name in SaveDir.FileNames)
+                foreach (string name in dir_.FileNames)
                 {
                     FileInfo info = new FileInfo(System.IO.Path.Combine(Path, name));
                     DateTime lastWrite = info.LastWriteTime;
@@ -211,6 +221,14 @@ namespace JSL
                 }
 
                 return latest;
+            }
+        }
+
+        public override bool IsExperimental
+        {
+            get
+            {
+                return dir_.IsExperimental;
             }
         }
 
@@ -225,11 +243,11 @@ namespace JSL
 
     public class EditorFactory
     {
-        public static SaveEditor OpenSave(string path)
+        public static SaveEditor OpenSave(string path, bool experimental)
         {
             if (Directory.Exists(path))
             {
-                return new SaveDirEditor(path);
+                return new SaveDirEditor(path, experimental);
             }
             else if (File.Exists(path))
             {

@@ -99,7 +99,13 @@ namespace JSL
                 throw new Exception($"MajorItemSlotUpgrade entry not found for category \"{MajorItemCategory.GetTitle(category)}\"");
             }
 
-            return upgrade.SlotCount;
+            int count = upgrade.SlotCount;
+            if (count == 0) // seen in Experimental (TODO: investigate)
+            {
+                count = DefaultMinSlotCount;
+            }
+
+            return count;
         }
 
         public void SetMaxMajorItemSlots(MajorItemCategory.Enum category, int slots)

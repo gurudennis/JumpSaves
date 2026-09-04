@@ -898,6 +898,7 @@ namespace JSL
         {
             Unknown,
             // MajorItemCategory.Enum.PlayerWeapons
+            PW_MateriaGun,
             PW_Bulldog,
             PW_Halberd,
             PW_Stinger,
@@ -1028,6 +1029,7 @@ namespace JSL
         {
             new EnumInfo { Title = "Unknown",                   Raw = null,                               Category = MajorItemCategory.Enum.Unknown,          Purpose = MajorItemPurpose.Unknown    },
             // MajorItemCategory.Enum.PlayerWeapons
+            new EnumInfo { Title = "MaG-8 Materia gun",         Raw = "6622f208a88629544b18ef5fafb59bf1", Category = MajorItemCategory.Enum.PlayerWeapons,    Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Bulldog-SA7 (AR)",          Raw = "b5b14acbf52842b4f90002bd4e9d1391", Category = MajorItemCategory.Enum.PlayerWeapons,    Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "VSR Halberd (AR)",          Raw = "dd2afc39b34322c4381b6a3ed3e5988a", Category = MajorItemCategory.Enum.PlayerWeapons,    Purpose = MajorItemPurpose.Weapon     },
             new EnumInfo { Title = "Stinger MP-75 (SMG)",       Raw = "b90b477e483f6cc4aa9a48f33e4400e3", Category = MajorItemCategory.Enum.PlayerWeapons,    Purpose = MajorItemPurpose.Weapon     },

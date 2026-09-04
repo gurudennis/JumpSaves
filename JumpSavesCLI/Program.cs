@@ -249,7 +249,7 @@ namespace JumpSavesCLI
                 if (String.IsNullOrEmpty(context.Options.SavePath))
                 {
                     Console.WriteLine("No save directory provided. Attempting to auto-detect...");
-                    dir = JSL.SaveDir.Default;
+                    dir = JSL.SaveDir.GetDefault(false);
                     if (dir == null)
                     {
                         Console.WriteLine("Failed to auto-detect the save directory. Please provide --save <...> on the command line.");
@@ -269,7 +269,7 @@ namespace JumpSavesCLI
                 else if (Directory.Exists(context.Options.SavePath))
                 {
                     Console.WriteLine($"Opening latest save file from dir: {context.Options.SavePath}");
-                    dir = new JSL.SaveDir(context.Options.SavePath);
+                    dir = new JSL.SaveDir(context.Options.SavePath, false);
                     file = dir.SaveFile;
                 }
                 else
@@ -292,7 +292,7 @@ namespace JumpSavesCLI
                     if (Directory.Exists(context.Options.DonorSavePath))
                     {
                         Console.WriteLine($"Opening latest donor save file from dir: {context.Options.DonorSavePath}");
-                        JSL.SaveDir donorDir = new JSL.SaveDir(context.Options.DonorSavePath);
+                        JSL.SaveDir donorDir = new JSL.SaveDir(context.Options.DonorSavePath, false);
                         donorFile = donorDir.SaveFile;
                     }
                     else

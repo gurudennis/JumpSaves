@@ -1,5 +1,4 @@
-﻿using MessagePack.Formatters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -15,11 +14,11 @@ namespace JSL
             Load();
         }
 
-        internal Backup(BackupStore store, string path, string originalPath, string name)
+        internal Backup(BackupStore store, string path, string originalPath, bool experimental, string name)
         {
             store_ = store;
             Path = path;
-            Save(originalPath, name);
+            Save(originalPath, experimental, name);
         }
 
         public static string MakeDirName(string name = null)
@@ -96,7 +95,15 @@ namespace JSL
             }
         }
 
-        public void Restore(string originalPath = null)
+        public bool IsExperimental
+        {
+            get
+            {
+                return metadata_.IsExperimental;
+            }
+        }
+
+        public void Restore(string originalPath = null, bool? experimental = null)
         {
             if (originalPath == null)
             {
@@ -105,7 +112,7 @@ namespace JSL
 
             if (Directory.Exists(originalPath))
             {
-                SaveDir dir = new SaveDir(originalPath);
+                SaveDir dir = new SaveDir(originalPath, experimental == null ? metadata_.IsExperimental : experimental.Value);
                 dir.Save(SaveFilePath);
             }
             else
@@ -125,6 +132,8 @@ namespace JSL
             public string OriginalPath { get; set; }
 
             public DateTime Timestamp { get; set; }
+
+            public bool IsExperimental { get; set; }
         }
 
         private string MetadataFilePath
@@ -152,11 +161,12 @@ namespace JSL
             }
         }
 
-        private void Save(string originalPath, string name)
+        private void Save(string originalPath, bool experimental, string name)
         {
             metadata_ = new Metadata();
             metadata_.Name = name;
             metadata_.Timestamp = DateTime.Now;
+            metadata_.IsExperimental = experimental;
             metadata_.OriginalPath = originalPath;
 
             Directory.CreateDirectory(Path);
@@ -164,7 +174,7 @@ namespace JSL
             string originalFilePath = originalPath;
             if (Directory.Exists(originalPath))
             {
-                SaveDir dir = new SaveDir(originalPath);
+                SaveDir dir = new SaveDir(originalPath, experimental);
                 originalFilePath = dir.SaveFilePath;
             }
 
@@ -208,9 +218,9 @@ namespace JSL
             Load();
         }
 
-        public Backup Add(string originalPath, string name = null)
+        public Backup Add(string originalPath, bool experimental, string name = null)
         {
-            Backup backup = new Backup(this, System.IO.Path.Combine(Path, Backup.MakeDirName()), originalPath, name);
+            Backup backup = new Backup(this, System.IO.Path.Combine(Path, Backup.MakeDirName()), originalPath, experimental, name);
             backups_.Insert(0, backup);
             Prune();
             Changed?.Invoke(this, EventArgs.Empty);

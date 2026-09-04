@@ -9,45 +9,53 @@ namespace JSL
 {
     public class SaveDir
     {
-        public static SaveDir Default // a bit of a heuristic, obviously
+        public static SaveDir GetDefault(bool experimental) // a bit of a heuristic, obviously
         {
-            get
+            string steamDir = GetSteamDirectory();
+            if (string.IsNullOrEmpty(steamDir))
             {
-                string steamDir = GetSteamDirectory();
-                if (string.IsNullOrEmpty(steamDir))
-                {
-                    return null;
-                }
-
-                string userRoot = System.IO.Path.Combine(steamDir, "userdata");
-                if (!Directory.Exists(userRoot))
-                {
-                    return null;
-                }
-
-                DirectoryInfo userRootDir = new DirectoryInfo(userRoot);
-                foreach (DirectoryInfo userDir in userRootDir.GetDirectories())
-                {
-                    string saveRoot = System.IO.Path.Combine(userDir.FullName, "1757300", "remote");
-                    if (Directory.Exists(saveRoot))
-                    {
-                        try
-                        {
-                            return new SaveDir(saveRoot);
-                        }
-                        catch
-                        {
-                            Thread.Sleep(1000); // Is the game contending with us? Try again after a second.
-                            return new SaveDir(saveRoot);
-                        }
-                    }
-                }
-
                 return null;
             }
+
+            string userRoot = System.IO.Path.Combine(steamDir, "userdata");
+            if (!Directory.Exists(userRoot))
+            {
+                return null;
+            }
+
+            DirectoryInfo userRootDir = new DirectoryInfo(userRoot);
+            foreach (DirectoryInfo userDir in userRootDir.GetDirectories())
+            {
+                string saveRoot = System.IO.Path.Combine(userDir.FullName, "1757300", "remote");
+                if (Directory.Exists(saveRoot))
+                {
+                    try
+                    {
+                        return new SaveDir(saveRoot, experimental);
+                    }
+                    catch
+                    {
+                        Thread.Sleep(1000); // Is the game contending with us? Try again after a second.
+                        return new SaveDir(saveRoot, experimental);
+                    }
+                }
+            }
+
+            return null;
         }
 
-        public SaveDir(string path)
+        public static bool HasExperimental(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !Directory.Exists(path))
+            {
+                return false;
+            }
+
+            DirectoryInfo directory = new DirectoryInfo(path);
+            return directory.GetFiles(ExperimentalFileMask).Any();
+        }
+
+        public SaveDir(string path, bool experimental)
         {
             if (!Directory.Exists(path))
             {
@@ -55,6 +63,7 @@ namespace JSL
             }
 
             Path = path;
+            IsExperimental = experimental;
 
             if (string.IsNullOrEmpty(SaveFilePath))
             {
@@ -67,7 +76,7 @@ namespace JSL
             get
             {
                 DirectoryInfo directory = new DirectoryInfo(Path);
-                FileInfo newestSaveFile = directory.GetFiles(FileMask).OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
+                FileInfo newestSaveFile = directory.GetFiles(IsExperimental ? ExperimentalFileMask : FileMask).OrderByDescending(f => f.LastWriteTime).FirstOrDefault();
                 if (newestSaveFile == null || !FileNames.Contains(newestSaveFile.Name))
                 {
                     return null;
@@ -85,6 +94,8 @@ namespace JSL
                 return string.IsNullOrEmpty(path) ? null : new SaveFile(path);
             }
         }
+
+        public bool IsExperimental { get; private set; }
 
         public void Save(SaveFile file)
         {
@@ -124,7 +135,19 @@ namespace JSL
 
         public string Path { get; private set; }
 
-        public static readonly List<string> FileNames = new List<string> { "persistent_user_data.bin", "persistent_user_data.bin.bak1", "persistent_user_data.bin.bak2" };
+        public IReadOnlyCollection<string> FileNames
+        {
+            get
+            {
+                string experimentalPrefix = IsExperimental ? "experimental_" : "";
+                return new List<string>
+                {
+                    $"{experimentalPrefix}persistent_user_data.bin",
+                    $"{experimentalPrefix}persistent_user_data.bin.bak1",
+                    $"{experimentalPrefix}persistent_user_data.bin.bak2"
+                };
+            }
+        }
 
         private static string GetSteamDirectory()
         {
@@ -178,5 +201,7 @@ namespace JSL
         }
 
         private const string FileMask = "persistent_user_data.bin*";
+
+        private const string ExperimentalFileMask = "experimental_persistent_user_data.bin*";
     }
 }

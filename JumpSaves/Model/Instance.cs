@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using System.Threading;
 
 namespace JumpSaves.Model
@@ -24,8 +25,10 @@ namespace JumpSaves.Model
 #if DEBUG
             DefaultSavePath = "C:\\Prj\\JumpSpaceSaves\\Data\\NewVersion_2";
 #else
-            DefaultSavePath = JSL.SaveDir.Default?.Path;
+            DefaultSavePath = JSL.SaveDir.GetDefault(false)?.Path;
 #endif
+
+            DefaultSavePathHasExperimental = JSL.SaveDir.HasExperimental(DefaultSavePath);
 
             manager_.PeriodicInfoEvent += OnGlobalPeriodicInfo;
         }
@@ -37,11 +40,13 @@ namespace JumpSaves.Model
 
         public string DefaultSavePath { get; private set; }
 
-        public void Open(string path)
+        public bool DefaultSavePathHasExperimental { get; private set; }
+
+        public void Open(string path, bool experimental)
         {
             Close();
 
-            SaveEditor = JSL.EditorFactory.OpenSave(path);
+            SaveEditor = JSL.EditorFactory.OpenSave(path, experimental);
             ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Opened save \"{Path}\"");
         }
 
@@ -67,7 +72,7 @@ namespace JumpSaves.Model
                 throw new Exception("Not ready to save because the backup store hasn't been fully initialized yet");
             }
 
-            BackupStore.Add(Path, "Before saving");
+            BackupStore.Add(Path, IsExperimental, "Before saving");
             ActionLog.AddEntry(ActionLog.Origin.Editor, ActionLog.Level.Info, $"Created a new backup of save \"{Path}\" prior to overwriting it.");
 
             SaveEditor.Save();
@@ -95,6 +100,14 @@ namespace JumpSaves.Model
             get
             {
                 return SaveEditor?.Path ?? String.Empty;
+            }
+        }
+
+        public bool IsExperimental
+        {
+            get
+            {
+                return SaveEditor?.IsExperimental ?? false;
             }
         }
 
@@ -320,7 +333,7 @@ namespace JumpSaves.Model
             {
                 try
                 {
-                    JSL.SaveEditor editor = JSL.EditorFactory.OpenSave(Path);
+                    JSL.SaveEditor editor = JSL.EditorFactory.OpenSave(Path, IsExperimental);
                     if (SaveEditor != null)
                     {
                         SaveEditor.DirtyChanged = null;

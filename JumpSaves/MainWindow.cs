@@ -41,7 +41,7 @@ namespace JumpSaves
 
             try
             {
-                OpenDefaultDirectory();
+                OpenDefaultDirectory(false);
             }
             catch
             {
@@ -59,22 +59,32 @@ namespace JumpSaves
 
         private void toolStripOpenDefaultDirectoryButton_Click(object sender, EventArgs e)
         {
-            OpenDefaultDirectory();
+            OpenDefaultDirectory(false);
         }
 
         private void openDefaultDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenDefaultDirectory();
+            OpenDefaultDirectory(false);
+        }
+
+        private void openDefaultDirectoryExperimentalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenDefaultDirectory(true);
+        }
+
+        private void toolStripButtonOpenDefaultDirectoryExperimental_Click(object sender, EventArgs e)
+        {
+            OpenDefaultDirectory(true);
         }
 
         private void toolStripOpenDirectoryButton_Click(object sender, EventArgs e)
         {
-            OpenDirectory();
+            OpenDirectory(false);
         }
 
         private void openDirectoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenDirectory();
+            OpenDirectory(false);
         }
 
         private void toolStripOpenFileButton_Click(object sender, EventArgs e)
@@ -196,13 +206,13 @@ namespace JumpSaves
             model_?.Dispose();
         }
 
-        private void OpenDefaultDirectory()
+        private void OpenDefaultDirectory(bool experimental)
         {
-            model_.Open(model_.DefaultSavePath);
+            model_.Open(model_.DefaultSavePath, experimental);
             OnStateChanged();
         }
 
-        private void OpenDirectory()
+        private void OpenDirectory(bool experimental)
         {
             using (FolderBrowserDialog dialog = new FolderBrowserDialog())
             {
@@ -211,7 +221,7 @@ namespace JumpSaves
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    Common.Safe(this, "opening a save directory", () => model_.Open(dialog.SelectedPath), model_.ActionLog);
+                    Common.Safe(this, "opening a save directory", () => model_.Open(dialog.SelectedPath, experimental), model_.ActionLog);
                     OnStateChanged();
                 }
             }
@@ -224,7 +234,7 @@ namespace JumpSaves
                             "Are you sure you want to open a single file?";
             if (MessageBox.Show(this, prompt, "Are you sure you want to open a single file?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
             {
-                OpenDirectory();
+                OpenDirectory(false);
                 return;
             }
 
@@ -239,7 +249,7 @@ namespace JumpSaves
                 DialogResult result = dialog.ShowDialog(this);
                 if (result == DialogResult.OK)
                 {
-                    Common.Safe(this, "opening a save file", () => model_.Open(dialog.FileName), model_.ActionLog);
+                    Common.Safe(this, "opening a save file", () => model_.Open(dialog.FileName, false), model_.ActionLog);
                     OnStateChanged();
                 }
             }
@@ -439,6 +449,8 @@ namespace JumpSaves
             }
 
             // Menu and toolbar
+            toolStripButtonOpenDefaultDirectoryExperimental.Visible = model_.DefaultSavePathHasExperimental;
+            openDefaultDirectoryExperimentalToolStripMenuItem.Visible = model_.DefaultSavePathHasExperimental;
             toolStripCloseButton.Visible = model_.IsOpen;
             toolStripSaveButton.Visible = model_.IsOpen && !model_.IsMonitoring;
             closeToolStripMenuItem.Visible = model_.IsOpen;
