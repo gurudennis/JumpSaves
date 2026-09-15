@@ -171,8 +171,8 @@ namespace JumpSaves
             numericUpDownR.Enabled = CanEdit && AllowCustomization;
             numericUpDownAG.Enabled = CanEdit && AllowCustomization;
 
-            int def = 2;
-            Debug.Assert(def == (Editor?.MajorItemSlotLimits?.DefaultMinSlotCount ?? 2));
+            int def = 4;
+            Debug.Assert(def == (Editor?.MajorItemSlotLimits?.DefaultMinSlotCount ?? 4));
             numericUpDownPW.Value = CanEdit ? Editor.MajorItemSlotLimits.GetMaxMajorItemSlots(JSL.MajorItemCategory.Enum.PlayerWeapons) : def;
             numericUpDownMT.Value = CanEdit ? Editor.MajorItemSlotLimits.GetMaxMajorItemSlots(JSL.MajorItemCategory.Enum.Multiturrets) : def;
             numericUpDownPC.Value = CanEdit ? Editor.MajorItemSlotLimits.GetMaxMajorItemSlots(JSL.MajorItemCategory.Enum.PilotCannons) : def;

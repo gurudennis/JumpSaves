@@ -36,16 +36,36 @@ namespace JSL
         {
             get
             {
-                return GetPropertyStrict<int>(Index_SlotCount);
+                if (Root.Length == 2) // Legacy behavior
+                {
+                    return GetPropertyStrict<int>(Index_LegacySlotCount);
+                }
+
+                return GetPropertyStrict<int>(Index_AdditionalSlotCount) + EffectiveBaseSlotCount;
             }
             set
             {
-                SetPropertyStrict(Index_SlotCount, value);
+                if (Root.Length == 2) // Legacy behavior
+                {
+                    SetPropertyStrict(Index_LegacySlotCount, value);
+                    return;
+                }
+
+                SetPropertyStrict(Index_AdditionalSlotCount, Math.Max(value - EffectiveBaseSlotCount, 0));
+            }
+        }
+
+        private int EffectiveBaseSlotCount
+        {
+            get
+            {
+                return RawCategory == MajorItemCategory.GetRaw(MajorItemCategory.Enum.PlayerWeapons) ? 5 : 4;
             }
         }
 
         private const int Index_RawCategory = 0;
-        private const int Index_SlotCount = 1;
+        private const int Index_LegacySlotCount = 1; // Essentially ignored in the latest game version (presumed 4 or 5, depending on category)
+        private const int Index_AdditionalSlotCount = 2;
     }
 
     public class MajorItemSlotUpgrades : ArrayBasedObject, IMajorItemSlotLimits
@@ -70,7 +90,7 @@ namespace JSL
         {
             get
             {
-                return 2;
+                return 4;
             }
         }
 
@@ -78,7 +98,7 @@ namespace JSL
         {
             get
             {
-                return 6;
+                return 7;
             }
         }
 
